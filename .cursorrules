@@ -1,0 +1,142 @@
+# TelcoDocs - Cursor Rules for Claude
+
+## Project Context
+Multi-tenant SaaS for telecom document management. Nuxt 3 + TypeScript + Supabase + PrimeVue.
+
+## Code Style & Standards
+
+### TypeScript
+- Use strict TypeScript with proper typing
+- Define interfaces for all data structures
+- Use Supabase generated types where possible
+- Prefer type assertions over `any`
+
+### Vue/Nuxt Conventions
+- Use Composition API with `<script setup>`
+- Prefer composables for reusable logic
+- Use auto-imports for components and composables
+- Follow Nuxt 3 directory conventions
+
+### Multi-tenant Architecture
+- Always include tenant context in API calls
+- Use RLS policies, never client-side tenant filtering
+- Extract tenant from subdomain in middleware
+- Prefix all tenant-scoped routes with tenant validation
+
+### Database Operations
+- Use Supabase client with RLS enabled
+- Never bypass RLS in client-side code
+- Include audit logging for sensitive operations
+- Use transactions for multi-table operations
+
+### Form Handling
+- Auto-save on field changes with debouncing (300ms)
+- Validate forms both client and server side
+- Use reactive form state management
+- Implement optimistic updates for better UX
+
+### File Management
+- Upload files directly to R2 with signed URLs
+- Validate file types and sizes on upload
+- Organize files by tenant/application structure
+- Implement automatic cleanup policies
+
+### Authentication & Authorization
+- Check user permissions on every protected route
+- Use Supabase Auth with role-based access
+- Implement proper session management
+- Add rate limiting for sensitive endpoints
+
+### Error Handling
+- Use try/catch blocks for all async operations
+- Provide meaningful error messages to users
+- Log errors with context for debugging
+- Implement graceful fallbacks
+
+### Performance
+- Use lazy loading for large components
+- Implement proper caching strategies
+- Optimize database queries with indexes
+- Use CDN for static assets
+
+### Security
+- Sanitize all user inputs
+- Use parameterized queries
+- Implement CSRF protection
+- Validate file uploads thoroughly
+
+## Component Structure
+
+### Form Components
+```vue
+<script setup lang="ts">
+// Props with proper typing
+// Composables for form logic
+// Auto-save implementation
+// Validation rules
+</script>
+
+<template>
+  <!-- PrimeVue components -->
+  <!-- Proper accessibility -->
+  <!-- Mobile responsive -->
+</template>
+```
+
+### API Routes
+```typescript
+// Tenant validation first
+// Authentication check
+// Input validation
+// Database operation with RLS
+// Proper error handling
+// Audit logging
+```
+
+## Naming Conventions
+- Components: PascalCase (`FormBuilder.vue`)
+- Composables: camelCase with `use` prefix (`useFormBuilder.ts`)
+- API routes: kebab-case (`form-templates.post.ts`)
+- Database tables: snake_case (`form_templates`)
+- Environment variables: SCREAMING_SNAKE_CASE
+
+## Import Structure
+```typescript
+// 1. Vue/Nuxt imports
+// 2. Third-party libraries
+// 3. Local components
+// 4. Composables
+// 5. Types
+// 6. Utils
+```
+
+## Testing Considerations
+- Test multi-tenant isolation
+- Validate RLS policies work correctly
+- Test form auto-save functionality
+- Verify signature capture works on mobile
+- Test file upload edge cases
+
+## Documentation
+- Document complex business logic
+- Add JSDoc comments for public functions
+- Keep README updated with setup instructions
+- Document API endpoints clearly
+
+## Focus Areas for MVP
+1. Get multi-tenant routing working first
+2. Implement basic form builder with essential field types
+3. Set up authentication and role-based access
+4. Build form submission with auto-save
+5. Create basic signature capture
+6. Develop owner dashboard for application management
+7. Set up email notifications
+
+## Common Patterns
+- Use `navigateTo()` for programmatic navigation
+- Use `$fetch` for API calls with proper error handling
+- Implement loading states for all async operations
+- Use PrimeVue Toast for user notifications
+- Store form state in Pinia for complex forms
+
+Remember: This is an MVP - focus on core functionality over perfect polish. Get the essential multi-tenant document workflow working first.
