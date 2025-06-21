@@ -148,16 +148,23 @@ const handleRegister = async () => {
   }
   
   try {
-    await register(
+    const result = await register(
       form.email, 
       form.password, 
       form.fullName,
       tenant.value?.id
     )
     
-    // Show success message and redirect
-    await router.push('/auth/verify-email')
+    // Check if email confirmation is required
+    if (result?.user && !result.session) {
+      // Email confirmation required
+      await router.push('/auth/verify-email')
+    } else if (result?.session) {
+      // Auto-confirmed, redirect to dashboard
+      await router.push('/dashboard')
+    }
   } catch (err: any) {
+    console.error('Registration error:', err)
     error.value = err.message || 'Failed to create account'
   } finally {
     loading.value = false

@@ -1,4 +1,4 @@
-# TelcoDocs - Project Context for Claude
+# TelcoDocs 
 
 ## Project Overview
 Multi-tenant SaaS application for telecommunications companies to manage carrier onboarding documents. A DocuSign-like application specifically for telco/VoIP operators.

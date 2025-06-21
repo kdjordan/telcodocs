@@ -18,32 +18,23 @@ export const useAuth = () => {
   }
   
   const register = async (email: string, password: string, fullName: string, tenantId?: string) => {
+    console.log('Attempting registration for:', email)
+    
     const { data: authData, error: authError } = await $supabase.auth.signUp({
       email,
       password,
       options: {
         data: {
-          full_name: fullName
+          full_name: fullName,
+          tenant_id: tenantId,
+          role: 'end_user'
         }
       }
     })
     
-    if (authError) throw authError
+    console.log('Registration response:', { authData, authError })
     
-    // Create user profile
-    if (authData.user) {
-      const { error: profileError } = await $supabase
-        .from('users')
-        .insert({
-          id: authData.user.id,
-          email,
-          full_name: fullName,
-          role: 'end_user' as UserRole,
-          tenant_id: tenantId
-        })
-      
-      if (profileError) throw profileError
-    }
+    if (authError) throw authError
     
     return authData
   }
