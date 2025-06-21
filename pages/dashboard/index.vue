@@ -13,14 +13,69 @@
     
     <!-- Main Dashboard -->
     <div v-else class="max-w-7xl mx-auto">
-      <!-- Header -->
-      <div class="mb-8">
-        <h1 class="text-3xl font-bold font-heading text-textPrimary mb-2">
-          Good {{ getTimeOfDay() }}, {{ getFirstName() }}!
-        </h1>
-        <p class="text-textSecondary">
-          Here's what's happening with your carrier onboarding today.
-        </p>
+      <!-- Top Header Bar -->
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <h1 class="text-3xl font-bold font-heading text-gray-900 mb-2">
+            Good {{ getTimeOfDay() }}, {{ getFirstName() }}!
+          </h1>
+          <p class="text-gray-600">
+            Here's what's happening with your carrier onboarding today.
+          </p>
+        </div>
+        
+        <!-- Top Navigation Icons -->
+        <div class="flex items-center space-x-4">
+          <!-- Calendar -->
+          <button class="w-10 h-10 flex items-center justify-center text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+          </button>
+          
+          <!-- Refresh -->
+          <button class="w-10 h-10 flex items-center justify-center text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+          </button>
+          
+          <!-- Notifications -->
+          <button class="w-10 h-10 flex items-center justify-center text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+            </svg>
+          </button>
+          
+          <!-- User Avatar with Dropdown -->
+          <div class="relative">
+            <button
+              @click="toggleUserMenu"
+              class="w-10 h-10 bg-gradient-to-br from-accent to-primary rounded-full flex items-center justify-center hover:ring-2 hover:ring-primary/20 transition-all"
+            >
+              <span class="text-white text-sm font-semibold">
+                {{ getFirstName()?.charAt(0).toUpperCase() }}
+              </span>
+            </button>
+            
+            <!-- User Menu Dropdown -->
+            <div 
+              v-if="userMenuOpen"
+              class="absolute top-full right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50"
+            >
+              <div class="px-3 py-2 border-b border-gray-100">
+                <p class="text-sm font-medium text-gray-900">{{ profile?.full_name }}</p>
+                <p class="text-xs text-gray-500">{{ profile?.role?.replace('_', ' ') }}</p>
+              </div>
+              <button
+                @click="handleLogout"
+                class="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+              >
+                Sign out
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Bento Grid Layout -->
@@ -211,11 +266,12 @@ definePageMeta({
 })
 
 const supabase = useSupabaseClient()
-const { profile, fetchProfile } = useAuth()
+const { profile, fetchProfile, logout } = useAuth()
 const { tenant } = useTenant()
 
 const loading = ref(true)
 const profileLoading = ref(true)
+const userMenuOpen = ref(false)
 const recentApplications = ref<Application[]>([])
 const stats = ref({
   totalApplicants: 0,
@@ -340,6 +396,16 @@ const fetchDashboardData = async () => {
   }
 }
 
+const toggleUserMenu = () => {
+  userMenuOpen.value = !userMenuOpen.value
+}
+
+const handleLogout = async () => {
+  userMenuOpen.value = false
+  await logout()
+}
+
+// Close menu when clicking outside
 onMounted(async () => {
   try {
     await fetchProfile()
@@ -350,5 +416,18 @@ onMounted(async () => {
   }
   
   await fetchDashboardData()
+  
+  // Handle click outside for user menu
+  const handleClickOutside = (event: Event) => {
+    const target = event.target as Element
+    if (!target.closest('.relative')) {
+      userMenuOpen.value = false
+    }
+  }
+  document.addEventListener('click', handleClickOutside)
+  
+  onUnmounted(() => {
+    document.removeEventListener('click', handleClickOutside)
+  })
 })
 </script>

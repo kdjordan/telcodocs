@@ -107,26 +107,36 @@
       <!-- User Profile -->
       <div class="border-t border-white/10 p-4">
         <div v-if="profile" class="flex items-center space-x-3">
-          <div class="w-8 h-8 bg-gradient-to-br from-accent to-primary rounded-full flex items-center justify-center">
-            <span class="text-white text-xs font-semibold">
-              {{ profile.full_name?.charAt(0).toUpperCase() }}
-            </span>
+          <div class="relative">
+            <button
+              @click="toggleUserMenu"
+              class="w-8 h-8 bg-gradient-to-br from-accent to-primary rounded-full flex items-center justify-center hover:ring-2 hover:ring-white/20 transition-all"
+            >
+              <span class="text-white text-xs font-semibold">
+                {{ profile.full_name?.charAt(0).toUpperCase() }}
+              </span>
+            </button>
+            
+            <!-- User Menu Dropdown -->
+            <div 
+              v-if="userMenuOpen"
+              class="absolute bottom-full left-0 mb-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50"
+            >
+              <div class="px-3 py-2 border-b border-gray-100">
+                <p class="text-sm font-medium text-gray-900">{{ profile.full_name }}</p>
+                <p class="text-xs text-gray-500">{{ profile.role?.replace('_', ' ') }}</p>
+              </div>
+              <button
+                @click="handleLogout"
+                class="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+              >
+                Sign out
+              </button>
+            </div>
           </div>
           <div v-if="!sidebarCollapsed" class="flex-1 min-w-0">
             <p class="text-white text-sm font-medium truncate">{{ profile.full_name }}</p>
             <p class="text-white/60 text-xs truncate">{{ profile.role?.replace('_', ' ') }}</p>
-          </div>
-          <div v-if="!sidebarCollapsed" class="relative">
-            <select 
-              v-model="selectedMenuItem"
-              @change="handleMenuAction"
-              class="appearance-none bg-transparent text-white text-xs cursor-pointer focus:outline-none"
-            >
-              <option value="" class="bg-slate-800">•••</option>
-              <option v-for="item in menuItems" :key="item.value" :value="item.value" class="bg-slate-800">
-                {{ item.label }}
-              </option>
-            </select>
           </div>
         </div>
       </div>
@@ -150,35 +160,34 @@ const router = useRouter()
 const { profile, logout } = useAuth()
 const { tenant } = useTenant()
 
-const selectedMenuItem = ref('')
 const sidebarCollapsed = ref(false)
-
-const menuItems = computed(() => [
-  { label: 'Profile', value: 'profile' },
-  { label: 'Settings', value: 'settings' },
-  { label: 'Sign out', value: 'logout' }
-])
+const userMenuOpen = ref(false)
 
 const toggleSidebar = () => {
   sidebarCollapsed.value = !sidebarCollapsed.value
 }
 
-const handleMenuAction = async () => {
-  const action = selectedMenuItem.value
-  
-  switch (action) {
-    case 'profile':
-      await router.push('/dashboard/profile')
-      break
-    case 'settings':
-      await router.push('/dashboard/settings')
-      break
-    case 'logout':
-      await logout()
-      break
-  }
-  
-  // Reset the dropdown
-  selectedMenuItem.value = ''
+const toggleUserMenu = () => {
+  userMenuOpen.value = !userMenuOpen.value
 }
+
+const handleLogout = async () => {
+  userMenuOpen.value = false
+  await logout()
+}
+
+// Close menu when clicking outside
+onMounted(() => {
+  const handleClickOutside = (event: Event) => {
+    const target = event.target as Element
+    if (!target.closest('.relative')) {
+      userMenuOpen.value = false
+    }
+  }
+  document.addEventListener('click', handleClickOutside)
+  
+  onUnmounted(() => {
+    document.removeEventListener('click', handleClickOutside)
+  })
+})
 </script>
