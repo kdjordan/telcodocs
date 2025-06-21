@@ -5,57 +5,77 @@
 @layer base {
   body {
     font-family: 'Inter', sans-serif;
+    background-color: #F2F6FA;
+    color: #1A1A1A;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Manrope', sans-serif;
   }
 }
 
 @layer components {
   .btn-primary {
-    background-color: #2563eb;
+    background-color: #91C4F2;
     color: white;
     padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
+    border-radius: 1rem;
     font-weight: 500;
-    transition: background-color 0.2s;
+    transition: all 0.2s;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
   }
   
   .btn-primary:hover {
-    background-color: #1d4ed8;
+    background-color: #7BB5EE;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   }
   
   .btn-secondary {
-    background-color: #e5e7eb;
-    color: #374151;
+    background-color: #E8EEF5;
+    color: #1A1A1A;
     padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
+    border-radius: 1rem;
     font-weight: 500;
-    transition: background-color 0.2s;
+    transition: all 0.2s;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
   }
   
   .btn-secondary:hover {
-    background-color: #d1d5db;
+    background-color: #DCE4F0;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   }
   
   .form-input {
     width: 100%;
-    padding: 0.5rem 0.75rem;
-    border: 1px solid #d1d5db;
-    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid #E8EEF5;
+    border-radius: 1rem;
+    background-color: white;
+    color: #1A1A1A;
+    transition: all 0.2s;
   }
   
   .form-input:focus {
     outline: none;
-    ring: 2px;
-    ring-color: #3b82f6;
-    border-color: transparent;
+    border-color: #91C4F2;
+    box-shadow: 0 0 0 3px rgba(145, 196, 242, 0.1);
   }
   
   .card {
     background-color: white;
-    border-radius: 0.5rem;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    border: 1px solid #e5e7eb;
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: none;
     padding: 1.5rem;
+    transition: all 0.2s;
+  }
+  
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
   }
 }

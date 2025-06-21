@@ -10,7 +10,8 @@ export default defineNuxtConfig({
 
   googleFonts: {
     families: {
-      Inter: [400, 500, 600, 700]
+      Inter: [400, 500, 600, 700],
+      Manrope: [400, 500, 600, 700, 800]
     }
   },
 

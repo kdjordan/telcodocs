@@ -1,12 +1,12 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div class="min-h-screen bg-bgLight">
     <!-- Use default layout navigation -->
-    <nav class="bg-white shadow-sm border-b border-gray-200">
+    <nav class="bg-white shadow-subtle border-b border-bgCard">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
           <div class="flex">
             <div class="flex-shrink-0 flex items-center">
-              <h1 class="text-xl font-semibold text-gray-900">
+              <h1 class="text-xl font-semibold font-heading text-textPrimary">
                 {{ tenant?.name || 'TelcoDocs' }}
               </h1>
             </div>
@@ -17,9 +17,9 @@
               <select 
                 v-model="selectedMenuItem"
                 @change="handleMenuAction"
-                class="border border-gray-300 rounded-md px-3 py-2 bg-white"
+                class="border border-bgCard rounded-xl px-3 py-2 bg-white text-textPrimary focus:border-primary focus:ring-2 focus:ring-primary/20"
               >
-                <option value="">{{ profile.full_name }}</option>
+                <option value="" class="text-textPrimary">{{ profile.full_name }}</option>
                 <option v-for="item in menuItems" :key="item.value" :value="item.value">
                   {{ item.label }}
                 </option>
