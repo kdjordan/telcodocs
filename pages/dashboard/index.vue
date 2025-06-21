@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-bgLight p-6">
+  <div>
     <!-- Loading state -->
     <div v-if="profileLoading" class="flex items-center justify-center min-h-[400px]">
       <div class="text-center">
@@ -26,9 +26,9 @@
       <!-- Bento Grid Layout -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <!-- Primary Stats -->
-        <div class="stat-card">
+        <div class="bg-cardBg rounded-2xl shadow-card p-6 transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-lg min-h-[120px]">
           <div class="flex items-center justify-between mb-3">
-            <div class="number-badge">
+            <div class="flex items-center justify-center">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.196-2.121M9 6a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
@@ -39,35 +39,35 @@
           <p class="text-sm text-textSecondary mt-1">Active applicants</p>
         </div>
 
-        <div class="stat-card-highlight">
+        <div class="bg-primary/10 rounded-2xl shadow-card p-6 transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-lg min-h-[120px]">
           <div class="flex items-center justify-between mb-3">
-            <div class="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center">
+            <div class="flex items-center justify-center">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <span class="text-xs text-white/80 font-medium">Pending</span>
+            <span class="text-xs text-textPrimary font-medium">Pending</span>
           </div>
           <div class="metric">{{ stats.pendingApproval }}</div>
-          <p class="text-sm text-white/80 mt-1">Awaiting approval</p>
+          <p class="text-sm text-textPrimary mt-1">Awaiting approval</p>
         </div>
 
-        <div class="stat-card-accent">
+        <div class="bg-accent/10 rounded-2xl shadow-card p-6 transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-card-hover min-h-[120px]">
           <div class="flex items-center justify-between mb-3">
-            <div class="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center">
+            <div class="flex items-center justify-center">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <span class="text-xs text-white/80 font-medium">Complete</span>
+            <span class="text-xs text-textPrimary font-medium">Complete</span>
           </div>
           <div class="metric">{{ stats.completed }}</div>
-          <p class="text-sm text-white/80 mt-1">Fully onboarded</p>
+          <p class="text-sm text-textPrimary mt-1">Fully onboarded</p>
         </div>
 
-        <div class="stat-card">
+        <div class="bg-cardBg rounded-2xl shadow-card p-6 transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-card-hover min-h-[120px]">
           <div class="flex items-center justify-between mb-3">
-            <div class="number-badge">
+            <div class="flex items-center justify-center">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
               </svg>
@@ -82,7 +82,7 @@
       <!-- Secondary Grid -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <!-- Recent Activity -->
-        <div class="lg:col-span-2 bento-card-lg">
+        <div class="lg:col-span-2 bg-cardBg rounded-2xl shadow-card p-6 transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-card-hover min-h-[300px]">
           <div class="flex items-center justify-between mb-6">
             <h2 class="text-xl font-bold font-heading text-textPrimary">Recent Applicants</h2>
             <div class="flex items-center space-x-2">
@@ -104,9 +104,9 @@
           
           <div v-else-if="recentApplications.length > 0" class="space-y-4">
             <div v-for="app in recentApplications.slice(0, 5)" :key="app.id" 
-                 class="flex items-center justify-between p-4 bg-gray-50 rounded-2xl hover:bg-gray-100 transition-colors">
+                 class="flex items-center justify-between p-4 bg-cardBg rounded-2xl hover:bg-white/10 transition-colors">
               <div class="flex items-center space-x-4">
-                <div class="avatar bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white font-semibold">
+                <div class="avatar bg-gradient-to-br from-primary to-accent flex items-center justify-center text-textPrimary font-semibold">
                   {{ app.carrier_name.charAt(0).toUpperCase() }}
                 </div>
                 <div>
@@ -139,29 +139,29 @@
         <!-- Trial Status & Quick Actions -->
         <div class="space-y-6">
           <!-- Trial Status Card -->
-          <div class="dark-card">
+          <div class="bg-cardBg rounded-2xl shadow-card p-6 transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-card-hover">
             <div class="flex items-center justify-between mb-4">
-              <h3 class="font-bold text-white">Trial Status</h3>
-              <span class="text-xs text-white/60">{{ trialDaysLeft }} days left</span>
+              <h3 class="font-bold text-textPrimary">Trial Status</h3>
+              <span class="text-xs text-textSecondary">{{ trialDaysLeft }} days left</span>
             </div>
             
             <div class="mb-4">
               <div class="progress-bar mb-2">
                 <div class="progress-fill" :style="{ width: trialProgress + '%' }"></div>
               </div>
-              <p class="text-sm text-white/80">{{ trialProgress }}% of trial used</p>
+              <p class="text-sm text-textPrimary">{{ trialProgress }}% of trial used</p>
             </div>
             
-            <button class="w-full bg-white text-textPrimary font-semibold py-2.5 px-4 rounded-xl hover:bg-gray-100 transition-colors">
+            <button class="w-full bg-white/10 text-textPrimary font-semibold py-2.5 px-4 rounded-xl hover:bg-primary/20 transition-colors border border-white/20">
               Upgrade Plan
             </button>
           </div>
 
           <!-- Quick Actions -->
-          <div class="bento-card">
+          <div class="bg-cardBg rounded-2xl shadow-card p-6 transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-card-hover">
             <h3 class="font-bold text-textPrimary mb-4">Quick Actions</h3>
             <div class="space-y-3">
-              <button class="w-full text-left p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors group">
+              <button class="w-full text-left p-3 bg-cardBg rounded-xl hover:bg-white/10 transition-colors group">
                 <div class="flex items-center space-x-3">
                   <div class="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-primary/20 transition-colors">
                     <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -172,7 +172,7 @@
                 </div>
               </button>
               
-              <button class="w-full text-left p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors group">
+              <button class="w-full text-left p-3 bg-cardBg rounded-xl hover:bg-white/10 transition-colors group">
                 <div class="flex items-center space-x-3">
                   <div class="w-8 h-8 bg-accent/10 rounded-lg flex items-center justify-center group-hover:bg-accent/20 transition-colors">
                     <svg class="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -183,7 +183,7 @@
                 </div>
               </button>
               
-              <button class="w-full text-left p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors group">
+              <button class="w-full text-left p-3 bg-cardBg rounded-xl hover:bg-white/10 transition-colors group">
                 <div class="flex items-center space-x-3">
                   <div class="w-8 h-8 bg-warning/10 rounded-lg flex items-center justify-center group-hover:bg-warning/20 transition-colors">
                     <svg class="w-4 h-4 text-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24">
