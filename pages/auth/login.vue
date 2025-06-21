@@ -83,7 +83,7 @@ definePageMeta({
   layout: false
 })
 
-const { login } = useAuth()
+const { login, profile } = useAuth()
 const { tenant } = useTenant()
 const router = useRouter()
 
@@ -101,7 +101,13 @@ const handleLogin = async () => {
   
   try {
     await login(form.email, form.password)
-    await router.push('/dashboard')
+    
+    // Redirect based on user role
+    if (profile.value?.role === 'super_admin') {
+      await router.push('/admin')
+    } else {
+      await router.push('/dashboard')
+    }
   } catch (err: any) {
     error.value = err.message || 'Invalid email or password'
   } finally {

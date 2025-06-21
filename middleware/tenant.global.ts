@@ -1,8 +1,12 @@
 import type { Tenant } from '~/types'
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
-  const { $supabase } = useNuxtApp()
   const config = useRuntimeConfig()
+  
+  // Only run on client side to ensure Supabase is available
+  if (!process.client) return
+  
+  const { $supabase } = useNuxtApp()
   
   // Extract subdomain from hostname
   const hostname = process.client ? window.location.hostname : useRequestHeaders().host || ''

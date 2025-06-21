@@ -23,7 +23,7 @@
             Main Portal
           </h2>
           <p class="text-blue-700">
-            Access your tenant at: yourcompany.telcodocs.com
+            Access your tenant at: {{ tenantAccessUrl }}
           </p>
         </div>
         
@@ -51,4 +51,18 @@
 <script setup lang="ts">
 const { tenant } = useTenant()
 const user = useSupabaseUser()
+const config = useRuntimeConfig()
+
+// Compute the tenant access URL based on environment
+const tenantAccessUrl = computed(() => {
+  const appDomain = config.public.appDomain || 'localhost:3000'
+  
+  // For localhost, always use the base domain from config
+  if (appDomain.includes('localhost') || appDomain.includes('127.0.0.1')) {
+    return `yourcompany.localhost:3000`
+  }
+  
+  // Production domain
+  return `yourcompany.${appDomain}`
+})
 </script>

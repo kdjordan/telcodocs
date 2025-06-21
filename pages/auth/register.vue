@@ -160,8 +160,8 @@ const handleRegister = async () => {
       // Email confirmation required
       await router.push('/auth/verify-email')
     } else if (result?.session) {
-      // Auto-confirmed, redirect to dashboard
-      await router.push('/dashboard')
+      // Auto-confirmed, redirect to tenant setup
+      await router.push('/onboarding/company-setup')
     }
   } catch (err: any) {
     console.error('Registration error:', err)

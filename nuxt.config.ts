@@ -21,9 +21,12 @@ export default defineNuxtConfig({
       supabaseUrl: process.env.SUPABASE_URL || '',
       supabaseAnonKey: process.env.SUPABASE_ANON_KEY || '',
       appDomain: process.env.APP_DOMAIN || 'telcodocs.com',
-      r2PublicUrl: process.env.R2_PUBLIC_URL || ''
+      r2PublicUrl: process.env.R2_PUBLIC_URL || '',
+      stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY || ''
     },
     supabaseServiceKey: process.env.SUPABASE_SERVICE_KEY || '',
+    stripeSecretKey: process.env.STRIPE_SECRET_KEY || '',
+    stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET || '',
     r2AccountId: process.env.R2_ACCOUNT_ID || '',
     r2AccessKeyId: process.env.R2_ACCESS_KEY_ID || '',
     r2SecretAccessKey: process.env.R2_SECRET_ACCESS_KEY || '',
