@@ -11,16 +11,11 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: '#91C4F2',       // Soft blue
-        accent: '#A2E5C1',        // Mint green
-        warning: '#F27272',       // Coral red
-        textPrimary: '#1A1A1A',   // Almost black
-        textSecondary: '#8E9BAE', // Cool gray
-        bgLight: '#F2F6FA',       // Light dashboard background
-        bgCard: '#E8EEF5',        // Light gray-blue for cards
-        cardBg: '#F8FAFC',        // Light bluish-grey for bento cards
-        cardBorder: '#E2E8F0',    // Subtle border for cards
-        darkBase: '#131A20',      // Optional dark mode base
+        primary: '#91C4F2',
+        accent: '#A2E5C1', 
+        warning: '#F27272',
+        cardBg: '#d0e2e8',
+        pageBg: '#dfecf1'
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
@@ -47,7 +42,8 @@ export default {
         xs: '2px',
       },
       backgroundImage: {
-        'dark-gradient': 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%)',
+        'dark-gradient': 'linear-gradient(135deg, #010104 0%, #0a0a0f 50%, #010104 100%)',
+        'dark-subtle': 'linear-gradient(135deg, #010104 0%, #0c0c12 100%)',
         'glass-gradient': 'linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%)',
         'primary-gradient': 'linear-gradient(135deg, #91C4F2 0%, #7BB5EE 100%)',
         'accent-gradient': 'linear-gradient(135deg, #A2E5C1 0%, #8FDEB0 100%)',

@@ -182,11 +182,11 @@
   
   /* Dark Cards */
   .dark-card {
-    background: linear-gradient(135deg, #131A20 0%, #1a222a 100%);
+    background: linear-gradient(135deg, #010104 0%, #0a0a0f 50%, #010104 100%);
     color: white;
     border-radius: 1.5rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-    border: none;
+    box-shadow: 0 4px 20px rgba(1, 1, 4, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     padding: 1.5rem;
     transition: all 0.2s;
     position: relative;
@@ -195,7 +195,8 @@
   
   .dark-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 8px 30px rgba(1, 1, 4, 0.4);
+    border-color: rgba(255, 255, 255, 0.15);
   }
   
   /* Progress Elements */

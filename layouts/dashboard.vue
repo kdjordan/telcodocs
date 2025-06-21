@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-dark-gradient relative">
+  <div class="min-h-screen bg-pageBg relative">
     <!-- Floating Sidebar -->
     <aside 
       class="fixed top-6 left-6 z-50 transition-all duration-300 ease-in-out bg-black/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-floating overflow-hidden flex flex-col"

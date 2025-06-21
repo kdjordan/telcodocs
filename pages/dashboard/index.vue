@@ -39,7 +39,7 @@
           <p class="text-sm text-textSecondary mt-1">Active applicants</p>
         </div>
 
-        <div class="bg-primary/10 rounded-2xl shadow-card p-6 transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-lg min-h-[120px]">
+        <div class="bg-cardBg rounded-2xl shadow-card p-6 transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-lg min-h-[120px]">
           <div class="flex items-center justify-between mb-3">
             <div class="flex items-center justify-center">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -52,7 +52,7 @@
           <p class="text-sm text-textPrimary mt-1">Awaiting approval</p>
         </div>
 
-        <div class="bg-accent/10 rounded-2xl shadow-card p-6 transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-card-hover min-h-[120px]">
+        <div class="bg-cardBg rounded-2xl shadow-card p-6 transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-card-hover min-h-[120px]">
           <div class="flex items-center justify-between mb-3">
             <div class="flex items-center justify-center">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -126,7 +126,7 @@
           </div>
           
           <div v-else class="text-center py-12">
-            <div class="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <div class="w-16 h-16 bg-cardBg rounded-2xl flex items-center justify-center mx-auto mb-4">
               <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.196-2.121M9 6a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>

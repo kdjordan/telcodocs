@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@nuxtjs/supabase": "^1.5.2",
+    "@nuxtjs/tailwindcss": "^6.14.0",
     "@primevue/nuxt-module": "^4.3.5",
     "@primevue/themes": "^4.3.5",
     "@supabase/supabase-js": "^2.50.0",
@@ -23,7 +24,6 @@
   },
   "devDependencies": {
     "@nuxtjs/google-fonts": "^3.2.0",
-    "@nuxtjs/tailwindcss": "^7.0.0-beta.0",
     "@vuelidate/core": "^2.0.3",
     "@vuelidate/validators": "^2.0.4",
     "primevue": "^4.3.5",
