@@ -34,7 +34,7 @@ TelcoDocs is a comprehensive multi-tenant SaaS application designed for telecomm
 
 1. Clone the repository:
 ```bash
-cd telcodocs
+cd telodox
 ```
 
 2. Install dependencies:
@@ -55,20 +55,20 @@ SUPABASE_ANON_KEY=your_supabase_anon_key
 SUPABASE_SERVICE_KEY=your_supabase_service_key
 
 # Application
-APP_DOMAIN=telcodocs.com
+APP_DOMAIN=telodox.com
 
 # Cloudflare R2
 R2_ACCOUNT_ID=your_r2_account_id
 R2_ACCESS_KEY_ID=your_r2_access_key_id
 R2_SECRET_ACCESS_KEY=your_r2_secret_access_key
-R2_BUCKET_NAME=telcodocs-files
-R2_PUBLIC_URL=https://files.telcodocs.com
+R2_BUCKET_NAME=telodox-files
+R2_PUBLIC_URL=https://files.telodox.com
 
 # Amazon SES
 SES_REGION=us-east-1
 SES_ACCESS_KEY_ID=your_ses_access_key_id
 SES_SECRET_ACCESS_KEY=your_ses_secret_access_key
-SES_FROM_EMAIL=noreply@telcodocs.com
+SES_FROM_EMAIL=noreply@telodox.com
 ```
 
 ## Database Setup
@@ -99,7 +99,7 @@ The application will be available at `http://localhost:3000`
 ## Project Structure
 
 ```
-telcodocs/
+telodox/
 ├── assets/           # CSS and static assets
 ├── components/       # Vue components
 │   ├── forms/       # Form-related components
@@ -122,8 +122,8 @@ telcodocs/
 ### Multi-Tenant Setup
 
 The application uses subdomain-based multi-tenancy:
-- `tenant1.telcodocs.com` - Tenant 1's instance
-- `tenant2.telcodocs.com` - Tenant 2's instance
+- `tenant1.telodox.com` - Tenant 1's instance
+- `tenant2.telodox.com` - Tenant 2's instance
 
 Tenant resolution happens in `middleware/tenant.global.ts`
 

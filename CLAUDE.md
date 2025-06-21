@@ -13,7 +13,7 @@ Multi-tenant SaaS application for telecommunications companies to manage carrier
 - **Serverless**: Cloudflare Workers/Edge functions
 
 ## Architecture
-**Multi-tenant**: Each telecom company gets subdomain (e.g., `faketelecom.telcodocs.com`)
+**Multi-tenant**: Each telecom company gets subdomain (e.g., `faketelecom.telodox.com`)
 **Database**: Shared tables with Row Level Security using `tenant_id`
 **Forms**: Sequential workflow (KYC → FUSF → MSA → Interop) with owner approval gates
 
@@ -106,7 +106,7 @@ STRIPE_WEBHOOK_SECRET=
 - Audit logging for compliance
 
 ## AWS Amplify Deployment Considerations
-- **DNS Configuration**: Wildcard DNS in Route 53 (*.telcodocs.com)
+- **DNS Configuration**: Wildcard DNS in Route 53 (*.telodox.com)
 - **Dynamic Subdomains**: CloudFront + Lambda@Edge for subdomain routing
 - **Alternative Approach**: URL parameter routing (/t/subdomain) for simpler deployment
 - **SSL**: Wildcard SSL certificate for all subdomains

@@ -37,7 +37,7 @@
 ## 📁 Project Structure
 
 ```
-telcodocs/
+telodox/
 ├── assets/css/main.css           # Custom CSS with component classes
 ├── components/
 │   ├── forms/                    # Form builder and field components

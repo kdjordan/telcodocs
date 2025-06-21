@@ -18,15 +18,15 @@ Add these entries to your hosts file:
 **Windows:** `C:\Windows\System32\drivers\etc\hosts`
 
 ```
-127.0.0.1   telcodocs.local
-127.0.0.1   tenant1.telcodocs.local
-127.0.0.1   tenant2.telcodocs.local
-127.0.0.1   acme.telcodocs.local
+127.0.0.1   telodox.local
+127.0.0.1   tenant1.telodox.local
+127.0.0.1   tenant2.telodox.local
+127.0.0.1   acme.telodox.local
 ```
 
 Then access via:
-- `http://tenant1.telcodocs.local:3000`
-- `http://tenant2.telcodocs.local:3000`
+- `http://tenant1.telodox.local:3000`
+- `http://tenant2.telodox.local:3000`
 
 ## Testing Multi-tenancy
 

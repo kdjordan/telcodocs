@@ -47,7 +47,7 @@
                 @input="validateSubdomain"
               >
               <span class="inline-flex items-center px-3 py-2 border border-l-0 border-gray-300 bg-gray-50 text-gray-500 text-sm rounded-r-md">
-                .telcodocs.com
+                .telodox.com
               </span>
             </div>
             <p class="mt-2 text-sm text-gray-500">
@@ -182,7 +182,7 @@ const validateSubdomain = () => {
   }
   
   // Check reserved words
-  const reserved = ['www', 'api', 'admin', 'app', 'mail', 'ftp', 'localhost', 'telcodocs']
+  const reserved = ['www', 'api', 'admin', 'app', 'mail', 'ftp', 'localhost', 'telodox']
   if (reserved.includes(subdomain)) {
     subdomainError.value = 'This subdomain is reserved'
     return

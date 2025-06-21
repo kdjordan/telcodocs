@@ -186,7 +186,7 @@ const validateSubdomain = () => {
   }
   
   // Check reserved words
-  const reserved = ['www', 'api', 'admin', 'app', 'mail', 'ftp', 'localhost', 'telcodocs']
+  const reserved = ['www', 'api', 'admin', 'app', 'mail', 'ftp', 'localhost', 'telodox']
   if (reserved.includes(subdomain)) {
     subdomainError.value = 'This subdomain is reserved'
     return

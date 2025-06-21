@@ -97,7 +97,7 @@
                 <div class="flex items-center justify-between">
                   <div>
                     <p class="text-sm font-medium text-gray-900">{{ tenant.name }}</p>
-                    <p class="text-sm text-gray-500">{{ tenant.subdomain }}.telcodocs.com</p>
+                    <p class="text-sm text-gray-500">{{ tenant.subdomain }}.telodox.com</p>
                   </div>
                   <div class="text-right">
                     <p class="text-xs text-gray-500">

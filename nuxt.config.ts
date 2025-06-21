@@ -20,7 +20,7 @@ export default defineNuxtConfig({
     public: {
       supabaseUrl: process.env.SUPABASE_URL || '',
       supabaseAnonKey: process.env.SUPABASE_ANON_KEY || '',
-      appDomain: process.env.APP_DOMAIN || 'telcodocs.com',
+      appDomain: process.env.APP_DOMAIN || 'telodox.com',
       r2PublicUrl: process.env.R2_PUBLIC_URL || '',
       stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY || ''
     },
@@ -34,7 +34,7 @@ export default defineNuxtConfig({
     sesRegion: process.env.SES_REGION || 'us-east-1',
     sesAccessKeyId: process.env.SES_ACCESS_KEY_ID || '',
     sesSecretAccessKey: process.env.SES_SECRET_ACCESS_KEY || '',
-    sesFromEmail: process.env.SES_FROM_EMAIL || 'noreply@telcodocs.com'
+    sesFromEmail: process.env.SES_FROM_EMAIL || 'noreply@telodox.com'
   },
 
   nitro: {
