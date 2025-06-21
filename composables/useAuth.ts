@@ -4,18 +4,10 @@ export const useAuth = () => {
   const user = useSupabaseUser()
   const profile = useState<User | null>('profile', () => null)
   
-  // Get Supabase client safely
-  const getSupabase = () => {
-    const { $supabase } = useNuxtApp()
-    if (!$supabase) {
-      throw new Error('Supabase client not initialized')
-    }
-    return $supabase
-  }
+  const supabase = useSupabaseClient()
   
   const login = async (email: string, password: string) => {
-    const $supabase = getSupabase()
-    const { data, error } = await $supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password
     })
@@ -29,8 +21,7 @@ export const useAuth = () => {
   const register = async (email: string, password: string, fullName: string, tenantId?: string) => {
     console.log('Attempting registration for:', email)
     
-    const $supabase = getSupabase()
-    const { data: authData, error: authError } = await $supabase.auth.signUp({
+    const { data: authData, error: authError } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -50,8 +41,7 @@ export const useAuth = () => {
   }
   
   const logout = async () => {
-    const $supabase = getSupabase()
-    await $supabase.auth.signOut()
+    await supabase.auth.signOut()
     profile.value = null
     await navigateTo('/auth/login')
   }
@@ -59,8 +49,7 @@ export const useAuth = () => {
   const fetchProfile = async () => {
     if (!user.value) return null
     
-    const $supabase = getSupabase()
-    const { data, error } = await $supabase
+    const { data, error } = await supabase
       .from('users')
       .select('*, tenant:tenants(*)')
       .eq('id', user.value.id)

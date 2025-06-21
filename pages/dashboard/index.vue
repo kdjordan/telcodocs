@@ -1,9 +1,9 @@
 <template>
-  <div>
-    <!-- Loading state while profile is being fetched -->
+  <div class="min-h-screen bg-bgLight p-6">
+    <!-- Loading state -->
     <div v-if="profileLoading" class="flex items-center justify-center min-h-[400px]">
       <div class="text-center">
-        <svg class="animate-spin h-8 w-8 mx-auto text-blue-600" fill="none" viewBox="0 0 24 24">
+        <svg class="animate-spin h-8 w-8 mx-auto text-primary" fill="none" viewBox="0 0 24 24">
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
         </svg>
@@ -11,176 +11,193 @@
       </div>
     </div>
     
-    <!-- Main content -->
-    <div v-else>
+    <!-- Main Dashboard -->
+    <div v-else class="max-w-7xl mx-auto">
+      <!-- Header -->
       <div class="mb-8">
-        <h1 class="text-2xl font-bold font-heading text-textPrimary">Dashboard Overview</h1>
-        <p class="mt-1 text-sm text-textSecondary">
-          Welcome back{{ profile?.full_name ? ', ' + profile.full_name : '' }}
+        <h1 class="text-3xl font-bold font-heading text-textPrimary mb-2">
+          Good {{ getTimeOfDay() }}, {{ getFirstName() }}!
+        </h1>
+        <p class="text-textSecondary">
+          Here's what's happening with your carrier onboarding today.
         </p>
       </div>
-    
-    <!-- Stats Cards -->
-    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8">
-      <div class="card">
-        <div class="flex items-center">
-          <div class="flex-shrink-0 p-3 bg-blue-100 rounded-lg">
-            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+
+      <!-- Bento Grid Layout -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <!-- Primary Stats -->
+        <div class="stat-card">
+          <div class="flex items-center justify-between mb-3">
+            <div class="number-badge">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.196-2.121M9 6a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </div>
+            <span class="text-xs text-textSecondary font-medium">Total</span>
+          </div>
+          <div class="metric text-textPrimary">{{ stats.totalApplicants }}</div>
+          <p class="text-sm text-textSecondary mt-1">Active applicants</p>
+        </div>
+
+        <div class="stat-card-highlight">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <span class="text-xs text-white/80 font-medium">Pending</span>
+          </div>
+          <div class="metric">{{ stats.pendingApproval }}</div>
+          <p class="text-sm text-white/80 mt-1">Awaiting approval</p>
+        </div>
+
+        <div class="stat-card-accent">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <span class="text-xs text-white/80 font-medium">Complete</span>
+          </div>
+          <div class="metric">{{ stats.completed }}</div>
+          <p class="text-sm text-white/80 mt-1">Fully onboarded</p>
+        </div>
+
+        <div class="stat-card">
+          <div class="flex items-center justify-between mb-3">
+            <div class="number-badge">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+              </svg>
+            </div>
+            <span class="text-xs text-textSecondary font-medium">Active</span>
+          </div>
+          <div class="metric text-textPrimary">{{ stats.activeCarriers }}</div>
+          <p class="text-sm text-textSecondary mt-1">Carrier partners</p>
+        </div>
+      </div>
+
+      <!-- Secondary Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Recent Activity -->
+        <div class="lg:col-span-2 bento-card-lg">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xl font-bold font-heading text-textPrimary">Recent Applicants</h2>
+            <div class="flex items-center space-x-2">
+              <button class="text-xs text-textSecondary hover:text-textPrimary transition-colors">
+                View all
+              </button>
+              <svg class="w-4 h-4 text-textSecondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+          </div>
+          
+          <div v-if="loading" class="text-center py-12">
+            <svg class="animate-spin h-6 w-6 mx-auto text-primary" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
           </div>
-          <div class="ml-5 w-0 flex-1">
-            <dl>
-              <dt class="text-sm font-medium text-gray-500 truncate">
-                Total Applicants
-              </dt>
-              <dd class="text-lg font-semibold text-gray-900">
-                {{ stats.totalApplicants }}
-              </dd>
-            </dl>
-          </div>
-        </div>
-      </div>
-      
-      <div class="card">
-        <div class="flex items-center">
-          <div class="flex-shrink-0 p-3 bg-yellow-100 rounded-lg">
-            <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-          </div>
-          <div class="ml-5 w-0 flex-1">
-            <dl>
-              <dt class="text-sm font-medium text-gray-500 truncate">
-                Pending Approval
-              </dt>
-              <dd class="text-lg font-semibold text-gray-900">
-                {{ stats.pendingApproval }}
-              </dd>
-            </dl>
-          </div>
-        </div>
-      </div>
-      
-      <div class="card">
-        <div class="flex items-center">
-          <div class="flex-shrink-0 p-3 bg-green-100 rounded-lg">
-            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-          </div>
-          <div class="ml-5 w-0 flex-1">
-            <dl>
-              <dt class="text-sm font-medium text-gray-500 truncate">
-                Completed
-              </dt>
-              <dd class="text-lg font-semibold text-gray-900">
-                {{ stats.completed }}
-              </dd>
-            </dl>
-          </div>
-        </div>
-      </div>
-      
-      <div class="card">
-        <div class="flex items-center">
-          <div class="flex-shrink-0 p-3 bg-purple-100 rounded-lg">
-            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-            </svg>
-          </div>
-          <div class="ml-5 w-0 flex-1">
-            <dl>
-              <dt class="text-sm font-medium text-gray-500 truncate">
-                Active Carriers
-              </dt>
-              <dd class="text-lg font-semibold text-gray-900">
-                {{ stats.activeCarriers }}
-              </dd>
-            </dl>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Recent Applicants -->
-    <div class="card">
-      <h2 class="text-lg font-semibold mb-4">Recent Applicants</h2>
-      
-      <div v-if="loading" class="text-center py-8">
-        <div class="inline-flex items-center">
-          <svg class="animate-spin h-5 w-5 mr-3 text-gray-500" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-          </svg>
-          Loading...
-        </div>
-      </div>
-      
-      <div v-else-if="recentApplications.length > 0" class="overflow-hidden">
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead>
-            <tr>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Carrier
-              </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Stage
-              </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Status
-              </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Created
-              </th>
-              <th class="relative px-6 py-3">
-                <span class="sr-only">Actions</span>
-              </th>
-            </tr>
-          </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
-            <tr v-for="app in recentApplications" :key="app.id">
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div>
-                  <div class="text-sm font-medium text-gray-900">
-                    {{ app.carrier_name }}
-                  </div>
-                  <div class="text-sm text-gray-500">
-                    {{ app.carrier_email }}
-                  </div>
+          
+          <div v-else-if="recentApplications.length > 0" class="space-y-4">
+            <div v-for="app in recentApplications.slice(0, 5)" :key="app.id" 
+                 class="flex items-center justify-between p-4 bg-gray-50 rounded-2xl hover:bg-gray-100 transition-colors">
+              <div class="flex items-center space-x-4">
+                <div class="avatar bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white font-semibold">
+                  {{ app.carrier_name.charAt(0).toUpperCase() }}
                 </div>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <span class="text-sm text-gray-900">{{ app.current_stage.toUpperCase() }}</span>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <span
-                  class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
-                  :class="getStatusClass(app.status)"
-                >
-                  {{ app.status }}
-                </span>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {{ formatDate(app.created_at) }}
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <NuxtLink
-                  :to="`/dashboard/applications/${app.id}`"
-                  class="text-blue-600 hover:text-blue-900"
-                >
-                  View
-                </NuxtLink>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                <div>
+                  <h4 class="font-semibold text-textPrimary">{{ app.carrier_name }}</h4>
+                  <p class="text-sm text-textSecondary">{{ app.carrier_email }}</p>
+                </div>
+              </div>
+              
+              <div class="text-right">
+                <div class="flex items-center space-x-2 mb-1">
+                  <span class="status-indicator" :class="getStatusIndicator(app.status)"></span>
+                  <span class="text-sm font-medium text-textPrimary capitalize">{{ app.status.replace('_', ' ') }}</span>
+                </div>
+                <p class="text-xs text-textSecondary">{{ formatDate(app.created_at) }}</p>
+              </div>
+            </div>
+          </div>
+          
+          <div v-else class="text-center py-12">
+            <div class="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.196-2.121M9 6a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-textPrimary mb-2">No applicants yet</h3>
+            <p class="text-textSecondary">Your first carrier applications will appear here.</p>
+          </div>
+        </div>
+
+        <!-- Trial Status & Quick Actions -->
+        <div class="space-y-6">
+          <!-- Trial Status Card -->
+          <div class="dark-card">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="font-bold text-white">Trial Status</h3>
+              <span class="text-xs text-white/60">{{ trialDaysLeft }} days left</span>
+            </div>
+            
+            <div class="mb-4">
+              <div class="progress-bar mb-2">
+                <div class="progress-fill" :style="{ width: trialProgress + '%' }"></div>
+              </div>
+              <p class="text-sm text-white/80">{{ trialProgress }}% of trial used</p>
+            </div>
+            
+            <button class="w-full bg-white text-textPrimary font-semibold py-2.5 px-4 rounded-xl hover:bg-gray-100 transition-colors">
+              Upgrade Plan
+            </button>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="bento-card">
+            <h3 class="font-bold text-textPrimary mb-4">Quick Actions</h3>
+            <div class="space-y-3">
+              <button class="w-full text-left p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors group">
+                <div class="flex items-center space-x-3">
+                  <div class="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                    <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                  </div>
+                  <span class="font-medium text-textPrimary">Create Form</span>
+                </div>
+              </button>
+              
+              <button class="w-full text-left p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors group">
+                <div class="flex items-center space-x-3">
+                  <div class="w-8 h-8 bg-accent/10 rounded-lg flex items-center justify-center group-hover:bg-accent/20 transition-colors">
+                    <svg class="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364" />
+                    </svg>
+                  </div>
+                  <span class="font-medium text-textPrimary">Invite Carrier</span>
+                </div>
+              </button>
+              
+              <button class="w-full text-left p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors group">
+                <div class="flex items-center space-x-3">
+                  <div class="w-8 h-8 bg-warning/10 rounded-lg flex items-center justify-center group-hover:bg-warning/20 transition-colors">
+                    <svg class="w-4 h-4 text-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                  </div>
+                  <span class="font-medium text-textPrimary">Settings</span>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
-      
-      <div v-else class="text-center py-8 text-gray-500">
-        No applicants yet
-      </div>
-    </div>
     </div>
   </div>
 </template>
@@ -193,7 +210,7 @@ definePageMeta({
   middleware: 'auth'
 })
 
-const { $supabase } = useNuxtApp()
+const supabase = useSupabaseClient()
 const { profile, fetchProfile } = useAuth()
 const { tenant } = useTenant()
 
@@ -207,17 +224,48 @@ const stats = ref({
   activeCarriers: 0
 })
 
-const getStatusClass = (status: string) => {
+const getStatusIndicator = (status: string) => {
   const classes = {
-    'draft': 'bg-gray-100 text-gray-800',
-    'in_progress': 'bg-blue-100 text-blue-800',
-    'pending_approval': 'bg-yellow-100 text-yellow-800',
-    'approved': 'bg-green-100 text-green-800',
-    'rejected': 'bg-red-100 text-red-800',
-    'completed': 'bg-green-100 text-green-800'
+    'draft': 'status-info',
+    'in_progress': 'status-info', 
+    'pending_approval': 'status-warning',
+    'approved': 'status-success',
+    'rejected': 'status-warning',
+    'completed': 'status-success'
   }
-  return classes[status as keyof typeof classes] || 'bg-gray-100 text-gray-800'
+  return classes[status as keyof typeof classes] || 'status-info'
 }
+
+const getTimeOfDay = () => {
+  const hour = new Date().getHours()
+  if (hour < 12) return 'morning'
+  if (hour < 17) return 'afternoon'
+  return 'evening'
+}
+
+const getFirstName = () => {
+  return profile.value?.full_name?.split(' ')[0] || 'there'
+}
+
+// Trial calculations
+const trialDaysLeft = computed(() => {
+  if (!tenant.value?.trial_ends_at) return 0
+  const trialEnd = new Date(tenant.value.trial_ends_at)
+  const now = new Date()
+  const diffTime = trialEnd.getTime() - now.getTime()
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+  return Math.max(0, diffDays)
+})
+
+const trialProgress = computed(() => {
+  if (!tenant.value?.trial_ends_at) return 0
+  const trialEnd = new Date(tenant.value.trial_ends_at)
+  const trialStart = new Date(trialEnd.getTime() - (7 * 24 * 60 * 60 * 1000)) // 7 days ago
+  const now = new Date()
+  const totalDuration = trialEnd.getTime() - trialStart.getTime()
+  const usedDuration = now.getTime() - trialStart.getTime()
+  return Math.min(100, Math.max(0, Math.round((usedDuration / totalDuration) * 100)))
+})
 
 const formatDate = (date: string) => {
   return new Date(date).toLocaleDateString('en-US', {
@@ -246,7 +294,7 @@ const fetchDashboardData = async () => {
     }
     
     // Fetch recent applications
-    const { data: applications, error: appError } = await $supabase
+    const { data: applications, error: appError } = await supabase
       .from('applications')
       .select('*')
       .eq('tenant_id', tenant.value.id)
@@ -257,24 +305,24 @@ const fetchDashboardData = async () => {
     recentApplications.value = applications || []
     
     // Calculate stats
-    const { count: total } = await $supabase
+    const { count: total } = await supabase
       .from('applications')
       .select('*', { count: 'exact', head: true })
       .eq('tenant_id', tenant.value.id)
     
-    const { count: pending } = await $supabase
+    const { count: pending } = await supabase
       .from('applications')
       .select('*', { count: 'exact', head: true })
       .eq('tenant_id', tenant.value.id)
       .eq('status', 'pending_approval')
     
-    const { count: completed } = await $supabase
+    const { count: completed } = await supabase
       .from('applications')
       .select('*', { count: 'exact', head: true })
       .eq('tenant_id', tenant.value.id)
       .eq('status', 'completed')
     
-    const { count: carriers } = await $supabase
+    const { count: carriers } = await supabase
       .from('applications')
       .select('carrier_email', { count: 'exact', head: true })
       .eq('tenant_id', tenant.value.id)

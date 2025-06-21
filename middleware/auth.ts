@@ -1,17 +1,10 @@
 export default defineNuxtRouteMiddleware(async (to, from) => {
   try {
-    const { $supabase } = useNuxtApp()
-    
-    // Ensure Supabase is initialized
-    if (!$supabase || !$supabase.auth) {
-      console.error('Supabase client not properly initialized')
-      return navigateTo('/auth/login')
-    }
-    
+    const supabase = useSupabaseClient()
     const user = useSupabaseUser()
     
     // Check if user is authenticated
-    const { data: { session }, error } = await $supabase.auth.getSession()
+    const { data: { session }, error } = await supabase.auth.getSession()
     
     if (error) {
       console.error('Auth session error:', error)
@@ -25,7 +18,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   
   // Optionally check user role for specific routes
   if (to.meta.requiresRole) {
-    const { data: profile } = await $supabase
+    const { data: profile } = await supabase
       .from('users')
       .select('role')
       .eq('id', user.value?.id)

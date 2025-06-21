@@ -78,4 +78,199 @@
     transform: translateY(-2px);
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
   }
+  
+  /* Bento Card Variants */
+  .bento-card {
+    background-color: white;
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: none;
+    padding: 1.5rem;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .bento-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  }
+  
+  .bento-card-sm {
+    background-color: white;
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: none;
+    padding: 1.5rem;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+    min-height: 120px;
+  }
+  
+  .bento-card-md {
+    background-color: white;
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: none;
+    padding: 1.5rem;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+    min-height: 200px;
+  }
+  
+  .bento-card-lg {
+    background-color: white;
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: none;
+    padding: 1.5rem;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+    min-height: 300px;
+  }
+  
+  /* Stat Cards */
+  .stat-card {
+    background: linear-gradient(135deg, white 0%, #f8fafc 100%);
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: none;
+    padding: 1.5rem;
+    transition: all 0.2s;
+    min-height: 120px;
+  }
+  
+  .stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  }
+  
+  .stat-card-highlight {
+    background: linear-gradient(135deg, #91C4F2 0%, #7BB5EE 100%);
+    color: white;
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: none;
+    padding: 1.5rem;
+    transition: all 0.2s;
+    min-height: 120px;
+  }
+  
+  .stat-card-highlight:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(145, 196, 242, 0.3);
+  }
+  
+  .stat-card-accent {
+    background: linear-gradient(135deg, #A2E5C1 0%, #8FDEB0 100%);
+    color: white;
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: none;
+    padding: 1.5rem;
+    transition: all 0.2s;
+    min-height: 120px;
+  }
+  
+  .stat-card-accent:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(162, 229, 193, 0.3);
+  }
+  
+  /* Dark Cards */
+  .dark-card {
+    background: linear-gradient(135deg, #131A20 0%, #1a222a 100%);
+    color: white;
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: none;
+    padding: 1.5rem;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .dark-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Progress Elements */
+  .progress-bar {
+    height: 6px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #A2E5C1, #91C4F2);
+    border-radius: 3px;
+    transition: width 0.3s ease;
+  }
+  
+  /* Number Badges */
+  .number-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.75rem;
+    background-color: rgba(145, 196, 242, 0.1);
+    color: #91C4F2;
+    font-weight: 600;
+    font-size: 0.875rem;
+  }
+  
+  /* Metric Display */
+  .metric {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.2;
+    font-family: 'Manrope', sans-serif;
+  }
+  
+  .metric-sm {
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+  
+  /* Status Indicators */
+  .status-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  
+  .status-success {
+    background-color: #A2E5C1;
+  }
+  
+  .status-warning {
+    background-color: #F27272;
+  }
+  
+  .status-info {
+    background-color: #91C4F2;
+  }
+  
+  /* Avatar */
+  .avatar {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    border: 2px solid white;
+    overflow: hidden;
+  }
+  
+  .avatar-sm {
+    width: 2rem;
+    height: 2rem;
+  }
 }
