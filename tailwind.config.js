@@ -14,6 +14,7 @@ export default {
         primary: '#91C4F2',
         accent: '#A2E5C1', 
         warning: '#F27272',
+        dark: '#28282B',
         cardBg: '#d0e2e8',
         pageBg: '#dfecf1'
       },

@@ -51,7 +51,7 @@
           <div class="relative">
             <button
               @click="toggleUserMenu"
-              class="w-10 h-10 bg-gradient-to-br from-accent to-primary rounded-full flex items-center justify-center hover:ring-2 hover:ring-primary/20 transition-all"
+              class="w-10 h-10 bg-gradient-to-br from-dark to-primary rounded-full flex items-center justify-center hover:ring-2 hover:ring-primary/20 transition-all"
             >
               <span class="text-white text-sm font-semibold">
                 {{ getFirstName()?.charAt(0).toUpperCase() }}
@@ -81,7 +81,7 @@
       <!-- Bento Grid Layout -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <!-- Primary Stats -->
-        <div class="bg-cardBg rounded-2xl shadow-card p-6 transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-lg min-h-[120px]">
+        <div class="bg-cardBg rounded-2xl p-6 min-h-[120px]">
           <div class="flex items-center justify-between mb-3">
             <div class="flex items-center justify-center">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -94,7 +94,7 @@
           <p class="text-sm text-textSecondary mt-1">Active applicants</p>
         </div>
 
-        <div class="bg-cardBg rounded-2xl shadow-card p-6 transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-lg min-h-[120px]">
+        <div class="bg-cardBg rounded-2xl p-6 min-h-[120px]">
           <div class="flex items-center justify-between mb-3">
             <div class="flex items-center justify-center">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -107,7 +107,7 @@
           <p class="text-sm text-textPrimary mt-1">Awaiting approval</p>
         </div>
 
-        <div class="bg-cardBg rounded-2xl shadow-card p-6 transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-card-hover min-h-[120px]">
+        <div class="bg-cardBg rounded-2xl p-6 min-h-[120px]">
           <div class="flex items-center justify-between mb-3">
             <div class="flex items-center justify-center">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -120,7 +120,7 @@
           <p class="text-sm text-textPrimary mt-1">Fully onboarded</p>
         </div>
 
-        <div class="bg-cardBg rounded-2xl shadow-card p-6 transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-card-hover min-h-[120px]">
+        <div class="bg-cardBg rounded-2xl p-6 min-h-[120px]">
           <div class="flex items-center justify-between mb-3">
             <div class="flex items-center justify-center">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -137,7 +137,7 @@
       <!-- Secondary Grid -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <!-- Recent Activity -->
-        <div class="lg:col-span-2 bg-cardBg rounded-2xl shadow-card p-6 transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-card-hover min-h-[300px]">
+        <div class="lg:col-span-2 bg-cardBg rounded-2xl p-6 min-h-[300px]">
           <div class="flex items-center justify-between mb-6">
             <h2 class="text-xl font-bold font-heading text-textPrimary">Recent Applicants</h2>
             <div class="flex items-center space-x-2">
@@ -161,7 +161,7 @@
             <div v-for="app in recentApplications.slice(0, 5)" :key="app.id" 
                  class="flex items-center justify-between p-4 bg-cardBg rounded-2xl hover:bg-white/10 transition-colors">
               <div class="flex items-center space-x-4">
-                <div class="avatar bg-gradient-to-br from-primary to-accent flex items-center justify-center text-textPrimary font-semibold">
+                <div class="avatar bg-gradient-to-br from-primary to-dark flex items-center justify-center text-textPrimary font-semibold">
                   {{ app.carrier_name.charAt(0).toUpperCase() }}
                 </div>
                 <div>
@@ -194,7 +194,7 @@
         <!-- Trial Status & Quick Actions -->
         <div class="space-y-6">
           <!-- Trial Status Card -->
-          <div class="bg-cardBg rounded-2xl shadow-card p-6 transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-card-hover">
+          <div class="bg-cardBg rounded-2xl p-6">
             <div class="flex items-center justify-between mb-4">
               <h3 class="font-bold text-textPrimary">Trial Status</h3>
               <span class="text-xs text-textSecondary">{{ trialDaysLeft }} days left</span>
@@ -213,7 +213,7 @@
           </div>
 
           <!-- Quick Actions -->
-          <div class="bg-cardBg rounded-2xl shadow-card p-6 transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-card-hover">
+          <div class="bg-cardBg rounded-2xl p-6">
             <h3 class="font-bold text-textPrimary mb-4">Quick Actions</h3>
             <div class="space-y-3">
               <button class="w-full text-left p-3 bg-cardBg rounded-xl hover:bg-white/10 transition-colors group">
@@ -229,8 +229,8 @@
               
               <button class="w-full text-left p-3 bg-cardBg rounded-xl hover:bg-white/10 transition-colors group">
                 <div class="flex items-center space-x-3">
-                  <div class="w-8 h-8 bg-accent/10 rounded-lg flex items-center justify-center group-hover:bg-accent/20 transition-colors">
-                    <svg class="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div class="w-8 h-8 bg-dark/10 rounded-lg flex items-center justify-center group-hover:bg-dark/20 transition-colors">
+                    <svg class="w-4 h-4 text-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364" />
                     </svg>
                   </div>

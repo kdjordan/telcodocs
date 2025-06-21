@@ -9,14 +9,14 @@
       <!-- Logo/Brand -->
       <div class="flex items-center justify-between p-4 border-b border-white/10">
         <div v-if="!sidebarCollapsed" class="flex items-center space-x-3">
-          <div class="w-8 h-8 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center">
+          <div class="w-8 h-8 bg-gradient-to-br from-primary to-dark rounded-lg flex items-center justify-center">
             <span class="text-white font-bold text-sm">T</span>
           </div>
           <h1 class="text-white font-bold font-heading">
             {{ tenant?.name || 'Telodox' }}
           </h1>
         </div>
-        <div v-else class="w-8 h-8 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center mx-auto">
+        <div v-else class="w-8 h-8 bg-gradient-to-br from-primary to-dark rounded-lg flex items-center justify-center mx-auto">
           <span class="text-white font-bold text-sm">T</span>
         </div>
         
@@ -110,7 +110,7 @@
           <div class="relative">
             <button
               @click="toggleUserMenu"
-              class="w-8 h-8 bg-gradient-to-br from-accent to-primary rounded-full flex items-center justify-center hover:ring-2 hover:ring-white/20 transition-all"
+              class="w-8 h-8 bg-gradient-to-br from-dark to-primary rounded-full flex items-center justify-center hover:ring-2 hover:ring-white/20 transition-all"
             >
               <span class="text-white text-xs font-semibold">
                 {{ profile.full_name?.charAt(0).toUpperCase() }}
