@@ -29,9 +29,10 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
       return
     }
     
-    // Only redirect on production domains
-    if (process.client && hostname.includes(config.public.appDomain)) {
-      window.location.href = `https://www.${config.public.appDomain}`
+    // Only redirect if not already on the main domain
+    if (process.client && hostname.includes(config.public.appDomain) && 
+        hostname !== config.public.appDomain && hostname !== `www.${config.public.appDomain}`) {
+      window.location.href = `https://${config.public.appDomain}`
     }
     return
   }
