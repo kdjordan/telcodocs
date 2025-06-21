@@ -93,12 +93,22 @@ function extractSubdomain(hostname: string, appDomain: string): string | null {
   // Remove www. if present
   hostname = hostname.replace(/^www\./, '')
   
+  // Handle localhost with port
+  if (hostname.includes('localhost') || hostname.includes('127.0.0.1')) {
+    // For localhost, check if there's a subdomain before 'localhost'
+    const localhostMatch = hostname.match(/^([^.]+)\.(localhost|127\.0\.0\.1)(:\d+)?$/)
+    if (localhostMatch) {
+      return localhostMatch[1]
+    }
+    return null
+  }
+  
   // Check if it's the main domain
   if (hostname === appDomain || hostname === `www.${appDomain}`) {
     return null
   }
   
-  // Extract subdomain
+  // Extract subdomain for production domains
   const regex = new RegExp(`^([^.]+)\.${appDomain.replace('.', '\\.')}$`)
   const match = hostname.match(regex)
   
