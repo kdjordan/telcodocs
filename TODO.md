@@ -10,6 +10,14 @@
 - [x] Local subdomain testing setup
 - [x] Test tenant creation
 - [x] Super admin user creation
+- [x] AWS Amplify deployment configuration
+- [x] Production/development environment separation (.env and .env.local)
+- [x] Fixed authentication redirect loop issue
+- [x] Added trial functionality to tenants (7-day free trial)
+- [x] Fixed dashboard loading state
+- [x] Changed "Applications" to "Applicants" throughout UI
+- [x] Added 404 error page with proper redirects
+- [x] Improved login persistence with redirect handling
 
 ### 🚧 In Progress
 - [x] Super admin dashboard (`/admin`)
@@ -18,12 +26,19 @@
   - ✅ Platform analytics and health metrics
   - [ ] Advanced user management across tenants
 
+- [x] Self-Service Tenant Creation (Trial Version)
+  - ✅ Tenant onboarding flow
+  - ✅ Subdomain selection with availability check  
+  - ✅ Automatic tenant owner role assignment
+  - ✅ 7-day free trial setup
+  - [ ] Stripe integration for paid subscriptions
+
 ### 📋 Next Up
-- [ ] Self-Service Tenant Creation
-  - User subscription flow with Stripe
-  - Tenant onboarding after payment
-  - Subdomain selection with availability check
-  - Automatic tenant owner role assignment
+- [ ] Dashboard UI Improvements
+  - Better styling and layout
+  - Mobile responsiveness
+  - Trial status indicator
+  - Upgrade prompts for trial users
 
 - [ ] Tenant Management for Owners
   - Subdomain change functionality

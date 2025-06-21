@@ -52,31 +52,20 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    // Get the free plan
-    const { data: freePlan, error: planError } = await supabase
-      .from('subscription_plans')
-      .select('*')
-      .eq('name', 'Free')
-      .single()
+    // Calculate trial end date (7 days from now)
+    const trialEndsAt = new Date()
+    trialEndsAt.setDate(trialEndsAt.getDate() + 7)
 
-    if (planError || !freePlan) {
-      throw createError({
-        statusCode: 500,
-        statusMessage: 'Free plan not found'
-      })
-    }
-
-    // Create the tenant
+    // Create the tenant with trial
     const { data: tenant, error: tenantError } = await supabase
       .from('tenants')
       .insert({
         name: companyName,
         subdomain: subdomain.toLowerCase(),
-        subscription_status: 'active',
-        subscription_plan: 'Free',
-        billing_email: contactEmail,
+        trial_ends_at: trialEndsAt.toISOString(),
+        subscription_status: 'trial',
         settings: {
-          primary_color: '#0066cc',
+          contact_email: contactEmail || user.email,
           workflow_settings: {
             drip_mode: 'sequential',
             require_approval: true

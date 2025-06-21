@@ -2,6 +2,12 @@
 
 ## 🔴 Critical Issues
 
+### Authentication Redirect Loop (RESOLVED)
+**Status:** Resolved  
+**Issue:** ~~Users were getting stuck in a redirect loop when logging in on production~~  
+**Solution:** ✅ Fixed tenant middleware redirect logic and added proper environment handling  
+**Fixed:** 2025-06-21
+
 ### Subdomain Tenant Resolution
 **Status:** Partially working, needs refinement  
 **Issue:** Tenant detection for subdomains (e.g., `acme.localhost:3000`) isn't working consistently for anonymous users  
@@ -22,6 +28,18 @@
 **Issue:** ~~Row Level Security preventing user profile creation during registration~~  
 **Solution:** ✅ Fixed with database trigger approach for automatic user profile creation
 
+### Dashboard Loading State
+**Status:** Resolved  
+**Issue:** ~~Dashboard spinner wouldn't stop when no data exists~~  
+**Solution:** ✅ Added proper empty state handling and loading logic  
+**Fixed:** 2025-06-21
+
+### Login Session Persistence
+**Status:** Resolved  
+**Issue:** ~~Users had to re-login when visiting non-existent routes~~  
+**Solution:** ✅ Added redirect preservation in auth middleware and 404 error page  
+**Fixed:** 2025-06-21
+
 ## 🟢 Minor Issues
 
 ### Console Warnings
@@ -40,10 +58,11 @@
 ## 📝 Technical Debt
 
 ### Error Handling
-**Status:** Needs improvement  
+**Status:** Improved  
 **Issue:** Inconsistent error handling across components and API routes  
 **Impact:** User experience and debugging difficulty  
-**Solution:** Implement centralized error handling pattern
+**Solution:** Added error.vue page and improved auth middleware error handling  
+**Next:** Implement centralized error handling pattern for API routes
 
 ### Type Safety
 **Status:** Partial  
@@ -98,6 +117,26 @@
 **Issue:** No malware scanning or file type validation  
 **Impact:** Security risk  
 **Solution:** Implement proper file upload security measures
+
+## 🚧 New Issues Added (2025-06-21)
+
+### Production Environment Configuration
+**Status:** Active  
+**Issue:** Need separate environment configurations for dev and production  
+**Solution:** ✅ Implemented .env for production and .env.local for development  
+**Impact:** Proper environment-specific settings
+
+### Trial System Implementation
+**Status:** Completed  
+**Issue:** Need to implement 7-day free trial instead of upfront payment  
+**Solution:** ✅ Added trial_ends_at and subscription_status fields to tenants table  
+**Impact:** Better user onboarding experience
+
+### Dashboard UI Polish
+**Status:** Pending  
+**Issue:** Dashboard needs better styling and mobile responsiveness  
+**Impact:** User experience  
+**Solution:** Implement improved UI components and responsive design
 
 ---
 

@@ -4,6 +4,10 @@ export interface Tenant {
   subdomain: string
   domain?: string
   settings: TenantSettings
+  trial_ends_at?: string
+  subscription_status: 'trial' | 'active' | 'cancelled' | 'expired'
+  stripe_customer_id?: string
+  stripe_subscription_id?: string
   created_at: string
   updated_at: string
 }

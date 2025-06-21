@@ -1,13 +1,27 @@
 export default defineNuxtRouteMiddleware(async (to, from) => {
-  const { $supabase } = useNuxtApp()
-  const user = useSupabaseUser()
-  
-  // Check if user is authenticated
-  const { data: { session } } = await $supabase.auth.getSession()
-  
-  if (!session) {
-    return navigateTo('/auth/login')
-  }
+  try {
+    const { $supabase } = useNuxtApp()
+    
+    // Ensure Supabase is initialized
+    if (!$supabase || !$supabase.auth) {
+      console.error('Supabase client not properly initialized')
+      return navigateTo('/auth/login')
+    }
+    
+    const user = useSupabaseUser()
+    
+    // Check if user is authenticated
+    const { data: { session }, error } = await $supabase.auth.getSession()
+    
+    if (error) {
+      console.error('Auth session error:', error)
+      return navigateTo('/auth/login')
+    }
+    
+    if (!session) {
+      // Preserve the intended destination
+      return navigateTo(`/auth/login?redirect=${encodeURIComponent(to.fullPath)}`)
+    }
   
   // Optionally check user role for specific routes
   if (to.meta.requiresRole) {
@@ -23,5 +37,10 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
         statusMessage: 'Access denied'
       })
     }
+  }
+  } catch (error) {
+    console.error('Auth middleware error:', error)
+    // On error, redirect to login with intended destination
+    return navigateTo(`/auth/login?redirect=${encodeURIComponent(to.fullPath)}`)
   }
 })

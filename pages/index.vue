@@ -51,7 +51,23 @@
 <script setup lang="ts">
 const { tenant } = useTenant()
 const user = useSupabaseUser()
+const { profile } = useAuth()
 const config = useRuntimeConfig()
+const router = useRouter()
+
+// Redirect logged-in users to appropriate dashboard
+onMounted(async () => {
+  if (user.value) {
+    // Wait a bit for profile to load
+    await new Promise(resolve => setTimeout(resolve, 100))
+    
+    if (profile.value?.role === 'super_admin') {
+      await router.push('/admin')
+    } else {
+      await router.push('/dashboard')
+    }
+  }
+})
 
 // Compute the tenant access URL based on environment
 const tenantAccessUrl = computed(() => {

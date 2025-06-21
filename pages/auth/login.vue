@@ -102,8 +102,16 @@ const handleLogin = async () => {
   try {
     await login(form.email, form.password)
     
-    // Redirect based on user role
-    if (profile.value?.role === 'super_admin') {
+    // Wait for profile to be loaded
+    await new Promise(resolve => setTimeout(resolve, 100))
+    
+    // Get redirect from query params if exists
+    const redirect = router.currentRoute.value.query.redirect as string
+    
+    // Redirect based on user role or to intended destination
+    if (redirect && redirect !== '/auth/login') {
+      await router.push(redirect)
+    } else if (profile.value?.role === 'super_admin') {
       await router.push('/admin')
     } else {
       await router.push('/dashboard')

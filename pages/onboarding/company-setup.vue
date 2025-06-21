@@ -6,7 +6,7 @@
           Set Up Your Company
         </h1>
         <p class="text-lg text-gray-600">
-          Create your carrier onboarding portal and start with 3 free onboardings
+          Create your carrier onboarding portal and start with a 7-day free trial
         </p>
       </div>
 
@@ -47,7 +47,7 @@
                 @blur="validateSubdomain"
               >
               <span class="inline-flex items-center px-3 py-2 border border-l-0 border-gray-300 bg-gray-50 text-gray-500 text-sm rounded-r-md">
-                .localhost:3000
+                .{{ config.public.appDomain }}
               </span>
             </div>
             <p class="mt-2 text-sm text-gray-500">
@@ -91,17 +91,18 @@
               </div>
               <div class="ml-3">
                 <h3 class="text-sm font-medium text-blue-800">
-                  Starting with Free Plan
+                  Starting with 7-Day Free Trial
                 </h3>
                 <div class="mt-2 text-sm text-blue-700">
                   <ul class="space-y-1">
-                    <li>• 3 free carrier onboardings</li>
+                    <li>• 7 days free trial - no credit card required</li>
+                    <li>• Unlimited carrier onboardings</li>
                     <li>• Unlimited custom forms</li>
                     <li>• Full platform access</li>
                     <li>• Email support</li>
                   </ul>
                   <p class="mt-2 font-medium">
-                    Upgrade anytime for unlimited onboardings and advanced features.
+                    Select a subscription plan before your trial ends to keep your portal active.
                   </p>
                 </div>
               </div>
@@ -136,6 +137,7 @@ definePageMeta({
 const { $supabase } = useNuxtApp()
 const { profile } = useAuth()
 const router = useRouter()
+const config = useRuntimeConfig()
 
 const form = reactive({
   companyName: '',

@@ -1,11 +1,24 @@
 <template>
   <div>
-    <div class="mb-8">
-      <h1 class="text-2xl font-bold text-gray-900">Dashboard Overview</h1>
-      <p class="mt-1 text-sm text-gray-600">
-        Welcome back, {{ profile?.full_name }}
-      </p>
+    <!-- Loading state while profile is being fetched -->
+    <div v-if="profileLoading" class="flex items-center justify-center min-h-[400px]">
+      <div class="text-center">
+        <svg class="animate-spin h-8 w-8 mx-auto text-blue-600" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <p class="mt-2 text-gray-600">Loading dashboard...</p>
+      </div>
     </div>
+    
+    <!-- Main content -->
+    <div v-else>
+      <div class="mb-8">
+        <h1 class="text-2xl font-bold text-gray-900">Dashboard Overview</h1>
+        <p class="mt-1 text-sm text-gray-600">
+          Welcome back{{ profile?.full_name ? ', ' + profile.full_name : '' }}
+        </p>
+      </div>
     
     <!-- Stats Cards -->
     <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8">
@@ -19,10 +32,10 @@
           <div class="ml-5 w-0 flex-1">
             <dl>
               <dt class="text-sm font-medium text-gray-500 truncate">
-                Total Applications
+                Total Applicants
               </dt>
               <dd class="text-lg font-semibold text-gray-900">
-                {{ stats.totalApplications }}
+                {{ stats.totalApplicants }}
               </dd>
             </dl>
           </div>
@@ -90,9 +103,9 @@
       </div>
     </div>
     
-    <!-- Recent Applications -->
+    <!-- Recent Applicants -->
     <div class="card">
-      <h2 class="text-lg font-semibold mb-4">Recent Applications</h2>
+      <h2 class="text-lg font-semibold mb-4">Recent Applicants</h2>
       
       <div v-if="loading" class="text-center py-8">
         <div class="inline-flex items-center">
@@ -165,8 +178,9 @@
       </div>
       
       <div v-else class="text-center py-8 text-gray-500">
-        No applications yet
+        No applicants yet
       </div>
+    </div>
     </div>
   </div>
 </template>
@@ -180,13 +194,14 @@ definePageMeta({
 })
 
 const { $supabase } = useNuxtApp()
-const { profile } = useAuth()
+const { profile, fetchProfile } = useAuth()
 const { tenant } = useTenant()
 
 const loading = ref(true)
+const profileLoading = ref(true)
 const recentApplications = ref<Application[]>([])
 const stats = ref({
-  totalApplications: 0,
+  totalApplicants: 0,
   pendingApproval: 0,
   completed: 0,
   activeCarriers: 0
@@ -213,9 +228,23 @@ const formatDate = (date: string) => {
 }
 
 const fetchDashboardData = async () => {
-  if (!tenant.value) return
+  // Allow dashboard to load even without tenant
+  loading.value = true
   
   try {
+    if (!tenant.value) {
+      // Set empty state if no tenant
+      recentApplications.value = []
+      stats.value = {
+        totalApplicants: 0,
+        pendingApproval: 0,
+        completed: 0,
+        activeCarriers: 0
+      }
+      loading.value = false
+      return
+    }
+    
     // Fetch recent applications
     const { data: applications, error: appError } = await $supabase
       .from('applications')
@@ -251,7 +280,7 @@ const fetchDashboardData = async () => {
       .eq('tenant_id', tenant.value.id)
     
     stats.value = {
-      totalApplications: total || 0,
+      totalApplicants: total || 0,
       pendingApproval: pending || 0,
       completed: completed || 0,
       activeCarriers: carriers || 0
@@ -263,7 +292,15 @@ const fetchDashboardData = async () => {
   }
 }
 
-onMounted(() => {
-  fetchDashboardData()
+onMounted(async () => {
+  try {
+    await fetchProfile()
+  } catch (error) {
+    console.error('Error fetching profile:', error)
+  } finally {
+    profileLoading.value = false
+  }
+  
+  await fetchDashboardData()
 })
 </script>
