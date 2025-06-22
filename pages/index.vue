@@ -7,7 +7,7 @@
           <!-- Main Headline -->
           <h1 class="text-6xl md:text-7xl font-bold font-heading text-gray-900 mb-6 leading-tight">
             Stop Chasing 
-            <span class="text-transparent bg-gradient-to-r from-dark to-dark bg-clip-text">Signatures.</span>
+            <span class="text-7xl font-sign1">Signatures.</span>
             <br>Start Closing Deals.
           </h1>
           
