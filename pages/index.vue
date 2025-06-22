@@ -1,104 +1,289 @@
 <template>
-  <div class="min-h-screen bg-pageBg">
-    <!-- Hero Section -->
-    <section class="relative overflow-hidden">
-      <div class="max-w-7xl mx-auto px-6 py-24">
-        <div class="text-center">
-          <!-- Main Headline -->
-          <h1
-            class="text-6xl md:text-7xl font-bold font-heading text-gray-900 mb-6 leading-tight"
-          >
-            Stop Chasing
-            <span class="text-7xl font-sign1">Signatures.</span>
-            <br />Start Closing Deals.
-          </h1>
-
-          <!-- Subheadline -->
-          <p
-            class="text-xl md:text-2xl text-gray-600 mb-12 max-w-4xl mx-auto leading-relaxed"
-          >
-            The telecom onboarding platform that turns email chaos into
-            streamlined deal flow. Built specifically for carriers, fiber
-            operators, and VoIP providers who are tired of losing deals in
-            endless email threads.
-          </p>
-
-          <!-- CTA Buttons -->
-          <div class="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <NuxtLink
-              to="/auth/register"
-              class="bg-dark hover:bg-dark/90 text-white font-semibold px-8 py-4 rounded-2xl text-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
-            >
-              Start Free Trial
-            </NuxtLink>
-            <button
-              class="border border-gray-300 hover:border-dark text-gray-700 hover:text-dark font-semibold px-8 py-4 rounded-2xl text-lg transition-all duration-300"
-            >
-              Watch Demo
-            </button>
+  <div class="min-h-screen bg-black">
+    <!-- Top Navigation -->
+    <nav class="main-nav hero-nav fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md border-b border-white/10">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="flex items-center justify-between h-16">
+          <!-- Logo -->
+          <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 bg-pink-500 rounded-lg flex items-center justify-center">
+              <span class="text-white text-sm font-bold">T</span>
+            </div>
+            <span class="text-white font-bold text-xl">TeloDox</span>
           </div>
 
-          <!-- Trust Badge -->
-          <p class="text-sm text-gray-500 mb-8">
-            7-day free trial • No credit card required • Cancel anytime
-          </p>
+          <!-- Desktop Navigation -->
+          <div class="hidden md:flex items-center space-x-8">
+            <a href="#how-it-works" class="text-white/80 hover:text-white transition-colors cursor-pointer">
+              How It Works
+            </a>
+            <a href="#pricing" class="text-white/80 hover:text-white transition-colors cursor-pointer">
+              Pricing
+            </a>
+            <a href="#contact" class="text-white/80 hover:text-white transition-colors cursor-pointer">
+              Contact
+            </a>
+            <NuxtLink to="/auth/login" class="text-white/80 hover:text-white transition-colors">
+              Sign In
+            </NuxtLink>
+          </div>
+
+          <!-- CTA Button -->
+          <div class="hidden md:block">
+            <GlowButton
+              tag="NuxtLink"
+              to="/auth/register"
+              size="sm"
+            >
+              Start Free Trial
+            </GlowButton>
+          </div>
+
+          <!-- Mobile Menu Button -->
+          <button 
+            @click="mobileMenuOpen = !mobileMenuOpen"
+            class="md:hidden text-white p-2"
+          >
+            <Bars3Icon v-if="!mobileMenuOpen" class="w-6 h-6" />
+            <XMarkIcon v-if="mobileMenuOpen" class="w-6 h-6" />
+          </button>
         </div>
+
+        <!-- Mobile Menu -->
+        <div v-if="mobileMenuOpen" class="md:hidden border-t border-white/10 py-4">
+          <div class="flex flex-col space-y-4">
+            <a href="#how-it-works" @click="mobileMenuOpen = false" class="text-white/80 hover:text-white transition-colors">
+              How It Works
+            </a>
+            <a href="#pricing" @click="mobileMenuOpen = false" class="text-white/80 hover:text-white transition-colors">
+              Pricing
+            </a>
+            <a href="#contact" @click="mobileMenuOpen = false" class="text-white/80 hover:text-white transition-colors">
+              Contact
+            </a>
+            <NuxtLink to="/auth/login" @click="mobileMenuOpen = false" class="text-white/80 hover:text-white transition-colors">
+              Sign In
+            </NuxtLink>
+            <div class="pt-4">
+              <GlowButton
+                tag="NuxtLink"
+                to="/auth/register"
+                size="sm"
+                class="w-full"
+                @click="mobileMenuOpen = false"
+              >
+                Start Free Trial
+              </GlowButton>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden bg-brand-dark py-20 lg:py-32 pt-32">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <!-- Left Side - Content -->
+          <div class="hero-content">
+            <!-- Main Headline -->
+            <h1 class="text-5xl md:text-6xl font-bold font-heading text-white mb-6 leading-tight">
+              Your Telco's<br />
+              Deal Desk.<br />
+              Reimagined.
+            </h1>
+
+            <!-- Subheadline -->
+            <p class="text-xl text-white/80 mb-8 leading-relaxed max-w-lg">
+              Upload MSAs, automate redlines, track interop steps — all in one branded portal. 
+              Telodox turns onboarding into a sales asset.
+            </p>
+
+            <!-- CTA Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4 mb-8">
+              <GlowButton
+                tag="NuxtLink"
+                to="/auth/register"
+                size="lg"
+              >
+                Start Free Trial
+              </GlowButton>
+              <button
+                class="border border-white/30 hover:border-white/50 text-white hover:text-white font-semibold px-8 py-4 rounded-2xl text-lg transition-all duration-300"
+              >
+                See How It Works
+              </button>
+            </div>
+
+            <!-- Trust Badge -->
+            <p class="text-sm text-white/60">
+              7-day free trial • No credit card required • Cancel anytime
+            </p>
+          </div>
+
+          <!-- Right Side - Layered Dashboard Mockup -->
+          <div class="hidden lg:block hero-dashboard">
+            <div class="relative h-[600px]">
+              <!-- Background Dashboard (skewed) -->
+              <div class="absolute top-0 right-0 w-[480px] h-[400px] transform rotate-3 translate-x-8 translate-y-8">
+                <div class="bg-gray-800/90 border border-gray-700/50 rounded-xl p-6 shadow-2xl backdrop-blur-sm h-full">
+                  <div class="space-y-4">
+                    <div class="h-6 bg-gray-600/50 rounded w-3/4"></div>
+                    <div class="space-y-3">
+                      <div class="h-12 bg-gray-700/30 rounded-lg"></div>
+                      <div class="h-12 bg-gray-700/30 rounded-lg"></div>
+                      <div class="h-12 bg-gray-700/30 rounded-lg"></div>
+                    </div>
+                    <div class="pt-4 border-t border-gray-600/30">
+                      <div class="space-y-2">
+                        <div class="h-3 bg-gray-600/40 rounded w-2/3"></div>
+                        <div class="h-3 bg-gray-600/40 rounded w-1/2"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Foreground Dashboard (main) -->
+              <div class="absolute top-0 left-0 w-[480px] h-[400px] z-10">
+                <div class="bg-gray-900/95 border border-gray-700/70 rounded-xl p-6 shadow-2xl backdrop-blur-md h-full">
+                  <!-- Header -->
+                  <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center space-x-3">
+                      <div class="w-8 h-8 bg-pink-500 rounded-lg flex items-center justify-center">
+                        <span class="text-white text-sm font-bold">T</span>
+                      </div>
+                      <span class="text-white font-semibold">TeloDox</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                      <div class="w-2 h-2 bg-green-400 rounded-full"></div>
+                      <span class="text-white/60 text-sm">Live</span>
+                    </div>
+                  </div>
+
+                  <!-- Main Content -->
+                  <div class="space-y-4">
+                    <!-- Active Deal -->
+                    <div class="bg-gradient-to-r from-pink-500/20 to-purple-500/20 border border-pink-500/30 rounded-lg p-4">
+                      <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                          <DocumentDuplicateIcon class="w-5 h-5 text-pink-400" />
+                          <div>
+                            <div class="text-white font-medium">MSA Negotiation</div>
+                            <div class="text-white/60 text-sm">Acme Telecom - Final Review</div>
+                          </div>
+                        </div>
+                        <div class="px-2 py-1 bg-pink-500/20 rounded-full">
+                          <span class="text-pink-400 text-xs font-medium">Active</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Pipeline Items -->
+                    <div class="bg-white/5 border border-white/10 rounded-lg p-4">
+                      <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                          <ClockIcon class="w-5 h-5 text-orange-400" />
+                          <div>
+                            <div class="text-white font-medium">FUSF Documentation</div>
+                            <div class="text-white/60 text-sm">NetConnect - Pending</div>
+                          </div>
+                        </div>
+                        <div class="w-2 h-2 bg-orange-400 rounded-full"></div>
+                      </div>
+                    </div>
+
+                    <div class="bg-white/5 border border-white/10 rounded-lg p-4">
+                      <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                          <CheckCircleIcon class="w-5 h-5 text-green-400" />
+                          <div>
+                            <div class="text-white font-medium">KYC Verification</div>
+                            <div class="text-white/60 text-sm">FiberCorp - Complete</div>
+                          </div>
+                        </div>
+                        <div class="w-2 h-2 bg-green-400 rounded-full"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Bottom Stats -->
+                  <div class="mt-6 pt-4 border-t border-white/10">
+                    <div class="flex items-center justify-between text-sm">
+                      <span class="text-white/60">Pipeline Health</span>
+                      <span class="text-green-400 font-medium">94% Complete</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Glow Effects -->
+              <div class="absolute -inset-4 bg-gradient-to-r from-pink-500/10 to-purple-500/10 rounded-3xl blur-2xl -z-10"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Background decorative elements -->
+      <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-40 -right-40 w-80 h-80 bg-pink-500/10 rounded-full blur-3xl"></div>
+        <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl"></div>
       </div>
     </section>
 
     <!-- Problem Section -->
-    <section class="py-20">
+    <section class="py-20 bg-black animate-on-scroll">
       <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-16">
-          <h2 class="text-5xl font-bold font-heading text-gray-900 mb-6">
+          <h2 class="text-5xl font-bold font-heading text-white mb-6">
             The Telecom Onboarding Nightmare
           </h2>
-          <p class="text-3xl text-gray-700 font-medium mb-12 leading-tight">
+          <p class="text-3xl text-white/80 font-medium mb-12 leading-tight">
             15+ emails. 6 document versions. 3 weeks later...
-            <span class="text-dark font-bold">still no signature.</span>
+            <span class="text-pink-500 font-bold">still no signature.</span>
           </p>
         </div>
 
         <!-- Problem Cards Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-          <div class="bg-cardBg rounded-2xl p-6 text-center">
+        <div class="animate-cards grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+          <div class="card bg-white/5 border border-white/10 rounded-2xl p-6 text-center">
             <div
-              class="w-12 h-12 bg-dark/20 rounded-xl flex items-center justify-center mx-auto mb-4"
+              class="w-12 h-12 bg-pink-500/20 rounded-xl flex items-center justify-center mx-auto mb-4"
             >
-              <EnvelopeIcon class="w-6 h-6 text-dark" />
+              <EnvelopeIcon class="w-6 h-6 text-pink-400" />
             </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-2">
+            <h3 class="text-xl font-semibold text-white mb-2">
               Email Chaos
             </h3>
-            <p class="text-gray-600">
+            <p class="text-white/60">
               KYC forms buried in attachments across 15+ email threads
             </p>
           </div>
 
-          <div class="bg-cardBg rounded-2xl p-6 text-center">
+          <div class="card bg-white/5 border border-white/10 rounded-2xl p-6 text-center">
             <div
-              class="w-12 h-12 bg-dark/20 rounded-xl flex items-center justify-center mx-auto mb-4"
+              class="w-12 h-12 bg-orange-500/20 rounded-xl flex items-center justify-center mx-auto mb-4"
             >
-              <DocumentDuplicateIcon class="w-6 h-6 text-dark" />
+              <DocumentDuplicateIcon class="w-6 h-6 text-orange-400" />
             </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-2">
+            <h3 class="text-xl font-semibold text-white mb-2">
               Version Confusion
             </h3>
-            <p class="text-gray-600">
+            <p class="text-white/60">
               MSAs with conflicting redlines across multiple document versions
             </p>
           </div>
 
-          <div class="bg-cardBg rounded-2xl p-6 text-center">
+          <div class="card bg-white/5 border border-white/10 rounded-2xl p-6 text-center">
             <div
-              class="w-12 h-12 bg-dark/20 rounded-xl flex items-center justify-center mx-auto mb-4"
+              class="w-12 h-12 bg-red-500/20 rounded-xl flex items-center justify-center mx-auto mb-4"
             >
-              <ClockIcon class="w-6 h-6 text-dark" />
+              <ClockIcon class="w-6 h-6 text-red-400" />
             </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-2">
+            <h3 class="text-xl font-semibold text-white mb-2">
               Deal Delays
             </h3>
-            <p class="text-gray-600">
+            <p class="text-white/60">
               40+ hours per month wrangling missing fields and stalled approvals
             </p>
           </div>
@@ -106,14 +291,14 @@
 
         <!-- Large Impact Statement -->
         <div
-          class="bg-dark/10 border border-dark/20 rounded-3xl p-12 text-center"
+          class="bg-white/5 border border-white/10 rounded-3xl p-12 text-center"
         >
-          <h3 class="text-4xl font-bold text-gray-900 mb-4">
+          <h3 class="text-4xl font-bold text-white mb-4">
             Sales teams waste
-            <span class="text-dark">40+ hours per month</span> on manual
+            <span class="text-pink-500">40+ hours per month</span> on manual
             onboarding
           </h3>
-          <p class="text-xl text-gray-600">
+          <p class="text-xl text-white/60">
             While competitors close deals faster with streamlined processes
           </p>
         </div>
@@ -121,27 +306,27 @@
     </section>
 
     <!-- Solution Section -->
-    <section class="py-20">
+    <section class="py-20 bg-black animate-on-scroll">
       <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-16">
-          <h2 class="text-5xl font-bold font-heading text-gray-900 mb-6">
+          <h2 class="text-5xl font-bold font-heading text-white mb-6">
             Telodox Fixes That
           </h2>
-          <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p class="text-xl text-white/60 max-w-3xl mx-auto">
             The complete telecom onboarding solution that turns chaos into
             clean, automated workflows
           </p>
         </div>
 
         <!-- Features Bento Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="animate-cards grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <!-- Build Once -->
-          <div class="bg-cardBg rounded-2xl p-8">
+          <div class="card bg-white/5 border border-white/10 rounded-2xl p-8">
             <div
-              class="w-12 h-12 bg-dark/20 rounded-xl flex items-center justify-center mb-6"
+              class="w-12 h-12 bg-pink-500/20 rounded-xl flex items-center justify-center mb-6"
             >
               <svg
-                class="w-6 h-6 text-dark"
+                class="w-6 h-6 text-pink-400"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -154,22 +339,22 @@
                 />
               </svg>
             </div>
-            <h3 class="text-xl font-bold text-gray-900 mb-3">
+            <h3 class="text-xl font-bold text-white mb-3">
               Build Once, Use Forever
             </h3>
-            <p class="text-gray-600">
+            <p class="text-white/60">
               Upload PDFs or build forms from scratch. Set required fields so
               nothing gets missed.
             </p>
           </div>
 
           <!-- Smart Flow -->
-          <div class="bg-cardBg rounded-2xl p-8">
+          <div class="card bg-white/5 border border-white/10 rounded-2xl p-8">
             <div
-              class="w-12 h-12 bg-dark/20 rounded-xl flex items-center justify-center mb-6"
+              class="w-12 h-12 bg-pink-500/20 rounded-xl flex items-center justify-center mb-6"
             >
               <svg
-                class="w-6 h-6 text-dark"
+                class="w-6 h-6 text-pink-400"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -182,22 +367,22 @@
                 />
               </svg>
             </div>
-            <h3 class="text-xl font-bold text-gray-900 mb-3">
+            <h3 class="text-xl font-bold text-white mb-3">
               Smart Document Flow
             </h3>
-            <p class="text-gray-600">
+            <p class="text-white/60">
               KYC → FUSF → MSA → Interop. Next doc only appears when the
               previous one's approved.
             </p>
           </div>
 
           <!-- Redlining -->
-          <div class="bg-cardBg rounded-2xl p-8">
+          <div class="card bg-white/5 border border-white/10 rounded-2xl p-8">
             <div
-              class="w-12 h-12 bg-dark/20 rounded-xl flex items-center justify-center mb-6"
+              class="w-12 h-12 bg-pink-500/20 rounded-xl flex items-center justify-center mb-6"
             >
               <svg
-                class="w-6 h-6 text-dark"
+                class="w-6 h-6 text-pink-400"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -210,22 +395,22 @@
                 />
               </svg>
             </div>
-            <h3 class="text-xl font-bold text-gray-900 mb-3">
+            <h3 class="text-xl font-bold text-white mb-3">
               Built-in Redlining
             </h3>
-            <p class="text-gray-600">
+            <p class="text-white/60">
               Track changes with full version control. No more "which document
               is current?"
             </p>
           </div>
 
           <!-- Collaboration -->
-          <div class="bg-cardBg rounded-2xl p-8">
+          <div class="card bg-white/5 border border-white/10 rounded-2xl p-8">
             <div
-              class="w-12 h-12 bg-dark/20 rounded-xl flex items-center justify-center mb-6"
+              class="w-12 h-12 bg-pink-500/20 rounded-xl flex items-center justify-center mb-6"
             >
               <svg
-                class="w-6 h-6 text-dark"
+                class="w-6 h-6 text-pink-400"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -238,22 +423,22 @@
                 />
               </svg>
             </div>
-            <h3 class="text-xl font-bold text-gray-900 mb-3">
+            <h3 class="text-xl font-bold text-white mb-3">
               Real-time Collaboration
             </h3>
-            <p class="text-gray-600">
+            <p class="text-white/60">
               In-app chat and notifications when action is needed. Stop playing
               email tag.
             </p>
           </div>
 
           <!-- Branded Portal -->
-          <div class="bg-cardBg rounded-2xl p-8">
+          <div class="card bg-white/5 border border-white/10 rounded-2xl p-8">
             <div
-              class="w-12 h-12 bg-dark/20 rounded-xl flex items-center justify-center mb-6"
+              class="w-12 h-12 bg-pink-500/20 rounded-xl flex items-center justify-center mb-6"
             >
               <svg
-                class="w-6 h-6 text-dark"
+                class="w-6 h-6 text-pink-400"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -266,22 +451,22 @@
                 />
               </svg>
             </div>
-            <h3 class="text-xl font-bold text-gray-900 mb-3">
+            <h3 class="text-xl font-bold text-white mb-3">
               Your Branded Portal
             </h3>
-            <p class="text-gray-600">
+            <p class="text-white/60">
               Custom subdomain that integrates seamlessly with your sales
               process.
             </p>
           </div>
 
           <!-- Pipeline Visibility -->
-          <div class="bg-cardBg rounded-2xl p-8">
+          <div class="card bg-white/5 border border-white/10 rounded-2xl p-8">
             <div
-              class="w-12 h-12 bg-dark/20 rounded-xl flex items-center justify-center mb-6"
+              class="w-12 h-12 bg-pink-500/20 rounded-xl flex items-center justify-center mb-6"
             >
               <svg
-                class="w-6 h-6 text-dark"
+                class="w-6 h-6 text-pink-400"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -294,10 +479,10 @@
                 />
               </svg>
             </div>
-            <h3 class="text-xl font-bold text-gray-900 mb-3">
+            <h3 class="text-xl font-bold text-white mb-3">
               Full Pipeline Visibility
             </h3>
-            <p class="text-gray-600">
+            <p class="text-white/60">
               See exactly where every deal stands. Identify bottlenecks before
               they kill momentum.
             </p>
@@ -307,10 +492,10 @@
     </section>
 
     <!-- How It Works Section -->
-    <section class="py-20">
+    <section id="how-it-works" class="py-20 bg-black">
       <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-16">
-          <h2 class="text-5xl font-bold font-heading text-gray-900 mb-6">
+          <h2 class="text-5xl font-bold font-heading text-white mb-6">
             Get Live in 3 Simple Steps
           </h2>
         </div>
@@ -324,14 +509,14 @@
             >
               1
             </div>
-            <h3 class="text-2xl font-bold text-gray-900 mb-4">
+            <h3 class="text-2xl font-bold text-white mb-4">
               Set Up Your Portal
             </h3>
-            <div class="bg-cardBg rounded-2xl p-6">
-              <p class="text-gray-600 mb-4">
+            <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
+              <p class="text-white/60 mb-4">
                 <strong>2 minutes to go live</strong>
               </p>
-              <ul class="text-gray-600 space-y-2">
+              <ul class="text-white/60 space-y-2">
                 <li>• Choose your subdomain</li>
                 <li>• Upload logo & brand colors</li>
                 <li>• You're live!</li>
@@ -346,14 +531,14 @@
             >
               2
             </div>
-            <h3 class="text-2xl font-bold text-gray-900 mb-4">
+            <h3 class="text-2xl font-bold text-white mb-4">
               Build Your Flow
             </h3>
-            <div class="bg-cardBg rounded-2xl p-6">
-              <p class="text-gray-600 mb-4">
+            <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
+              <p class="text-white/60 mb-4">
                 <strong>Drag, drop, done</strong>
               </p>
-              <ul class="text-gray-600 space-y-2">
+              <ul class="text-white/60 space-y-2">
                 <li>• Upload PDFs or build forms</li>
                 <li>• Set required fields</li>
                 <li>• Define document sequence</li>
@@ -368,12 +553,12 @@
             >
               3
             </div>
-            <h3 class="text-2xl font-bold text-gray-900 mb-4">Share & Scale</h3>
-            <div class="bg-cardBg rounded-2xl p-6">
-              <p class="text-gray-600 mb-4">
+            <h3 class="text-2xl font-bold text-white mb-4">Share & Scale</h3>
+            <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
+              <p class="text-white/60 mb-4">
                 <strong>Let the system work</strong>
               </p>
-              <ul class="text-gray-600 space-y-2">
+              <ul class="text-white/60 space-y-2">
                 <li>• Share your onboarding link</li>
                 <li>• Carriers self-complete</li>
                 <li>• Close deals faster</li>
@@ -385,13 +570,13 @@
     </section>
 
     <!-- Pricing Section -->
-    <section class="py-20">
+    <section id="pricing" class="py-20 bg-black">
       <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-16">
-          <h2 class="text-5xl font-bold font-heading text-gray-900 mb-6">
+          <h2 class="text-5xl font-bold font-heading text-white mb-6">
             Simple, Transparent Pricing
           </h2>
-          <p class="text-2xl text-gray-700 font-medium">
+          <p class="text-2xl text-white/80 font-medium">
             Start Free. Scale When Ready.
           </p>
         </div>
@@ -399,42 +584,44 @@
         <!-- Pricing Cards -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
           <!-- Free Trial -->
-          <div class="bg-cardBg rounded-2xl p-8 border-2 border-dark">
+          <div class="bg-white/5 border-2 border-pink-500 rounded-2xl p-8">
             <div class="text-center mb-8">
-              <h3 class="text-2xl font-bold text-gray-900 mb-2">Free Trial</h3>
+              <h3 class="text-2xl font-bold text-white mb-2">Free Trial</h3>
               <div class="text-4xl font-bold text-dark mb-2">7 Days</div>
-              <p class="text-gray-600">No credit card required</p>
+              <p class="text-white/60">No credit card required</p>
             </div>
 
             <ul class="space-y-3 mb-8">
               <li class="flex items-center text-gray-700">
-                <span class="text-dark mr-2">✓</span>Unlimited documents
+                <span class="text-pink-500 mr-2">✓</span>Unlimited documents
               </li>
               <li class="flex items-center text-gray-700">
-                <span class="text-dark mr-2">✓</span>Up to 10 active
+                <span class="text-pink-500 mr-2">✓</span>Up to 10 active
                 applications
               </li>
               <li class="flex items-center text-gray-700">
-                <span class="text-dark mr-2">✓</span>Full feature access
+                <span class="text-pink-500 mr-2">✓</span>Full feature access
               </li>
               <li class="flex items-center text-gray-700">
-                <span class="text-dark mr-2">✓</span>Custom subdomain
+                <span class="text-pink-500 mr-2">✓</span>Custom subdomain
               </li>
               <li class="flex items-center text-gray-700">
-                <span class="text-dark mr-2">✓</span>Email support
+                <span class="text-pink-500 mr-2">✓</span>Email support
               </li>
             </ul>
 
-            <NuxtLink
+            <GlowButton
+              tag="NuxtLink"
               to="/auth/register"
-              class="w-full bg-dark hover:bg-dark/90 text-white font-semibold py-3 px-6 rounded-xl text-center block transition-all duration-300"
+              size="md"
+              class="w-full"
             >
               Start Free Trial
-            </NuxtLink>
+            </GlowButton>
           </div>
 
           <!-- Pro Plan -->
-          <div class="bg-cardBg rounded-2xl p-8 relative">
+          <div class="bg-white/5 border border-white/10 rounded-2xl p-8 relative">
             <div class="absolute -top-4 left-1/2 transform -translate-x-1/2">
               <span
                 class="bg-dark text-white px-4 py-1 rounded-full text-sm font-semibold"
@@ -443,62 +630,64 @@
             </div>
 
             <div class="text-center mb-8">
-              <h3 class="text-2xl font-bold text-gray-900 mb-2">Pro Plan</h3>
-              <div class="text-4xl font-bold text-gray-900 mb-2">
+              <h3 class="text-2xl font-bold text-white mb-2">Pro Plan</h3>
+              <div class="text-4xl font-bold text-white mb-2">
                 $99<span class="text-lg text-gray-600">/month</span>
               </div>
-              <p class="text-gray-600">Perfect for growing teams</p>
+              <p class="text-white/60">Perfect for growing teams</p>
             </div>
 
             <ul class="space-y-3 mb-8">
               <li class="flex items-center text-gray-700">
-                <span class="text-dark mr-2">✓</span>Everything in Free Trial
+                <span class="text-pink-500 mr-2">✓</span>Everything in Free Trial
               </li>
               <li class="flex items-center text-gray-700">
-                <span class="text-dark mr-2">✓</span>Unlimited applications
+                <span class="text-pink-500 mr-2">✓</span>Unlimited applications
               </li>
               <li class="flex items-center text-gray-700">
-                <span class="text-dark mr-2">✓</span>Advanced analytics
+                <span class="text-pink-500 mr-2">✓</span>Advanced analytics
               </li>
               <li class="flex items-center text-gray-700">
-                <span class="text-dark mr-2">✓</span>Priority support
+                <span class="text-pink-500 mr-2">✓</span>Priority support
               </li>
               <li class="flex items-center text-gray-700">
-                <span class="text-dark mr-2">✓</span>Custom integrations
+                <span class="text-pink-500 mr-2">✓</span>Custom integrations
               </li>
             </ul>
 
-            <NuxtLink
+            <GlowButton
+              tag="NuxtLink"
               to="/auth/register"
-              class="w-full bg-dark hover:bg-dark/90 text-white font-semibold py-3 px-6 rounded-xl text-center block transition-all duration-300"
+              size="md"
+              class="w-full"
             >
               Choose Pro
-            </NuxtLink>
+            </GlowButton>
           </div>
 
           <!-- Enterprise -->
-          <div class="bg-cardBg rounded-2xl p-8">
+          <div class="bg-white/5 border border-white/10 rounded-2xl p-8">
             <div class="text-center mb-8">
-              <h3 class="text-2xl font-bold text-gray-900 mb-2">Enterprise</h3>
-              <div class="text-4xl font-bold text-gray-900 mb-2">Custom</div>
-              <p class="text-gray-600">For large organizations</p>
+              <h3 class="text-2xl font-bold text-white mb-2">Enterprise</h3>
+              <div class="text-4xl font-bold text-white mb-2">Custom</div>
+              <p class="text-white/60">For large organizations</p>
             </div>
 
             <ul class="space-y-3 mb-8">
               <li class="flex items-center text-gray-700">
-                <span class="text-dark mr-2">✓</span>Everything in Pro
+                <span class="text-pink-500 mr-2">✓</span>Everything in Pro
               </li>
               <li class="flex items-center text-gray-700">
-                <span class="text-dark mr-2">✓</span>Dedicated success manager
+                <span class="text-pink-500 mr-2">✓</span>Dedicated success manager
               </li>
               <li class="flex items-center text-gray-700">
-                <span class="text-dark mr-2">✓</span>Custom workflows
+                <span class="text-pink-500 mr-2">✓</span>Custom workflows
               </li>
               <li class="flex items-center text-gray-700">
-                <span class="text-dark mr-2">✓</span>API access
+                <span class="text-pink-500 mr-2">✓</span>API access
               </li>
               <li class="flex items-center text-gray-700">
-                <span class="text-dark mr-2">✓</span>SSO integration
+                <span class="text-pink-500 mr-2">✓</span>SSO integration
               </li>
             </ul>
 
@@ -513,47 +702,48 @@
     </section>
 
     <!-- Final CTA Section -->
-    <section class="py-20 bg-gradient-to-br from-dark/10 to-dark/10">
+    <section id="contact" class="py-20 bg-black">
       <div class="max-w-7xl mx-auto px-6 text-center">
-        <h2 class="text-5xl font-bold font-heading text-gray-900 mb-6">
+        <h2 class="text-5xl font-bold font-heading text-white mb-6">
           Ready to Transform Your Onboarding?
         </h2>
-        <p class="text-2xl text-gray-700 mb-12">
+        <p class="text-2xl text-white/80 mb-12">
           Stop losing deals to process friction.
         </p>
 
         <!-- Large CTA Buttons -->
         <div class="flex flex-col sm:flex-row gap-6 justify-center mb-12">
-          <NuxtLink
+          <GlowButton
+            tag="NuxtLink"
             to="/auth/register"
-            class="bg-dark hover:bg-dark/90 text-white font-bold px-12 py-6 rounded-2xl text-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1"
+            size="xl"
           >
             Start Free Trial
-          </NuxtLink>
+          </GlowButton>
           <button
-            class="border-2 border-gray-300 hover:border-dark text-gray-700 hover:text-dark font-bold px-12 py-6 rounded-2xl text-xl transition-all duration-300"
+            class="border-2 border-white/30 hover:border-white/50 text-white hover:text-white font-bold px-12 py-6 rounded-2xl text-xl transition-all duration-300"
           >
             Book Demo
           </button>
         </div>
 
         <!-- Risk-Free Promise -->
-        <div class="bg-cardBg rounded-2xl p-8 inline-block">
-          <h3 class="text-xl font-bold text-gray-900 mb-4">
+        <div class="bg-white/5 border border-white/10 rounded-2xl p-8 inline-block">
+          <h3 class="text-xl font-bold text-white mb-4">
             Risk-Free Promise
           </h3>
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-gray-600">
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-white/60">
             <div class="flex items-center">
-              <span class="text-dark mr-2">✓</span>7-day free trial
+              <span class="text-pink-500 mr-2">✓</span>7-day free trial
             </div>
             <div class="flex items-center">
-              <span class="text-dark mr-2">✓</span>No setup fees
+              <span class="text-pink-500 mr-2">✓</span>No setup fees
             </div>
             <div class="flex items-center">
-              <span class="text-dark mr-2">✓</span>Cancel anytime
+              <span class="text-pink-500 mr-2">✓</span>Cancel anytime
             </div>
             <div class="flex items-center">
-              <span class="text-dark mr-2">✓</span>Keep your data
+              <span class="text-pink-500 mr-2">✓</span>Keep your data
             </div>
           </div>
         </div>
@@ -562,13 +752,15 @@
 
     <!-- Sticky CTA (appears on scroll) -->
     <div class="fixed bottom-6 right-6 z-50">
-      <NuxtLink
+      <GlowButton
+        tag="NuxtLink"
         to="/auth/register"
-        class="bg-dark hover:bg-dark/90 text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center space-x-2"
+        size="md"
+        class="shadow-lg hover:shadow-xl"
       >
         <RocketLaunchIcon class="w-5 h-5" />
         <span>Start Free Trial</span>
-      </NuxtLink>
+      </GlowButton>
     </div>
   </div>
 
@@ -586,8 +778,17 @@ import {
   EnvelopeIcon,
   DocumentDuplicateIcon,
   ClockIcon,
+  Bars3Icon,
+  XMarkIcon,
 } from "@heroicons/vue/24/outline";
 import AppFooter from "~/components/ui/AppFooter.vue";
+import GlowButton from "~/components/ui/GlowButton.vue";
+
+// Mobile menu state
+const mobileMenuOpen = ref(false);
+
+// GSAP animations
+const { animateHeroEntrance, animateOnScroll, animateNavOnScroll, cleanup } = useGSAP();
 
 definePageMeta({
   layout: false,
@@ -619,6 +820,35 @@ onMounted(async () => {
     } else {
       await router.push("/dashboard");
     }
+  } else {
+    // Initialize animations for landing page
+    await nextTick();
+    animateHeroEntrance();
+    animateOnScroll();
+    animateNavOnScroll();
   }
 });
+
+// Cleanup animations on unmount
+onUnmounted(() => {
+  cleanup();
+});
 </script>
+
+<style scoped>
+.main-nav {
+  transition: all 0.3s ease;
+}
+
+.main-nav.nav-scrolled {
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.hero-content,
+.hero-dashboard,
+.hero-nav {
+  opacity: 0;
+}
+</style>

@@ -14,7 +14,7 @@ export default {
         primary: '#91C4F2',
         accent: '#A2E5C1', 
         warning: '#F27272',
-        dark: '#28282B',
+        dark: '#08090a',
         cardBg: '#d0e2e8',
         pageBg: '#dfecf1'
       },
@@ -44,6 +44,7 @@ export default {
         xs: '2px',
       },
       backgroundImage: {
+        'hero-gradient': 'linear-gradient(135deg, #1e1b4b 0%, #581c87 50%, #1e3a8a 100%)',
         'dark-gradient': 'linear-gradient(135deg, #010104 0%, #0a0a0f 50%, #010104 100%)',
         'dark-subtle': 'linear-gradient(135deg, #010104 0%, #0c0c12 100%)',
         'glass-gradient': 'linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%)',

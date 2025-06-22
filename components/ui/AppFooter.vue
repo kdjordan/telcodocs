@@ -1,60 +1,87 @@
 <template>
-  <footer class="bg-white border-t border-gray-200">
-    <div class="container mx-auto px-4 py-12">
+  <footer class="bg-black border-t border-white/10">
+    <div class="max-w-7xl mx-auto px-6 py-12">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
         <!-- Company Info -->
         <div class="col-span-1 md:col-span-2">
-          <h3 class="font-sign1 text-3xl text-dark mb-4">Telodox</h3>
-          <p class="text-gray-600 mb-4">
+          <div class="flex items-center space-x-3 mb-4">
+            <div class="w-8 h-8 bg-pink-500 rounded-lg flex items-center justify-center">
+              <span class="text-white text-sm font-bold">T</span>
+            </div>
+            <span class="text-white font-bold text-2xl">TeloDox</span>
+          </div>
+          <p class="text-white/80 mb-4 max-w-md">
             The telecom onboarding platform that turns email chaos into streamlined deal flow.
           </p>
-          <p class="text-sm text-gray-500">
-            © {{ currentYear }} Telodox. All rights reserved.
+          <p class="text-sm text-white/60">
+            © {{ currentYear }} TeloDox. All rights reserved.
           </p>
         </div>
 
         <!-- Product Links -->
         <div>
-          <h4 class="font-semibold text-gray-900 mb-4">Product</h4>
+          <h4 class="font-semibold text-white mb-4">Product</h4>
           <ul class="space-y-2">
             <li>
-              <NuxtLink to="/#features" class="text-gray-600 hover:text-dark transition-colors">
-                Features
-              </NuxtLink>
+              <a href="/#how-it-works" class="text-white/70 hover:text-white transition-colors">
+                How It Works
+              </a>
             </li>
             <li>
-              <NuxtLink to="/#pricing" class="text-gray-600 hover:text-dark transition-colors">
+              <a href="/#pricing" class="text-white/70 hover:text-white transition-colors">
                 Pricing
-              </NuxtLink>
+              </a>
             </li>
             <li>
-              <a href="mailto:support@telodox.com" class="text-gray-600 hover:text-dark transition-colors">
+              <a href="mailto:support@telodox.com" class="text-white/70 hover:text-white transition-colors">
                 Support
               </a>
+            </li>
+            <li>
+              <NuxtLink to="/auth/register" class="text-white/70 hover:text-white transition-colors">
+                Get Started
+              </NuxtLink>
             </li>
           </ul>
         </div>
 
         <!-- Legal Links -->
         <div>
-          <h4 class="font-semibold text-gray-900 mb-4">Legal</h4>
+          <h4 class="font-semibold text-white mb-4">Legal</h4>
           <ul class="space-y-2">
             <li>
-              <NuxtLink to="/terms" class="text-gray-600 hover:text-dark transition-colors">
+              <NuxtLink to="/terms" class="text-white/70 hover:text-white transition-colors">
                 Terms & Conditions
               </NuxtLink>
             </li>
             <li>
-              <NuxtLink to="/privacy" class="text-gray-600 hover:text-dark transition-colors">
+              <NuxtLink to="/privacy" class="text-white/70 hover:text-white transition-colors">
                 Privacy Policy
               </NuxtLink>
             </li>
             <li>
-              <a href="mailto:legal@telodox.com" class="text-gray-600 hover:text-dark transition-colors">
-                Contact
+              <a href="mailto:legal@telodox.com" class="text-white/70 hover:text-white transition-colors">
+                Contact Legal
               </a>
             </li>
+            <li>
+              <NuxtLink to="/auth/login" class="text-white/70 hover:text-white transition-colors">
+                Sign In
+              </NuxtLink>
+            </li>
           </ul>
+        </div>
+      </div>
+      
+      <!-- Bottom Border -->
+      <div class="mt-8 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center">
+        <p class="text-white/60 text-sm">
+          Built for telecommunications professionals who demand excellence.
+        </p>
+        <div class="flex space-x-6 mt-4 md:mt-0">
+          <a href="mailto:hello@telodox.com" class="text-white/60 hover:text-white transition-colors text-sm">
+            hello@telodox.com
+          </a>
         </div>
       </div>
     </div>

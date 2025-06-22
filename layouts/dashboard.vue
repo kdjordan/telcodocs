@@ -1,160 +1,252 @@
 <template>
-  <div class="min-h-screen bg-pageBg relative">
-    <!-- Floating Sidebar -->
-    <aside 
-      class="fixed top-6 left-6 z-50 transition-all duration-300 ease-in-out bg-black/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-floating overflow-hidden flex flex-col"
-      :class="sidebarCollapsed ? 'w-16' : 'w-64'"
-      style="height: calc(100vh - 3rem);"
-    >
-      <!-- Logo/Brand -->
-      <div class="flex items-center justify-between p-4 border-b border-white/10">
-        <div v-if="!sidebarCollapsed" class="flex items-center space-x-3">
-          <div class="w-8 h-8 bg-gradient-to-br from-primary to-dark rounded-lg flex items-center justify-center">
+  <div class="min-h-screen bg-black relative">
+    <!-- Mobile Sidebar Overlay -->
+    <div v-if="mobileMenuOpen" class="lg:hidden fixed inset-0 z-50">
+      <div class="fixed inset-0 bg-black/50" @click="closeMobileMenu"></div>
+      <div class="fixed left-0 top-0 bottom-0 w-64 bg-black border-r border-white/10">
+        <MobileSidebar @close="closeMobileMenu" />
+      </div>
+    </div>
+
+    <!-- Desktop Layout -->
+    <div class="flex">
+      <!-- Desktop Sidebar - Hidden on Mobile -->
+      <aside 
+        class="hidden lg:flex transition-all duration-300 ease-in-out bg-black border-r border-white/10 flex-col"
+        :class="sidebarCollapsed ? 'w-16' : 'w-64'"
+        style="height: 100vh;"
+      >
+        <!-- Sidebar Header -->
+        <div class="flex items-center justify-between p-4 border-b border-white/10">
+          <div v-if="!sidebarCollapsed" class="flex items-center space-x-3">
+            <div class="w-8 h-8 bg-gradient-to-br from-pink-500 to-purple-600 rounded-lg flex items-center justify-center">
+              <span class="text-white font-bold text-sm">T</span>
+            </div>
+            <h1 class="text-white font-bold text-lg">
+              {{ tenant?.name || 'TeloDox' }}
+            </h1>
+          </div>
+          <div v-else class="w-8 h-8 bg-gradient-to-br from-pink-500 to-purple-600 rounded-lg flex items-center justify-center mx-auto">
             <span class="text-white font-bold text-sm">T</span>
           </div>
-          <h1 class="text-white font-bold font-heading">
-            {{ tenant?.name || 'Telodox' }}
-          </h1>
-        </div>
-        <div v-else class="w-8 h-8 bg-gradient-to-br from-primary to-dark rounded-lg flex items-center justify-center mx-auto">
-          <span class="text-white font-bold text-sm">T</span>
-        </div>
-        
-        <!-- Collapse Button -->
-        <button 
-          @click="toggleSidebar"
-          class="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
-        >
-          <svg 
-            class="w-4 h-4 text-white transition-transform duration-300" 
-            :class="sidebarCollapsed ? 'rotate-180' : ''"
-            fill="none" 
-            stroke="currentColor" 
-            viewBox="0 0 24 24"
+          
+          <!-- Collapse Button -->
+          <button 
+            v-if="!sidebarCollapsed"
+            @click="toggleSidebar"
+            class="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
           >
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
-      </div>
+            <ChevronLeftIcon class="w-4 h-4 text-white" />
+          </button>
+        </div>
 
-      <!-- Navigation -->
-      <nav class="flex-1 p-4 space-y-2">
-        <!-- Super Admin Navigation -->
-        <template v-if="profile?.role === 'super_admin'">
-          <SidebarItem 
-            to="/admin"
-            icon="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-            label="Platform"
-            :collapsed="sidebarCollapsed"
-          />
-          <SidebarItem 
-            to="/admin/tenants"
-            icon="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-            label="Tenants"
-            :collapsed="sidebarCollapsed"
-          />
-          <SidebarItem 
-            to="/admin/users"
-            icon="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
-            label="Users"
-            :collapsed="sidebarCollapsed"
-          />
-          <SidebarItem 
-            to="/admin/analytics"
-            icon="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-            label="Analytics"
-            :collapsed="sidebarCollapsed"
-          />
-        </template>
-        
-        <!-- Tenant Owner/End User Navigation -->
-        <template v-else>
-          <SidebarItem 
-            to="/dashboard"
-            icon="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-            label="Overview"
-            :collapsed="sidebarCollapsed"
-          />
-          <SidebarItem 
-            to="/dashboard/applications"
-            icon="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-            label="Applications"
-            :collapsed="sidebarCollapsed"
-          />
-          <SidebarItem 
-            v-if="profile?.role === 'tenant_owner'"
-            to="/dashboard/forms"
-            icon="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
-            label="Forms"
-            :collapsed="sidebarCollapsed"
-          />
-          <SidebarItem 
-            v-if="profile?.role === 'tenant_owner'"
-            to="/dashboard/users"
-            icon="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
-            label="Users"
-            :collapsed="sidebarCollapsed"
-          />
-          <SidebarItem 
-            to="/dashboard/settings"
-            icon="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065zM15 12a3 3 0 11-6 0 3 3 0 016 0z"
-            label="Settings"
-            :collapsed="sidebarCollapsed"
-          />
-        </template>
-      </nav>
-
-      <!-- User Profile -->
-      <div class="border-t border-white/10 p-4">
-        <div v-if="profile" class="flex items-center space-x-3">
+        <!-- Search Bar -->
+        <div v-if="!sidebarCollapsed" class="p-4">
           <div class="relative">
-            <button
-              @click="toggleUserMenu"
-              class="w-8 h-8 bg-gradient-to-br from-dark to-primary rounded-full flex items-center justify-center hover:ring-2 hover:ring-white/20 transition-all"
-            >
-              <span class="text-white text-xs font-semibold">
-                {{ profile.full_name?.charAt(0).toUpperCase() }}
-              </span>
-            </button>
-            
-            <!-- User Menu Dropdown -->
-            <div 
-              v-if="userMenuOpen"
-              class="absolute bottom-full left-0 mb-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50"
-            >
-              <div class="px-3 py-2 border-b border-gray-100">
-                <p class="text-sm font-medium text-gray-900">{{ profile.full_name }}</p>
-                <p class="text-xs text-gray-500">{{ profile.role?.replace('_', ' ') }}</p>
-              </div>
+            <MagnifyingGlassIcon class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/40" />
+            <input 
+              type="text" 
+              placeholder="Search..." 
+              class="w-full pl-10 pr-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all"
+            />
+          </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex-1 p-4 space-y-2">
+          <!-- Super Admin Navigation -->
+          <template v-if="profile?.role === 'super_admin'">
+            <NavItem
+              to="/admin"
+              :icon="HomeIcon"
+              label="Platform"
+              :collapsed="sidebarCollapsed"
+            />
+            <NavItem
+              to="/admin/tenants"
+              :icon="BuildingOfficeIcon"
+              label="Tenants"
+              :collapsed="sidebarCollapsed"
+            />
+            <NavItem
+              to="/admin/users"
+              :icon="UsersIcon"
+              label="Users"
+              :collapsed="sidebarCollapsed"
+            />
+            <NavItem
+              to="/admin/analytics"
+              :icon="ChartBarIcon"
+              label="Analytics"
+              :collapsed="sidebarCollapsed"
+            />
+          </template>
+          
+          <!-- Tenant Owner/End User Navigation -->
+          <template v-else>
+            <NavItem
+              to="/dashboard"
+              :icon="HomeIcon"
+              label="Dashboard"
+              :collapsed="sidebarCollapsed"
+              active
+            />
+            <NavItem
+              to="/dashboard/applications"
+              :icon="InboxIcon"
+              label="Inbox"
+              :collapsed="sidebarCollapsed"
+            />
+            <NavItem
+              v-if="profile?.role === 'tenant_owner'"
+              to="/dashboard/forms"
+              :icon="FolderIcon"
+              label="Projects"
+              :collapsed="sidebarCollapsed"
+            />
+            <NavItem
+              to="/dashboard/calendar"
+              :icon="CalendarIcon"
+              label="Calendar"
+              :collapsed="sidebarCollapsed"
+            />
+            <NavItem
+              to="/dashboard/reports"
+              :icon="ChartBarIcon"
+              label="Reports"
+              :collapsed="sidebarCollapsed"
+            />
+            <NavItem
+              to="/dashboard/help"
+              :icon="QuestionMarkCircleIcon"
+              label="Help & Center"
+              :collapsed="sidebarCollapsed"
+            />
+            <NavItem
+              to="/dashboard/settings"
+              :icon="Cog6ToothIcon"
+              label="Settings"
+              :collapsed="sidebarCollapsed"
+            />
+          </template>
+        </nav>
+
+        <!-- User Profile -->
+        <div class="border-t border-white/10 p-4">
+          <div v-if="profile" class="flex items-center space-x-3">
+            <div class="relative">
               <button
-                @click="handleLogout"
-                class="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                @click="toggleUserMenu"
+                class="w-8 h-8 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center hover:ring-2 hover:ring-white/20 transition-all"
               >
-                Sign out
+                <span class="text-white text-xs font-semibold">
+                  {{ profile.full_name?.charAt(0).toUpperCase() }}
+                </span>
               </button>
+              
+              <!-- User Menu Dropdown -->
+              <div 
+                v-if="userMenuOpen"
+                class="absolute bottom-full left-0 mb-2 w-48 bg-black/90 backdrop-blur-md rounded-lg border border-white/10 py-1 z-50"
+              >
+                <div class="px-3 py-2 border-b border-white/10">
+                  <p class="text-sm font-medium text-white">{{ profile.full_name }}</p>
+                  <p class="text-xs text-white/60">{{ profile.role?.replace('_', ' ') }}</p>
+                </div>
+                <button
+                  @click="handleLogout"
+                  class="w-full text-left px-3 py-2 text-sm text-white hover:bg-white/10 transition-colors"
+                >
+                  Sign out
+                </button>
+              </div>
+            </div>
+            <div v-if="!sidebarCollapsed" class="flex-1 min-w-0">
+              <p class="text-white text-sm font-medium truncate">{{ profile.full_name }}</p>
+              <p class="text-white/60 text-xs truncate">{{ profile.role?.replace('_', ' ') }}</p>
             </div>
           </div>
-          <div v-if="!sidebarCollapsed" class="flex-1 min-w-0">
-            <p class="text-white text-sm font-medium truncate">{{ profile.full_name }}</p>
-            <p class="text-white/60 text-xs truncate">{{ profile.role?.replace('_', ' ') }}</p>
-          </div>
         </div>
-      </div>
-    </aside>
+      </aside>
 
-    <!-- Main content -->
-    <main 
-      class="min-h-screen transition-all duration-300 ease-in-out"
-      :class="sidebarCollapsed ? 'pl-28' : 'pl-80'"
-    >
-      <div class="p-6">
-        <slot />
+      <!-- Main Content Area -->
+      <div class="flex-1 flex flex-col lg:ml-0">
+        <!-- Mobile Header -->
+        <header class="lg:hidden bg-black/80 backdrop-blur-md border-b border-white/10 p-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+              <button 
+                @click="toggleMobileMenu"
+                class="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
+              >
+                <Bars3Icon class="w-5 h-5 text-white" />
+              </button>
+              <div class="w-8 h-8 bg-gradient-to-br from-pink-500 to-purple-600 rounded-lg flex items-center justify-center">
+                <span class="text-white font-bold text-sm">T</span>
+              </div>
+              <h1 class="text-white font-bold text-lg">TeloDox</h1>
+            </div>
+            <UserMenuDropdown />
+          </div>
+        </header>
+
+        <!-- Desktop Header -->
+        <header class="hidden lg:block bg-black/80 backdrop-blur-md border-b border-white/10 h-16">
+          <div class="flex items-center justify-between px-6 h-full">
+            <!-- Left: Expand button + Welcome message -->
+            <div class="flex items-center space-x-4">
+              <button 
+                v-if="sidebarCollapsed"
+                @click="toggleSidebar"
+                class="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
+              >
+                <ChevronRightIcon class="w-4 h-4 text-white" />
+              </button>
+              <div class="text-white/60">
+                Welcome back, {{ profile?.full_name?.split(' ')[0] || 'there' }}! 👋
+              </div>
+            </div>
+            
+            <!-- Right: Live indicator + User menu -->
+            <div class="flex items-center space-x-4">
+              <div class="flex items-center space-x-2">
+                <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                <span class="text-white/60 text-sm">Live</span>
+              </div>
+              <UserMenuDropdown />
+            </div>
+          </div>
+        </header>
+
+        <!-- Main content -->
+        <main class="flex-1 p-4 lg:p-6 bg-black">
+          <slot />
+        </main>
       </div>
-    </main>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { 
+  HomeIcon,
+  InboxIcon,
+  FolderIcon,
+  CalendarIcon,
+  ChartBarIcon,
+  QuestionMarkCircleIcon,
+  Cog6ToothIcon,
+  MagnifyingGlassIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  BuildingOfficeIcon,
+  UsersIcon,
+  Bars3Icon
+} from '@heroicons/vue/24/outline'
+import NavItem from '~/components/ui/NavItem.vue'
+import UserMenuDropdown from '~/components/ui/UserMenuDropdown.vue'
+import MobileSidebar from '~/components/ui/MobileSidebar.vue'
+
 const route = useRoute()
 const router = useRouter()
 const { profile, logout } = useAuth()
@@ -162,9 +254,18 @@ const { tenant } = useTenant()
 
 const sidebarCollapsed = ref(false)
 const userMenuOpen = ref(false)
+const mobileMenuOpen = ref(false)
 
 const toggleSidebar = () => {
   sidebarCollapsed.value = !sidebarCollapsed.value
+}
+
+const toggleMobileMenu = () => {
+  mobileMenuOpen.value = !mobileMenuOpen.value
+}
+
+const closeMobileMenu = () => {
+  mobileMenuOpen.value = false
 }
 
 const toggleUserMenu = () => {

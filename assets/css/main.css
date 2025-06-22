@@ -1,6 +1,16 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-hero-from: #1e1b4b;
+  --color-hero-via: #581c87;
+  --color-hero-to: #1e3a8a;
+  --color-pink-500: #ec4899;
+  --color-pink-600: #db2777;
+  --color-brand-dark: #08090a;
+  --color-brand-white: #f7f8f8;
+  --color-black: #08090a;
+  --color-white: #f7f8f8;
+}
 
 @layer base {
   body {
