@@ -15,7 +15,7 @@
       :type="type"
       :disabled="disabled"
       @click="handleClick"
-      class="relative bg-black text-white font-semibold rounded-lg transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2"
+      class="relative bg-black hover:bg-white/40 text-white hover:text-black font-semibold rounded-lg transition-all duration-300 flex items-center justify-center gap-2"
       :class="[buttonSize, buttonClasses]"
       :style="buttonStyle"
     >
@@ -38,7 +38,7 @@ interface Props {
   disabled?: boolean
   
   // Size variants
-  size?: 'sm' | 'md' | 'lg' | 'xl'
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
   
   // Animation speed (degrees per frame)
   speed?: number
@@ -66,9 +66,10 @@ const handleClick = (event: Event) => {
 
 // Size configurations
 const sizeConfig = {
-  sm: { button: 'px-4 py-2 text-sm', border: '1px' },
-  md: { button: 'px-6 py-3 text-base', border: '1px' },
-  lg: { button: 'px-8 py-4 text-lg', border: '1px' },
+  xs: { button: 'px-3 py-1.5 text-xs', border: '1px' },
+  sm: { button: 'px-4 py-2 text-sm', border: '2px' },
+  md: { button: 'px-6 py-3 text-base', border: '2px' },
+  lg: { button: 'px-8 py-4 text-lg', border: '2px' },
   xl: { button: 'px-12 py-6 text-xl', border: '3px' }
 }
 

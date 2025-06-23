@@ -5,7 +5,7 @@
         <!-- Company Info -->
         <div class="col-span-1 md:col-span-2">
           <div class="flex items-center space-x-3 mb-4">
-            <div class="w-8 h-8 bg-pink-500 rounded-lg flex items-center justify-center">
+            <div class="w-8 h-8 bg-gradient-to-br from-pink-500 to-purple-600 rounded-lg flex items-center justify-center">
               <span class="text-white text-sm font-bold">T</span>
             </div>
             <span class="text-white font-bold text-2xl">TeloDox</span>
