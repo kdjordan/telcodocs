@@ -11,54 +11,41 @@
       </div>
     </div>
     
-    <!-- Main Dashboard -->
-    <div v-else class="space-y-6">
-
-      <!-- Stats Cards Row -->
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
-        <StatsCard 
-          title="Total Projects" 
-          :value="stats.totalApplicants.toString()" 
-          change="+5% this month"
-          :icon="FolderIcon"
-        />
-        <StatsCard 
-          title="Total Task" 
-          :value="stats.pendingApproval.toString()" 
-          change="+12% this month"
-          :icon="ClockIcon"
-        />
-        <StatsCard 
-          title="In Reviews" 
-          :value="'23'" 
-          change="+12% this month"
-          :icon="EyeIcon"
-        />
-        <StatsCard 
-          title="Completed Tasks" 
-          :value="stats.completed.toString()" 
-          change="+8% this month"
-          :icon="CheckCircleIcon"
-        />
-      </div>
-
-      <!-- Main Dashboard Grid - Mobile Optimized -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
-        <!-- Today's Tasks - Full width on mobile -->
-        <div class="lg:col-span-1">
-          <TodaysTasks :tasks="recentApplications" :loading="loading" />
-        </div>
-        
-        <!-- Performance Chart - Full width on mobile -->
-        <div class="lg:col-span-1">
-          <PerformanceChart :stats="stats" />
-        </div>
-        
-        <!-- Projects List + Upgrade - Full width on mobile -->
-        <div class="lg:col-span-1 space-y-4 lg:space-y-6">
-          <ProjectsList :projects="recentApplications" />
-          <UpgradePrompt :trial-days-left="trialDaysLeft" :trial-progress="trialProgress" />
-        </div>
+    <!-- Role-Based Dashboard -->
+    <div v-else>
+      <!-- Organization Owner Dashboard -->
+      <OwnerDashboardLayout
+        v-if="isOwner"
+        :metrics="dashboardMetrics"
+        :urgent-carriers="urgentCarriers"
+        :recent-activities="recentActivities"
+        :pipeline-data="pipelineData"
+        :team-members="teamMembers"
+        :form-templates="formTemplates"
+        :revenue-data="revenueData"
+        :loading="loading"
+        :activities-loading="activitiesLoading"
+        :team-loading="teamLoading"
+        :templates-loading="templatesLoading"
+        :revenue-loading="revenueLoading"
+        @view-urgent="handleViewUrgent"
+        @view-activities="handleViewActivities"
+        @view-stage="handleViewStage"
+        @manage-team="handleManageTeam"
+        @invite-member="handleInviteMember"
+        @create-template="handleCreateTemplate"
+        @edit-template="handleEditTemplate"
+        @view-billing="handleViewBilling"
+      />
+      
+      <!-- TODO: Add other role dashboards -->
+      <!-- AdminDashboardLayout v-else-if="isAdmin" -->
+      <!-- MemberDashboardLayout v-else-if="isMember" -->
+      <!-- CarrierDashboardLayout v-else-if="isCarrier" -->
+      
+      <!-- Fallback for unrecognized roles -->
+      <div v-else class="text-center py-12">
+        <p class="text-white/60">Dashboard not available for your role.</p>
       </div>
     </div>
   </div>
@@ -66,19 +53,9 @@
 
 <script setup lang="ts">
 import type { Application } from '~/types'
-import { 
-  FolderIcon,
-  ClockIcon,
-  EyeIcon,
-  CheckCircleIcon
-} from '@heroicons/vue/24/outline'
 
-// Explicit component imports to ensure resolution
-import StatsCard from '~/components/ui/StatsCard.vue'
-import TodaysTasks from '~/components/ui/TodaysTasks.vue'
-import PerformanceChart from '~/components/ui/PerformanceChart.vue'
-import ProjectsList from '~/components/ui/ProjectsList.vue'
-import UpgradePrompt from '~/components/ui/UpgradePrompt.vue'
+// Import role-specific dashboard components
+import OwnerDashboardLayout from '~/components/dashboard/owner/OwnerDashboardLayout.vue'
 
 definePageMeta({
   layout: 'dashboard',
@@ -91,104 +68,182 @@ const { tenant } = useTenant()
 
 const loading = ref(true)
 const profileLoading = ref(true)
-const recentApplications = ref<Application[]>([])
-const stats = ref({
-  totalApplicants: 0,
-  pendingApproval: 0,
-  completed: 0,
-  activeCarriers: 0
+const activitiesLoading = ref(true)
+const teamLoading = ref(true)
+const templatesLoading = ref(true)
+const revenueLoading = ref(true)
+
+// Organization Owner specific data
+const dashboardMetrics = ref({
+  activeCarriers: 0,
+  pendingApprovals: 0,
+  completedThisMonth: 0,
+  teamEfficiency: 85
 })
 
-// Trial calculations
-const trialDaysLeft = computed(() => {
-  if (!tenant.value?.trial_ends_at) return 0
-  const trialEnd = new Date(tenant.value.trial_ends_at)
-  const now = new Date()
-  const diffTime = trialEnd.getTime() - now.getTime()
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-  return Math.max(0, diffDays)
+const urgentCarriers = ref<Application[]>([])
+const recentActivities = ref<any[]>([])
+const pipelineData = ref({
+  kyc: 0,
+  fusf: 0,
+  msa: 0,
+  interop: 0
+})
+const teamMembers = ref<any[]>([])
+const formTemplates = ref<any[]>([])
+const revenueData = ref({
+  mrr: 0,
+  growth: 0,
+  seats: 1,
+  churnRate: 5
 })
 
-const trialProgress = computed(() => {
-  if (!tenant.value?.trial_ends_at) return 0
-  const trialEnd = new Date(tenant.value.trial_ends_at)
-  const trialStart = new Date(trialEnd.getTime() - (7 * 24 * 60 * 60 * 1000)) // 7 days ago
-  const now = new Date()
-  const totalDuration = trialEnd.getTime() - trialStart.getTime()
-  const usedDuration = now.getTime() - trialStart.getTime()
-  return Math.min(100, Math.max(0, Math.round((usedDuration / totalDuration) * 100)))
-})
+// Role detection
+const isOwner = computed(() => 
+  profile.value?.role === 'tenant_owner' || 
+  profile.value?.organization_role === 'owner'
+)
+const isAdmin = computed(() => 
+  profile.value?.organization_role === 'admin'
+)
+const isMember = computed(() => 
+  profile.value?.organization_role === 'member'
+)
+const isCarrier = computed(() => 
+  profile.value?.role === 'end_user' && !profile.value?.organization_role
+)
 
-const formatDate = (date: string) => {
-  return new Date(date).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric'
-  })
+// Event handlers for Organization Owner dashboard
+const handleViewUrgent = () => {
+  navigateTo('/dashboard/applications?filter=urgent')
 }
 
-const fetchDashboardData = async () => {
-  // Allow dashboard to load even without tenant
+const handleViewActivities = () => {
+  navigateTo('/dashboard/activities')
+}
+
+const handleViewStage = (stage: string) => {
+  navigateTo(`/dashboard/applications?stage=${stage}`)
+}
+
+const handleManageTeam = () => {
+  navigateTo('/dashboard/team')
+}
+
+const handleInviteMember = () => {
+  navigateTo('/dashboard/team/invite')
+}
+
+const handleCreateTemplate = () => {
+  navigateTo('/dashboard/forms/create')
+}
+
+const handleEditTemplate = (template: any) => {
+  navigateTo(`/dashboard/forms/${template.id}/edit`)
+}
+
+const handleViewBilling = () => {
+  navigateTo('/dashboard/billing')
+}
+
+const fetchOwnerDashboardData = async () => {
+  if (!tenant.value) {
+    loading.value = false
+    return
+  }
+  
   loading.value = true
   
   try {
-    if (!tenant.value) {
-      // Set empty state if no tenant
-      recentApplications.value = []
-      stats.value = {
-        totalApplicants: 0,
-        pendingApproval: 0,
-        completed: 0,
-        activeCarriers: 0
-      }
-      loading.value = false
-      return
-    }
-    
-    // Fetch recent applications
+    // Fetch applications for metrics and urgent carriers
     const { data: applications, error: appError } = await supabase
       .from('applications')
       .select('*')
       .eq('tenant_id', tenant.value.id)
       .order('created_at', { ascending: false })
-      .limit(10)
     
     if (appError) throw appError
-    recentApplications.value = applications || []
+    const apps = applications || []
     
-    // Calculate stats
-    const { count: total } = await supabase
-      .from('applications')
-      .select('*', { count: 'exact', head: true })
-      .eq('tenant_id', tenant.value.id)
+    // Calculate metrics
+    const now = new Date()
+    const thisMonth = now.getMonth()
+    const thisYear = now.getFullYear()
     
-    const { count: pending } = await supabase
-      .from('applications')
-      .select('*', { count: 'exact', head: true })
-      .eq('tenant_id', tenant.value.id)
-      .eq('status', 'pending_approval')
-    
-    const { count: completed } = await supabase
-      .from('applications')
-      .select('*', { count: 'exact', head: true })
-      .eq('tenant_id', tenant.value.id)
-      .eq('status', 'completed')
-    
-    const { count: carriers } = await supabase
-      .from('applications')
-      .select('carrier_email', { count: 'exact', head: true })
-      .eq('tenant_id', tenant.value.id)
-    
-    stats.value = {
-      totalApplicants: total || 0,
-      pendingApproval: pending || 0,
-      completed: completed || 0,
-      activeCarriers: carriers || 0
+    dashboardMetrics.value = {
+      activeCarriers: apps.filter(app => !['completed', 'archived'].includes(app.status)).length,
+      pendingApprovals: apps.filter(app => app.status === 'pending_approval').length,
+      completedThisMonth: apps.filter(app => {
+        const createdDate = new Date(app.created_at)
+        return app.status === 'completed' && 
+               createdDate.getMonth() === thisMonth && 
+               createdDate.getFullYear() === thisYear
+      }).length,
+      teamEfficiency: 85 // Mock calculation
     }
+    
+    // Get urgent carriers (requiring attention)
+    urgentCarriers.value = apps.filter(app => 
+      ['pending_approval', 'requires_action', 'overdue'].includes(app.status)
+    ).slice(0, 10)
+    
+    // Calculate pipeline data
+    pipelineData.value = {
+      kyc: apps.filter(app => app.current_stage === 'kyc').length,
+      fusf: apps.filter(app => app.current_stage === 'fusf').length,
+      msa: apps.filter(app => app.current_stage === 'msa').length,
+      interop: apps.filter(app => app.current_stage === 'interop').length
+    }
+    
+    // Mock data for other sections (would come from actual API calls)
+    recentActivities.value = [
+      {
+        id: '1',
+        type: 'carrier_update',
+        user_name: 'John Smith',
+        user_role: 'admin',
+        description: 'Updated KYC documentation',
+        carrier_name: 'TeleCarrier Inc',
+        timestamp: new Date().toISOString()
+      }
+    ]
+    
+    teamMembers.value = [
+      {
+        id: '1',
+        name: 'Sarah Johnson',
+        role: 'admin',
+        assignedCarriers: 5,
+        performance: 92,
+        status: 'active'
+      }
+    ]
+    
+    formTemplates.value = [
+      {
+        id: '1',
+        name: 'KYC Verification Form',
+        stage: 'kyc',
+        lastModified: new Date().toISOString(),
+        status: 'active'
+      }
+    ]
+    
+    revenueData.value = {
+      mrr: 149,
+      growth: 15,
+      seats: 1,
+      churnRate: 3
+    }
+    
   } catch (error) {
-    console.error('Error fetching dashboard data:', error)
+    console.error('Error fetching owner dashboard data:', error)
   } finally {
     loading.value = false
+    activitiesLoading.value = false
+    teamLoading.value = false
+    templatesLoading.value = false
+    revenueLoading.value = false
   }
 }
 
@@ -202,6 +257,10 @@ onMounted(async () => {
     profileLoading.value = false
   }
   
-  await fetchDashboardData()
+  // Fetch role-appropriate dashboard data
+  if (isOwner.value) {
+    await fetchOwnerDashboardData()
+  }
+  // TODO: Add other role data fetching
 })
 </script>
