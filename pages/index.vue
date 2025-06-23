@@ -1,92 +1,7 @@
 <template>
   <div class="min-h-screen bg-black">
     <!-- Top Navigation -->
-    <nav class="main-nav hero-nav fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md border-b border-white/10">
-      <div class="max-w-7xl mx-auto px-6">
-        <div class="flex items-center justify-between h-14">
-          <!-- Logo -->
-          <div class="flex items-center space-x-2">
-            <div class="w-7 h-7 bg-gradient-to-br from-pink-500 to-purple-600 rounded-lg flex items-center justify-center">
-              <span class="text-white text-xs font-bold">T</span>
-            </div>
-            <span class="text-white font-bold text-lg">TeloDox</span>
-          </div>
-
-          <!-- Desktop Navigation -->
-          <div class="hidden md:flex items-center space-x-6">
-            <a href="#how-it-works" class="text-sm text-white/80 hover:text-white transition-colors cursor-pointer">
-              How It Works
-            </a>
-            <a href="#pricing" class="text-sm text-white/80 hover:text-white transition-colors cursor-pointer">
-              Pricing
-            </a>
-            <a href="#contact" class="text-sm text-white/80 hover:text-white transition-colors cursor-pointer">
-              Contact
-            </a>
-          </div>
-
-          <!-- Auth Buttons -->
-          <div class="hidden md:flex items-center space-x-2">
-            <NuxtLink 
-              to="/auth/login" 
-              class="bg-white text-black hover:bg-white/90 font-medium px-3 py-1.5 rounded-md transition-all duration-300 text-xs"
-            >
-              Sign in
-            </NuxtLink>
-            <GlowButton
-              tag="NuxtLink"
-              to="/auth/register"
-              size="xs"
-              class="text-xs"
-            >
-              Sign up
-            </GlowButton>
-          </div>
-
-          <!-- Mobile Menu Button -->
-          <button 
-            @click="mobileMenuOpen = !mobileMenuOpen"
-            class="md:hidden text-white p-2"
-          >
-            <Bars3Icon v-if="!mobileMenuOpen" class="w-5 h-5" />
-            <XMarkIcon v-if="mobileMenuOpen" class="w-5 h-5" />
-          </button>
-        </div>
-
-        <!-- Mobile Menu -->
-        <div v-if="mobileMenuOpen" class="md:hidden border-t border-white/10 py-3">
-          <div class="flex flex-col space-y-3">
-            <a href="#how-it-works" @click="mobileMenuOpen = false" class="text-sm text-white/80 hover:text-white transition-colors">
-              How It Works
-            </a>
-            <a href="#pricing" @click="mobileMenuOpen = false" class="text-sm text-white/80 hover:text-white transition-colors">
-              Pricing
-            </a>
-            <a href="#contact" @click="mobileMenuOpen = false" class="text-sm text-white/80 hover:text-white transition-colors">
-              Contact
-            </a>
-            <div class="pt-3 space-y-2">
-              <NuxtLink 
-                to="/auth/login" 
-                @click="mobileMenuOpen = false" 
-                class="block bg-white text-black hover:bg-white/90 font-medium px-4 py-2 rounded-lg transition-all duration-300 text-sm text-center"
-              >
-                Sign in
-              </NuxtLink>
-              <GlowButton
-                tag="NuxtLink"
-                to="/auth/register"
-                size="sm"
-                class="w-full"
-                @click="mobileMenuOpen = false"
-              >
-                Sign up
-              </GlowButton>
-            </div>
-          </div>
-        </div>
-      </div>
-    </nav>
+    <LandingNav />
 
     <!-- Hero Section -->
     <section class="relative overflow-hidden bg-brand-dark py-20 lg:py-32 pt-32">
@@ -95,7 +10,7 @@
         <div class="mb-16 pl-[10%]">
           <div class="hero-content">
             <!-- Main Headline -->
-            <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold font-heading text-white mb-4 leading-tight">
+            <h1 class="text-3xl md:text-4xl lg:text-6xl font-bold font-heading text-white mb-4 tracking-wide">
               Stop Chasing <span class="font-allura text-gradient-purple-magenta text-6xl">Signatures.</span><br />
               Start Closing Deals.
             </h1>
@@ -126,108 +41,7 @@
           </div>
         </div>
 
-        <!-- Full Width Dashboard Image -->
-        <div class="hero-dashboard w-full">
-          <div class="relative max-w-6xl mx-auto">
-            <!-- Main Dashboard -->
-            <div class="w-full h-[600px] lg:h-[700px]">
-              <div class="bg-gray-900/95 border border-gray-700/70 rounded-xl p-6 shadow-2xl backdrop-blur-md h-full">
-                <!-- Header -->
-                <div class="flex items-center justify-between mb-6">
-                  <div class="flex items-center space-x-3">
-                    <div class="w-8 h-8 bg-gradient-to-br from-pink-500 to-purple-600 rounded-lg flex items-center justify-center">
-                      <span class="text-white text-sm font-bold">T</span>
-                    </div>
-                    <span class="text-white font-semibold">TeloDox</span>
-                  </div>
-                  <div class="flex items-center space-x-2">
-                    <div class="w-2 h-2 bg-green-400 rounded-full"></div>
-                    <span class="text-white/60 text-sm">Live</span>
-                  </div>
-                </div>
-
-                <!-- Main Content Grid -->
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 h-full">
-                  <!-- Left Column - Active Deals -->
-                  <div class="space-y-4">
-                    <div class="bg-gradient-to-r from-pink-500/20 to-purple-500/20 border border-pink-500/30 rounded-lg p-4">
-                      <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-3">
-                          <DocumentDuplicateIcon class="w-5 h-5 text-pink-400" />
-                          <div>
-                            <div class="text-white font-medium">MSA Negotiation</div>
-                            <div class="text-white/60 text-sm">Acme Telecom - Final Review</div>
-                          </div>
-                        </div>
-                        <div class="px-2 py-1 bg-pink-500/20 rounded-full">
-                          <span class="text-pink-400 text-xs font-medium">Active</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="bg-white/5 border border-white/10 rounded-lg p-4">
-                      <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-3">
-                          <ClockIcon class="w-5 h-5 text-orange-400" />
-                          <div>
-                            <div class="text-white font-medium">FUSF Documentation</div>
-                            <div class="text-white/60 text-sm">NetConnect - Pending</div>
-                          </div>
-                        </div>
-                        <div class="w-2 h-2 bg-orange-400 rounded-full"></div>
-                      </div>
-                    </div>
-
-                    <div class="bg-white/5 border border-white/10 rounded-lg p-4">
-                      <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-3">
-                          <CheckCircleIcon class="w-5 h-5 text-green-400" />
-                          <div>
-                            <div class="text-white font-medium">KYC Verification</div>
-                            <div class="text-white/60 text-sm">FiberCorp - Complete</div>
-                          </div>
-                        </div>
-                        <div class="w-2 h-2 bg-green-400 rounded-full"></div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Center Column - Performance Chart -->
-                  <div class="bg-white/5 border border-white/10 rounded-lg p-6">
-                    <h3 class="text-white font-semibold mb-4">Pipeline Health</h3>
-                    <div class="text-center">
-                      <div class="text-4xl font-bold text-green-400 mb-2">94%</div>
-                      <div class="text-white/60 text-sm">Complete</div>
-                    </div>
-                  </div>
-
-                  <!-- Right Column - Project List -->
-                  <div class="space-y-4">
-                    <div class="bg-white/5 border border-white/10 rounded-lg p-4">
-                      <h3 class="text-white font-semibold mb-3">Recent Projects</h3>
-                      <div class="space-y-2">
-                        <div class="text-white/80 text-sm">• Carrier Onboarding V2</div>
-                        <div class="text-white/80 text-sm">• MSA Template Updates</div>
-                        <div class="text-white/80 text-sm">• Document Automation</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Bottom Stats -->
-                <div class="absolute bottom-6 left-6 right-6 pt-4 border-t border-white/10">
-                  <div class="flex items-center justify-between text-sm">
-                    <span class="text-white/60">Pipeline Health</span>
-                    <span class="text-green-400 font-medium">94% Complete</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Glow Effects -->
-            <div class="absolute -inset-4 bg-gradient-to-r from-pink-500/10 to-purple-500/10 rounded-3xl blur-2xl -z-10"></div>
-          </div>
-        </div>
+   
       </div>
 
       <!-- Background decorative elements -->
@@ -246,7 +60,7 @@
           </h2>
           <p class="text-xl md:text-2xl text-white/80 font-medium mb-8 leading-tight">
             15+ emails. 6 document versions. 3 weeks later...
-            <span class="text-pink-500 font-bold">still no signature.</span>
+            <span class="text-gradient-purple-magenta font-bold">still no signature.</span>
           </p>
         </div>
 
@@ -301,7 +115,7 @@
         >
           <h3 class="text-2xl md:text-3xl font-bold text-white mb-3">
             Sales teams waste
-            <span class="text-pink-500">40+ hours per month</span> on manual
+            <span class="text-gradient-purple-magenta">40+ hours per month</span> on manual
             onboarding
           </h3>
           <p class="text-base text-white/60">
@@ -562,7 +376,7 @@
             <h3 class="text-xl font-bold text-white mb-3">Share & Scale</h3>
             <div class="bg-white/5 border border-white/10 rounded-xl p-5">
               <p class="text-sm text-white/60 mb-3">
-                <strong>Let the system work</strong>
+                <strong>Let the system Cook</strong>
               </p>
               <ul class="text-sm text-white/60 space-y-2">
                 <li>• Share your onboarding link</li>
@@ -786,14 +600,10 @@ import {
   EnvelopeIcon,
   DocumentDuplicateIcon,
   ClockIcon,
-  Bars3Icon,
-  XMarkIcon,
 } from "@heroicons/vue/24/outline";
 import AppFooter from "~/components/ui/AppFooter.vue";
 import GlowButton from "~/components/ui/GlowButton.vue";
-
-// Mobile menu state
-const mobileMenuOpen = ref(false);
+import LandingNav from "~/components/ui/LandingNav.vue";
 
 // GSAP animations
 const { animateHeroEntrance, animateOnScroll, animateNavOnScroll, cleanup } = useGSAP();
@@ -844,16 +654,6 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.main-nav {
-  transition: all 0.3s ease;
-}
-
-.main-nav.nav-scrolled {
-  background: rgba(0, 0, 0, 0.95);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-}
-
 .hero-content,
 .hero-dashboard,
 .hero-nav {

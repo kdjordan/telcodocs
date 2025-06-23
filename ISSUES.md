@@ -1,12 +1,6 @@
-# TelcoDocs Known Issues
+# TeloDox Active Issues
 
-## 🔴 Critical Issues
-
-### Authentication Redirect Loop (RESOLVED)
-**Status:** Resolved  
-**Issue:** ~~Users were getting stuck in a redirect loop when logging in on production~~  
-**Solution:** ✅ Fixed tenant middleware redirect logic and added proper environment handling  
-**Fixed:** 2025-06-21
+## 🟡 Medium Priority Issues
 
 ### Subdomain Tenant Resolution
 **Status:** Partially working, needs refinement  
@@ -15,32 +9,7 @@
 **Solution:** Fix middleware to properly resolve tenants on client-side for anonymous users  
 **Priority:** Medium (can be addressed after core features)
 
-## 🟡 Medium Issues
-
-### Environment Variable Loading
-**Status:** Resolved  
-**Issue:** ~~APP_DOMAIN environment variable not loading properly during development~~  
-**Solution:** ✅ Fixed by restarting dev server after .env changes  
-**Note:** Nuxt requires server restart for .env changes
-
-### User Registration RLS Policies
-**Status:** Resolved  
-**Issue:** ~~Row Level Security preventing user profile creation during registration~~  
-**Solution:** ✅ Fixed with database trigger approach for automatic user profile creation
-
-### Dashboard Loading State
-**Status:** Resolved  
-**Issue:** ~~Dashboard spinner wouldn't stop when no data exists~~  
-**Solution:** ✅ Added proper empty state handling and loading logic  
-**Fixed:** 2025-06-21
-
-### Login Session Persistence
-**Status:** Resolved  
-**Issue:** ~~Users had to re-login when visiting non-existent routes~~  
-**Solution:** ✅ Added redirect preservation in auth middleware and 404 error page  
-**Fixed:** 2025-06-21
-
-## 🟢 Minor Issues
+## 🟢 Low Priority Issues
 
 ### Console Warnings
 **Status:** Active, low priority  
@@ -49,11 +18,6 @@
 **Solution:** Update middleware to handle SSR gracefully  
 **Priority:** Low
 
-### Development Workflow
-**Status:** Monitoring  
-**Issue:** Need better hot-reload support for database schema changes  
-**Impact:** Developer experience  
-**Solution:** Consider Supabase CLI integration for local development
 
 ## 📝 Technical Debt
 
@@ -84,11 +48,6 @@
 **Impact:** Production will need email confirmation flow  
 **Solution:** Implement proper email confirmation flow for production
 
-### File Upload Limits
-**Status:** Not configured  
-**Issue:** No file size or type restrictions implemented  
-**Impact:** Potential storage and security issues  
-**Solution:** Implement proper file validation and limits
 
 ## 🚀 Performance Considerations
 
@@ -118,33 +77,6 @@
 **Impact:** Security risk  
 **Solution:** Implement proper file upload security measures
 
-## 🚧 New Issues Added (2025-06-21)
-
-### Production Environment Configuration
-**Status:** Active  
-**Issue:** Need separate environment configurations for dev and production  
-**Solution:** ✅ Implemented .env for production and .env.local for development  
-**Impact:** Proper environment-specific settings
-
-### Trial System Implementation
-**Status:** Completed  
-**Issue:** Need to implement 7-day free trial instead of upfront payment  
-**Solution:** ✅ Added trial_ends_at and subscription_status fields to tenants table  
-**Impact:** Better user onboarding experience
-
-### Dashboard UI Polish
-**Status:** Completed  
-**Issue:** ~~Dashboard needs better styling and mobile responsiveness~~  
-**Impact:** User experience  
-**Solution:** ✅ Implemented floating sidebar, bento grid layout, custom Tailwind theme with proper colors  
-**Fixed:** 2025-06-21
-
-### Tailwind Configuration Issues
-**Status:** Resolved  
-**Issue:** ~~Custom Tailwind colors not generating due to beta version conflicts~~  
-**Impact:** UI styling and development experience  
-**Solution:** ✅ Downgraded from `@nuxtjs/tailwindcss@7.0.0-beta.0` to stable `v6.14.0` with PostCSS config  
-**Fixed:** 2025-06-21
 
 ---
 
