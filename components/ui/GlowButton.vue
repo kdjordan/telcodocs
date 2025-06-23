@@ -3,7 +3,7 @@
     <!-- Rotating border -->
     <div 
       ref="borderRef"
-      class="absolute inset-0 rounded-lg"
+      class="absolute inset-0 rounded-lg pointer-events-none"
       :style="borderStyle"
     ></div>
     
@@ -13,9 +13,9 @@
       :to="to"
       :href="href"
       :type="type"
-      :disabled="disabled"
+      :disabled="tag === 'button' ? disabled : undefined"
       @click="handleClick"
-      class="relative bg-black hover:bg-white/40 text-white hover:text-black font-semibold rounded-lg transition-all duration-300 flex items-center justify-center gap-2"
+      class="relative bg-black hover:bg-gray-600 text-white font-semibold rounded-lg transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
       :class="[buttonSize, buttonClasses]"
       :style="buttonStyle"
     >
@@ -25,6 +25,7 @@
 </template>
 
 <script setup lang="ts">
+
 interface Props {
   // Component type
   tag?: 'button' | 'NuxtLink' | 'a'
@@ -59,7 +60,18 @@ const borderRef = ref<HTMLElement>()
 const angle = ref(0)
 
 const handleClick = (event: Event) => {
+  console.log('GlowButton clicked:', {
+    tag: props.tag,
+    to: props.to,
+    disabled: props.disabled,
+    event: event
+  })
+  
   if (!props.disabled) {
+    if (props.tag === 'NuxtLink' && props.to) {
+      console.log('Navigating to:', props.to)
+      navigateTo(props.to)
+    }
     emit('click', event)
   }
 }
@@ -103,6 +115,11 @@ const animate = () => {
 }
 
 onMounted(() => {
+  console.log('GlowButton mounted:', {
+    tag: props.tag,
+    to: props.to,
+    disabled: props.disabled
+  })
   animate()
 })
 

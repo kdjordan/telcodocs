@@ -1,4 +1,9 @@
 export default defineNuxtRouteMiddleware(async (to, from) => {
+  // Skip authentication check if page meta says auth: false
+  if (to.meta.auth === false) {
+    return
+  }
+  
   try {
     const supabase = useSupabaseClient()
     const user = useSupabaseUser()

@@ -96,7 +96,7 @@
           <div class="hero-content">
             <!-- Main Headline -->
             <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold font-heading text-white mb-4 leading-tight">
-              Stop Chasing Signatures.<br />
+              Stop Chasing <span class="font-allura text-gradient-purple-magenta text-6xl">Signatures.</span><br />
               Start Closing Deals.
             </h1>
 
@@ -498,7 +498,7 @@
     </section>
 
     <!-- How It Works Section -->
-    <section id="how-it-works" class="py-16 bg-black">
+    <section id="how-it-works" class="py-16 bg-black animate-on-scroll">
       <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-12">
           <h2 class="text-3xl md:text-4xl font-bold font-heading text-white mb-4">
@@ -507,7 +507,7 @@
         </div>
 
         <!-- Steps -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="animate-cards grid grid-cols-1 md:grid-cols-3 gap-8">
           <!-- Step 1 -->
           <div class="text-center">
             <div
@@ -576,7 +576,7 @@
     </section>
 
     <!-- Pricing Section -->
-    <section id="pricing" class="py-16 bg-black">
+    <section id="pricing" class="py-16 bg-black animate-on-scroll">
       <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-12">
           <h2 class="text-3xl md:text-4xl font-bold font-heading text-white mb-4">
@@ -588,7 +588,7 @@
         </div>
 
         <!-- Pricing Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="animate-cards grid grid-cols-1 md:grid-cols-3 gap-8">
           <!-- Free Trial -->
           <div class="bg-white/5 border-2 border-pink-500 rounded-xl p-6">
             <div class="text-center mb-6">

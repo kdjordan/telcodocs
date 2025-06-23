@@ -22,7 +22,6 @@ export default {
         sans: ['Inter', 'sans-serif'],
         heading: ['Manrope', 'sans-serif'],
         inter: ['Inter', 'sans-serif'],
-        sign1: ['Allura', 'cursive'],
       },
       borderRadius: {
         xl: '1rem',

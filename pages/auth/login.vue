@@ -3,18 +3,18 @@
     <!-- Top Navigation -->
     <nav class="bg-black/80 backdrop-blur-md border-b border-white/10">
       <div class="max-w-7xl mx-auto px-6">
-        <div class="flex items-center justify-between h-16">
+        <div class="flex items-center justify-between h-14">
           <!-- Logo -->
-          <NuxtLink to="/" class="flex items-center space-x-3">
-            <div class="w-8 h-8 bg-pink-500 rounded-lg flex items-center justify-center">
-              <span class="text-white text-sm font-bold">T</span>
+          <NuxtLink to="/" class="flex items-center space-x-2">
+            <div class="w-7 h-7 bg-gradient-to-br from-pink-500 to-purple-600 rounded-lg flex items-center justify-center">
+              <span class="text-white text-xs font-bold">T</span>
             </div>
-            <span class="text-white font-bold text-xl">TeloDox</span>
+            <span class="text-white font-bold text-lg">TeloDox</span>
           </NuxtLink>
 
           <!-- Back to Home -->
-          <NuxtLink to="/" class="text-white/80 hover:text-white transition-colors flex items-center space-x-2">
-            <ArrowLeftIcon class="w-5 h-5" />
+          <NuxtLink to="/" class="text-white/80 hover:text-white transition-colors flex items-center space-x-2 text-sm">
+            <ArrowLeftIcon class="w-4 h-4" />
             <span>Back to Home</span>
           </NuxtLink>
         </div>
@@ -25,24 +25,24 @@
     <div class="flex-1 flex items-center justify-center p-6">
       <div class="w-full max-w-md">
         <!-- Auth Card -->
-        <div class="bg-white/5 border border-white/10 rounded-2xl p-8 backdrop-blur-sm">
+        <div class="bg-white/5 border border-white/10 rounded-xl p-6 backdrop-blur-sm">
           <!-- Header -->
-          <div class="text-center mb-8">
-            <div class="w-16 h-16 bg-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <LockClosedIcon class="w-8 h-8 text-white" />
+          <div class="text-center mb-6">
+            <div class="w-12 h-12 bg-gradient-to-br from-pink-500 to-purple-600 rounded-xl flex items-center justify-center mx-auto mb-3">
+              <LockClosedIcon class="w-6 h-6 text-white" />
             </div>
-            <h1 class="text-2xl font-bold text-white mb-2">
+            <h1 class="text-xl font-bold text-white mb-2">
               Welcome back
             </h1>
-            <p class="text-white/60">
+            <p class="text-sm text-white/60">
               {{ tenant ? `Sign in to ${tenant.name}` : 'Sign in to your account' }}
             </p>
           </div>
         
-          <form class="space-y-6" @submit.prevent="handleLogin">
+          <form class="space-y-5" @submit.prevent="handleLogin">
           <div class="space-y-4">
             <div>
-              <label for="email" class="block text-sm font-medium text-white mb-2">
+              <label for="email" class="block text-xs font-medium text-white mb-2">
                 Email address
               </label>
               <input
@@ -52,13 +52,13 @@
                 type="email"
                 autocomplete="email"
                 required
-                class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all"
+                class="w-full px-3 py-2.5 bg-white/10 border border-white/20 rounded-lg text-sm text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all"
                 placeholder="Enter your email"
               >
             </div>
             
             <div>
-              <label for="password" class="block text-sm font-medium text-white mb-2">
+              <label for="password" class="block text-xs font-medium text-white mb-2">
                 Password
               </label>
               <input
@@ -68,7 +68,7 @@
                 type="password"
                 autocomplete="current-password"
                 required
-                class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all"
+                class="w-full px-3 py-2.5 bg-white/10 border border-white/20 rounded-lg text-sm text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all"
                 placeholder="Enter your password"
               >
             </div>
@@ -81,31 +81,33 @@
             </div>
           </div>
 
-          <button
-            type="submit"
-            :disabled="loading"
-            class="w-full bg-pink-500 hover:bg-pink-600 disabled:bg-pink-500/50 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 focus:ring-offset-black"
-          >
+          <div class="w-full flex justify-end">
+            <GlowButton
+              type="submit"
+              :disabled="loading"
+              size="sm"
+            >
             <span v-if="loading" class="flex items-center justify-center">
-              <svg class="animate-spin -ml-1 mr-3 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+              <svg class="animate-spin -ml-1 mr-3 h-3 w-3 text-white" fill="none" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
               Signing in...
             </span>
             <span v-else>Sign in</span>
-          </button>
+          </GlowButton>
+          </div>
 
           <div class="text-center space-y-3">
             <NuxtLink
               to="/auth/forgot-password"
-              class="text-sm text-white/60 hover:text-white transition-colors"
+              class="text-xs text-white/60 hover:text-white transition-colors"
             >
               Forgot your password?
             </NuxtLink>
             
-            <div class="border-t border-white/10 pt-4">
-              <p class="text-sm text-white/60">
+            <div class="border-t border-white/10 pt-3">
+              <p class="text-xs text-white/60">
                 Don't have an account?
                 <NuxtLink
                   to="/auth/register"
@@ -125,9 +127,11 @@
 
 <script setup lang="ts">
 import { ArrowLeftIcon, LockClosedIcon, ExclamationCircleIcon } from "@heroicons/vue/24/outline";
+import GlowButton from "~/components/ui/GlowButton.vue";
 
 definePageMeta({
-  layout: false
+  layout: false,
+  auth: false
 })
 
 const { login, profile } = useAuth()

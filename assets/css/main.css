@@ -10,6 +10,11 @@
   --color-brand-white: #f7f8f8;
   --color-black: #08090a;
   --color-white: #f7f8f8;
+  
+  --font-family-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-family-heading: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+  --font-family-sign1: 'Allura', cursive;
+  --font-family-allura: 'Allura', cursive;
 }
 
 @layer base {
@@ -27,6 +32,24 @@
 }
 
 @layer components {
+  /* Force Allura font classes */
+  .font-allura {
+    font-family: 'Allura', cursive !important;
+  }
+  
+  .font-sign1 {
+    font-family: 'Allura', cursive !important;
+  }
+
+  /* Gradient text utility */
+  .text-gradient-purple-magenta {
+    background: linear-gradient(135deg, #a855f7, #ec4899);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
   .btn-primary {
     background-color: #91C4F2;
     color: white;
