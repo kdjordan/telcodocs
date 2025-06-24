@@ -22,7 +22,16 @@ Next-generation multi-tenant SaaS platform that transforms telecom carrier onboa
 ## User Roles
 
 ### Platform Level
-1. **Super Admin**: Platform management and oversight
+1. **Platform Owner**: System-wide analytics and operational management
+   - **Platform Analytics**: Aggregated metrics across all tenants (no individual deal access)
+   - **Revenue Intelligence**: MRR, ARR, subscription analytics, billing health
+   - **Tenant Health Monitoring**: Activity scores, engagement metrics, churn prediction
+   - **System Operations**: Infrastructure health, API performance, error monitoring
+   - **Strategic Insights**: Growth trends, feature adoption, geographic distribution
+   - **Platform Events**: Billing failures, system alerts, critical notifications
+   - **No Tenant Data Access**: Cannot see individual deals or user data without permission
+
+2. **Super Admin**: Platform administration and support (deprecated - use Platform Owner)
 
 ### Organization Level (within each tenant - e.g., GloTell)
 2. **Organization Owner**: Ultimate authority with complete control
@@ -168,7 +177,7 @@ Next-generation multi-tenant SaaS platform that transforms telecom carrier onboa
 ### Core Tables (Existing)
 - `tenants` - Telecom companies/organizations (e.g., GloTell)
 - `users` - All platform users with role system:
-  - `role`: 'super_admin' | 'tenant_owner' | 'end_user' 
+  - `role`: 'platform_owner' | 'super_admin' | 'tenant_owner' | 'end_user' 
   - `organization_role`: 'owner' | 'admin' | 'member' | null (for carriers)
   - Carriers have `role: 'end_user'` and `organization_role: null`
 - `form_templates` - Owner-created forms with document references
@@ -193,6 +202,12 @@ Next-generation multi-tenant SaaS platform that transforms telecom carrier onboa
 - `document_changes` - Change tracking for redlining
 - `document_comments` - Comments and suggestions
 - `document_versions` - Version history and comparison
+
+### Platform Analytics (V1)
+- `platform_metrics` - Aggregated platform-wide metrics
+- `tenant_health_scores` - Tenant engagement and success scoring
+- `platform_events` - System alerts and operational events
+- `system_health_metrics` - Infrastructure performance tracking
 
 ## Strategic Development Roadmap
 
@@ -238,8 +253,9 @@ Next-generation multi-tenant SaaS platform that transforms telecom carrier onboa
 │   ├── dashboard/      # Owner dashboard
 │   └── ui/            # Reusable UI components
 ├── pages/
-│   ├── admin/         # Super admin pages
-│   ├── dashboard/     # Owner dashboard
+│   ├── platform/      # Platform owner analytics
+│   ├── admin/         # Super admin pages (deprecated)
+│   ├── dashboard/     # Tenant dashboard
 │   └── forms/         # Form filling interface
 ├── server/api/        # API routes
 ├── middleware/        # Tenant resolution, auth guards

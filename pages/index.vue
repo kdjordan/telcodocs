@@ -4,50 +4,69 @@
     <LandingNav />
 
     <!-- Hero Section -->
-    <section class="relative overflow-hidden bg-brand-dark py-20 lg:py-32 pt-32">
+    <section
+      class="relative overflow-hidden bg-brand-dark py-20 lg:py-32 pt-32"
+    >
       <div class="max-w-7xl mx-auto px-6">
-        <!-- Content - Left Aligned -->
-        <div class="mb-16 pl-[10%]">
+        <!-- Content - Centered -->
+        <div class="mb-16 text-center">
           <div class="hero-content">
             <!-- Main Headline -->
-            <h1 class="text-3xl md:text-4xl lg:text-6xl font-bold font-heading text-white mb-4 tracking-wide">
-              Stop Chasing <span class="font-allura text-gradient-purple-magenta text-6xl">Signatures.</span><br />
+            <h1
+              class="text-3xl md:text-4xl lg:text-6xl font-bold font-heading text-white mb-4 tracking-wide"
+            >
+              Stop Chasing
+              <span class="font-allura text-gradient-purple-magenta text-6xl"
+                >Signatures.</span
+              ><br />
               Start Closing Deals.
             </h1>
 
             <!-- Subheadline -->
-            <p class="text-base text-white/80 mb-6 leading-relaxed max-w-lg">
-              Telodox simplifies the telco customer onboarding process by centralizing documents, approvals, and communication — so you can onboard faster, with zero back-and-forth.
+            <p
+              class="text-base text-white/80 mb-6 leading-relaxed max-w-lg mx-auto"
+            >
+              Telodox simplifies the telco customer onboarding process by
+              centralizing documents, approvals, and communication — so you can
+              onboard faster, with zero back-and-forth.
             </p>
 
             <!-- CTA Buttons -->
-            <div class="flex flex-col sm:flex-row gap-3 mb-6">
-              <GlowButton
-                tag="NuxtLink"
-                to="/auth/register"
-                size="md"
-              >
+            <div class="flex flex-col sm:flex-row gap-3 mb-6 justify-center">
+              <GlowButton tag="NuxtLink" to="/auth/register" size="md">
                 Start Free Trial
               </GlowButton>
               <button
                 class="text-white/80 hover:text-white font-semibold px-6 py-3 rounded-xl text-base transition-all duration-300 flex items-center gap-2"
               >
                 See How It Works
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 5l7 7-7 7"
+                  />
                 </svg>
               </button>
             </div>
           </div>
         </div>
-
-   
       </div>
 
       <!-- Background decorative elements -->
       <div class="absolute inset-0 overflow-hidden pointer-events-none">
-        <div class="absolute -top-40 -right-40 w-80 h-80 bg-pink-500/10 rounded-full blur-3xl"></div>
-        <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl"></div>
+        <div
+          class="absolute -top-40 -right-40 w-80 h-80 bg-pink-500/10 rounded-full blur-3xl"
+        ></div>
+        <div
+          class="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl"
+        ></div>
       </div>
     </section>
 
@@ -55,32 +74,42 @@
     <section class="py-16 bg-black animate-on-scroll">
       <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-12">
-          <h2 class="text-3xl md:text-4xl font-bold font-heading text-white mb-4">
+          <h2
+            class="text-3xl md:text-4xl font-bold font-heading text-white mb-4"
+          >
             The Telecom Onboarding Nightmare
           </h2>
-          <p class="text-xl md:text-2xl text-white/80 font-medium mb-8 leading-tight">
+          <p
+            class="text-xl md:text-2xl text-white/80 font-medium mb-8 leading-tight"
+          >
             15+ emails. 6 document versions. 3 weeks later...
-            <span class="text-gradient-purple-magenta font-bold">still no signature.</span>
+            <span class="text-gradient-purple-magenta font-bold"
+              >still no signature.</span
+            >
           </p>
         </div>
 
         <!-- Problem Cards Grid -->
-        <div class="animate-cards grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          <div class="card bg-white/5 border border-white/10 rounded-xl p-5 text-center">
+        <div
+          class="animate-cards grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12"
+        >
+          <div
+            class="card bg-white/5 border border-white/10 rounded-xl p-5 text-center"
+          >
             <div
               class="w-10 h-10 bg-gradient-to-br from-pink-500 to-purple-600 rounded-lg flex items-center justify-center mx-auto mb-3"
             >
               <EnvelopeIcon class="w-5 h-5 text-white" />
             </div>
-            <h3 class="text-lg font-semibold text-white mb-2">
-              Email Chaos
-            </h3>
+            <h3 class="text-lg font-semibold text-white mb-2">Email Chaos</h3>
             <p class="text-sm text-white/60">
               KYC forms buried in attachments across 15+ email threads
             </p>
           </div>
 
-          <div class="card bg-white/5 border border-white/10 rounded-xl p-5 text-center">
+          <div
+            class="card bg-white/5 border border-white/10 rounded-xl p-5 text-center"
+          >
             <div
               class="w-10 h-10 bg-gradient-to-br from-pink-500 to-purple-600 rounded-lg flex items-center justify-center mx-auto mb-3"
             >
@@ -94,15 +123,15 @@
             </p>
           </div>
 
-          <div class="card bg-white/5 border border-white/10 rounded-xl p-5 text-center">
+          <div
+            class="card bg-white/5 border border-white/10 rounded-xl p-5 text-center"
+          >
             <div
               class="w-10 h-10 bg-gradient-to-br from-pink-500 to-purple-600 rounded-lg flex items-center justify-center mx-auto mb-3"
             >
               <ClockIcon class="w-5 h-5 text-white" />
             </div>
-            <h3 class="text-lg font-semibold text-white mb-2">
-              Deal Delays
-            </h3>
+            <h3 class="text-lg font-semibold text-white mb-2">Deal Delays</h3>
             <p class="text-sm text-white/60">
               40+ hours per month wrangling missing fields and stalled approvals
             </p>
@@ -115,8 +144,10 @@
         >
           <h3 class="text-2xl md:text-3xl font-bold text-white mb-3">
             Sales teams waste
-            <span class="text-gradient-purple-magenta">40+ hours per month</span> on manual
-            onboarding
+            <span class="text-gradient-purple-magenta"
+              >40+ hours per month</span
+            >
+            on manual onboarding
           </h3>
           <p class="text-base text-white/60">
             While competitors close deals faster with streamlined processes
@@ -129,7 +160,9 @@
     <section class="py-16 bg-black animate-on-scroll">
       <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-12">
-          <h2 class="text-3xl md:text-4xl font-bold font-heading text-white mb-4">
+          <h2
+            class="text-3xl md:text-4xl font-bold font-heading text-white mb-4"
+          >
             Telodox Fixes That
           </h2>
           <p class="text-base text-white/60 max-w-3xl mx-auto">
@@ -139,7 +172,9 @@
         </div>
 
         <!-- Features Bento Grid -->
-        <div class="animate-cards grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div
+          class="animate-cards grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
           <!-- Build Once -->
           <div class="card bg-white/5 border border-white/10 rounded-xl p-6">
             <div
@@ -315,7 +350,9 @@
     <section id="how-it-works" class="py-16 bg-black animate-on-scroll">
       <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-12">
-          <h2 class="text-3xl md:text-4xl font-bold font-heading text-white mb-4">
+          <h2
+            class="text-3xl md:text-4xl font-bold font-heading text-white mb-4"
+          >
             Get Live in 3 Simple Steps
           </h2>
         </div>
@@ -351,9 +388,7 @@
             >
               2
             </div>
-            <h3 class="text-xl font-bold text-white mb-3">
-              Build Your Flow
-            </h3>
+            <h3 class="text-xl font-bold text-white mb-3">Build Your Flow</h3>
             <div class="bg-white/5 border border-white/10 rounded-xl p-5">
               <p class="text-sm text-white/60 mb-3">
                 <strong>Drag, drop, done</strong>
@@ -393,7 +428,9 @@
     <section id="pricing" class="py-16 bg-black animate-on-scroll">
       <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-12">
-          <h2 class="text-3xl md:text-4xl font-bold font-heading text-white mb-4">
+          <h2
+            class="text-3xl md:text-4xl font-bold font-heading text-white mb-4"
+          >
             Simple, Transparent Pricing
           </h2>
           <p class="text-xl text-white/80 font-medium">
@@ -441,7 +478,9 @@
           </div>
 
           <!-- Pro Plan -->
-          <div class="bg-white/5 border border-white/10 rounded-xl p-6 relative">
+          <div
+            class="bg-white/5 border border-white/10 rounded-xl p-6 relative"
+          >
             <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
               <span
                 class="bg-dark text-white px-3 py-1 rounded-full text-xs font-semibold"
@@ -459,7 +498,8 @@
 
             <ul class="space-y-2 mb-6 text-sm">
               <li class="flex items-center text-white/80">
-                <span class="text-pink-500 mr-2">✓</span>Everything in Free Trial
+                <span class="text-pink-500 mr-2">✓</span>Everything in Free
+                Trial
               </li>
               <li class="flex items-center text-white/80">
                 <span class="text-pink-500 mr-2">✓</span>Unlimited applications
@@ -498,7 +538,8 @@
                 <span class="text-pink-500 mr-2">✓</span>Everything in Pro
               </li>
               <li class="flex items-center text-white/80">
-                <span class="text-pink-500 mr-2">✓</span>Dedicated success manager
+                <span class="text-pink-500 mr-2">✓</span>Dedicated success
+                manager
               </li>
               <li class="flex items-center text-white/80">
                 <span class="text-pink-500 mr-2">✓</span>Custom workflows
@@ -534,11 +575,7 @@
         <!-- Large CTA Buttons -->
         <div class="flex flex-col sm:flex-row gap-4 justify-center mb-8">
           <div>
-            <GlowButton
-              tag="NuxtLink"
-              to="/auth/register"
-              size="md"
-            >
+            <GlowButton tag="NuxtLink" to="/auth/register" size="md">
               Start Free Trial
             </GlowButton>
           </div>
@@ -550,11 +587,13 @@
         </div>
 
         <!-- Risk-Free Promise -->
-        <div class="bg-white/5 border border-white/10 rounded-xl p-6 inline-block">
-          <h3 class="text-lg font-bold text-white mb-3">
-            Risk-Free Promise
-          </h3>
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm text-white/60">
+        <div
+          class="bg-white/5 border border-white/10 rounded-xl p-6 inline-block"
+        >
+          <h3 class="text-lg font-bold text-white mb-3">Risk-Free Promise</h3>
+          <div
+            class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm text-white/60"
+          >
             <div class="flex items-center">
               <span class="text-pink-500 mr-2">✓</span>7-day free trial
             </div>
@@ -606,7 +645,8 @@ import GlowButton from "~/components/ui/GlowButton.vue";
 import LandingNav from "~/components/ui/LandingNav.vue";
 
 // GSAP animations
-const { animateHeroEntrance, animateOnScroll, animateNavOnScroll, cleanup } = useGSAP();
+const { animateHeroEntrance, animateOnScroll, animateNavOnScroll, cleanup } =
+  useGSAP();
 
 definePageMeta({
   layout: false,
