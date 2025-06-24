@@ -33,8 +33,8 @@
 
             <!-- CTA Buttons -->
             <div class="flex flex-col sm:flex-row gap-3 mb-6 justify-center">
-              <GlowButton tag="NuxtLink" to="/auth/register" size="md">
-                Start Free Trial
+              <GlowButton tag="NuxtLink" to="/early-access" size="md">
+                Get Early Access
               </GlowButton>
               <button
                 class="text-white/80 hover:text-white font-semibold px-6 py-3 rounded-xl text-base transition-all duration-300 flex items-center gap-2"
@@ -67,6 +67,79 @@
         <div
           class="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl"
         ></div>
+      </div>
+    </section>
+
+    <!-- Launch Announcement Section -->
+    <section class="py-16 bg-gradient-to-b from-black to-gray-900/50">
+      <div class="max-w-4xl mx-auto px-6 text-center">
+        <!-- Launch Badge -->
+        <div class="inline-flex items-center px-6 py-3 bg-pink-500/20 border border-pink-500/30 rounded-full text-pink-300 text-lg font-semibold mb-8">
+          <RocketLaunchIcon class="w-5 h-5 mr-3" />
+          Launching August 1, 2025
+        </div>
+        
+        <!-- Announcement Content -->
+        <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">
+          The Future of Telecom Onboarding is Almost Here
+        </h2>
+        <p class="text-xl text-white/80 mb-8 max-w-3xl mx-auto">
+          Be among the first to experience streamlined carrier onboarding, intelligent document processing, 
+          and collaborative MSA redlining. Join <span class="font-semibold text-pink-400">500+</span> industry professionals already waiting.
+        </p>
+        
+        <!-- Email Capture Form -->
+        <form @submit.prevent="handleEmailSubmit" class="max-w-md mx-auto mb-8">
+          <div class="flex flex-col sm:flex-row gap-3">
+            <input
+              v-model="launchEmail"
+              type="email"
+              placeholder="Enter your email for launch updates"
+              class="flex-1 px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all"
+              required
+            >
+            <GlowButton 
+              type="submit" 
+              :disabled="emailLoading || !launchEmail"
+              size="md"
+              class="sm:w-auto w-full"
+            >
+              <span v-if="emailLoading">Joining...</span>
+              <span v-else>Join Waitlist</span>
+            </GlowButton>
+          </div>
+          <div v-if="emailSuccess" class="mt-3 text-green-400 text-sm">
+            ✅ You're on the list! We'll notify you on launch day.
+          </div>
+          <div v-if="emailError" class="mt-3 text-red-400 text-sm">
+            {{ emailError }}
+          </div>
+        </form>
+        
+        <!-- Benefits Preview -->
+        <div class="grid md:grid-cols-3 gap-6 mt-12">
+          <div class="text-center">
+            <div class="w-12 h-12 bg-pink-500/20 rounded-xl flex items-center justify-center mx-auto mb-4">
+              <DocumentCheckIcon class="w-6 h-6 text-pink-400" />
+            </div>
+            <h3 class="text-white font-semibold mb-2">Smart Document Processing</h3>
+            <p class="text-sm text-white/60">Upload PDFs and transform them into digital workflows</p>
+          </div>
+          <div class="text-center">
+            <div class="w-12 h-12 bg-pink-500/20 rounded-xl flex items-center justify-center mx-auto mb-4">
+              <UsersIcon class="w-6 h-6 text-pink-400" />
+            </div>
+            <h3 class="text-white font-semibold mb-2">Team Collaboration</h3>
+            <p class="text-sm text-white/60">Eliminate email chaos with role-based workflows</p>
+          </div>
+          <div class="text-center">
+            <div class="w-12 h-12 bg-pink-500/20 rounded-xl flex items-center justify-center mx-auto mb-4">
+              <PencilSquareIcon class="w-6 h-6 text-pink-400" />
+            </div>
+            <h3 class="text-white font-semibold mb-2">MSA Redlining</h3>
+            <p class="text-sm text-white/60">Professional document negotiation and tracking</p>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -469,11 +542,11 @@
 
             <GlowButton
               tag="NuxtLink"
-              to="/auth/register"
+              to="/early-access"
               size="sm"
               class="w-full"
             >
-              Start Free Trial
+              Get Early Access
             </GlowButton>
           </div>
 
@@ -517,11 +590,11 @@
 
             <GlowButton
               tag="NuxtLink"
-              to="/auth/register"
+              to="/early-access"
               size="sm"
               class="w-full"
             >
-              Choose Pro
+              Get Early Access
             </GlowButton>
           </div>
 
@@ -575,8 +648,8 @@
         <!-- Large CTA Buttons -->
         <div class="flex flex-col sm:flex-row gap-4 justify-center mb-8">
           <div>
-            <GlowButton tag="NuxtLink" to="/auth/register" size="md">
-              Start Free Trial
+            <GlowButton tag="NuxtLink" to="/early-access" size="md">
+              Get Early Access
             </GlowButton>
           </div>
           <button
@@ -615,12 +688,12 @@
     <div class="fixed bottom-6 right-6 z-50">
       <GlowButton
         tag="NuxtLink"
-        to="/auth/register"
+        to="/early-access"
         size="sm"
         class="shadow-lg hover:shadow-xl"
       >
         <RocketLaunchIcon class="w-4 h-4" />
-        <span>Start Free Trial</span>
+        <span>Get Early Access</span>
       </GlowButton>
     </div>
   </div>
@@ -639,10 +712,62 @@ import {
   EnvelopeIcon,
   DocumentDuplicateIcon,
   ClockIcon,
+  DocumentCheckIcon,
+  UsersIcon,
+  PencilSquareIcon,
 } from "@heroicons/vue/24/outline";
 import AppFooter from "~/components/ui/AppFooter.vue";
 import GlowButton from "~/components/ui/GlowButton.vue";
 import LandingNav from "~/components/ui/LandingNav.vue";
+
+// Email capture for launch announcement
+const launchEmail = ref('')
+const emailLoading = ref(false)
+const emailSuccess = ref(false)
+const emailError = ref('')
+
+const handleEmailSubmit = async () => {
+  if (!launchEmail.value) return
+  
+  emailLoading.value = true
+  emailError.value = ''
+  emailSuccess.value = false
+  
+  try {
+    await $fetch('/api/early-access', {
+      method: 'POST',
+      body: {
+        email: launchEmail.value,
+        source: 'homepage',
+        referrer: document.referrer,
+        metadata: {
+          userAgent: navigator.userAgent,
+          timestamp: new Date().toISOString()
+        }
+      }
+    })
+    
+    emailSuccess.value = true
+    launchEmail.value = ''
+    
+    // Track conversion for analytics
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'homepage_email_signup', {
+        email_hash: btoa(launchEmail.value).substring(0, 8)
+      })
+    }
+    
+  } catch (err: any) {
+    console.error('Email signup error:', err)
+    if (err.data?.message?.includes('already exists')) {
+      emailError.value = 'You\'re already on our waitlist!'
+    } else {
+      emailError.value = 'Failed to join waitlist. Please try again.'
+    }
+  } finally {
+    emailLoading.value = false
+  }
+}
 
 // GSAP animations
 const { animateHeroEntrance, animateOnScroll, animateNavOnScroll, cleanup } =

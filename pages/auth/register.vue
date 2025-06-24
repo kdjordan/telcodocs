@@ -107,6 +107,24 @@
                 placeholder="••••••••"
               >
           </div>
+          
+          <!-- Dev Password Field (only shown when needed) -->
+          <div v-if="showDevPassword">
+              <label for="devPassword" class="block text-xs font-medium text-yellow-400 mb-2">
+                Developer Access Code
+              </label>
+              <input
+                id="devPassword"
+                v-model="form.devPassword"
+                name="devPassword"
+                type="password"
+                class="w-full px-3 py-2.5 bg-yellow-500/10 border border-yellow-500/30 rounded-lg text-sm text-white placeholder-yellow-300/60 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all"
+                placeholder="Enter developer access code"
+              >
+              <p class="text-xs text-yellow-300/80 mt-1">
+                Platform is in pre-launch mode. Access code required for testing.
+              </p>
+          </div>
             </div>
 
             <div v-if="error" class="bg-red-500/10 border border-red-500/30 rounded-xl p-4">
@@ -168,15 +186,33 @@ const form = reactive({
   fullName: '',
   email: '',
   password: '',
-  confirmPassword: ''
+  confirmPassword: '',
+  devPassword: ''
 })
 
 const loading = ref(false)
 const error = ref('')
 
+// Show dev password field when in production mode and dev password is configured
+const runtimeConfig = useRuntimeConfig()
+const showDevPassword = computed(() => {
+  return process.env.NODE_ENV === 'production' && runtimeConfig.public.devPassword
+})
+
 const handleRegister = async () => {
   loading.value = true
   error.value = ''
+  
+  // Check if we're in production and no dev password provided
+  const runtimeConfig = useRuntimeConfig()
+  const isProduction = process.env.NODE_ENV === 'production'
+  const devPassword = runtimeConfig.public.devPassword
+  
+  if (isProduction && devPassword && form.devPassword !== devPassword) {
+    // Redirect to early access page instead of showing error
+    await router.push('/early-access')
+    return
+  }
   
   // Validate passwords match
   if (form.password !== form.confirmPassword) {

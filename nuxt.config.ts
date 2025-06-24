@@ -51,7 +51,8 @@ export default defineNuxtConfig({
       supabaseAnonKey: process.env.SUPABASE_ANON_KEY || '',
       appDomain: process.env.APP_DOMAIN || 'telodox.com',
       r2PublicUrl: process.env.R2_PUBLIC_URL || '',
-      stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY || ''
+      stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY || '',
+      devPassword: process.env.DEV_PASSWORD || ''
     },
     supabaseServiceKey: process.env.SUPABASE_SERVICE_KEY || '',
     stripeSecretKey: process.env.STRIPE_SECRET_KEY || '',

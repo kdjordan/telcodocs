@@ -90,7 +90,7 @@
             >
               <span v-if="loading === plan.id">Processing...</span>
               <span v-else-if="plan.name === 'Free'">Start Free</span>
-              <span v-else>Get Started</span>
+              <span v-else>Get Early Access</span>
             </button>
           </div>
         </div>
@@ -194,7 +194,7 @@ const getPrice = (plan: SubscriptionPlan) => {
 const selectPlan = async (plan: SubscriptionPlan) => {
   if (!user.value) {
     // Redirect to signup
-    await navigateTo('/auth/register')
+    await navigateTo('/early-access')
     return
   }
 
