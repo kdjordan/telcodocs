@@ -21,8 +21,22 @@ Next-generation multi-tenant SaaS platform that transforms telecom carrier onboa
 
 ## User Roles
 
+### Role System Overview
+TELODOX uses a two-field role system for maximum flexibility:
+- `role`: Determines platform vs organization vs external user
+- `organization_role`: Specifies permissions within an organization
+
+### Database Field Mapping
+```typescript
+// users table structure
+{
+  role: 'platform_owner' | 'organization_user' | 'carrier'
+  organization_role: 'owner' | 'admin' | 'member' | null
+}
+```
+
 ### Platform Level
-1. **Platform Owner**: System-wide analytics and operational management
+1. **Platform Owner** (`role: 'platform_owner'`, `organization_role: null`)
    - **Platform Analytics**: Aggregated metrics across all tenants (no individual deal access)
    - **Revenue Intelligence**: MRR, ARR, subscription analytics, billing health
    - **Tenant Health Monitoring**: Activity scores, engagement metrics, churn prediction
@@ -31,10 +45,8 @@ Next-generation multi-tenant SaaS platform that transforms telecom carrier onboa
    - **Platform Events**: Billing failures, system alerts, critical notifications
    - **No Tenant Data Access**: Cannot see individual deals or user data without permission
 
-2. **Super Admin**: Platform administration and support (deprecated - use Platform Owner)
-
 ### Organization Level (within each tenant - e.g., GloTell)
-2. **Organization Owner**: Ultimate authority with complete control
+2. **Organization Owner** (`role: 'organization_user'`, `organization_role: 'owner'`)
    - **User Management**: Add/remove multiple admins and team members
    - **Billing Management**: Subscription and payment oversight
    - **Form Templates**: Create and edit all form templates
@@ -42,22 +54,22 @@ Next-generation multi-tenant SaaS platform that transforms telecom carrier onboa
    - **Document Authority**: Sign documents, approve redlines, download all docs
    - **Visibility**: See all deals, all team activity, all carrier interactions
 
-3. **Admin**: Senior staff with broad authority (multiple admins allowed)
+3. **Admin** (`role: 'organization_user'`, `organization_role: 'admin'`)
    - **Redlining**: Redline MSAs and approve carrier redlines
    - **Communications**: Send notifications to anyone (carriers, team members)
-   - **Team Building**: Add team members (not other admins)
+   - **Team Building**: Add team members only (cannot add other admins)
    - **Document Authority**: Sign documents on behalf of organization
    - **Full Visibility**: Download ALL carrier documents, see ALL team member deals
    - **Approval Power**: Approve carrier redlines to allow process progression
 
-4. **Team Member**: Individual contributors with focused responsibilities
+4. **Team Member** (`role: 'organization_user'`, `organization_role: 'member'`)
    - **Limited Communications**: Send notifications to assigned carriers only
    - **Assigned Visibility**: View only assigned carriers' statuses and documents
    - **Document Access**: Download only assigned carriers' documents
    - **No Signing Authority**: Cannot sign documents or approve redlines
 
 ### External Level (Carriers applying for interconnection)
-5. **Carrier**: External carrier companies with time-limited access
+5. **Carrier** (`role: 'carrier'`, `organization_role: null`)
    - **Registration**: Signs up on tenant subdomain (e.g., `abc-telecom.com` → `glotell.telodox.com`)
    - **Document Management**: Fill document information and sign agreements
    - **Redlining Capability**: Redline MSAs and approve organization redlines
@@ -66,6 +78,65 @@ Next-generation multi-tenant SaaS platform that transforms telecom carrier onboa
    - **Workflow Progression**: Complete KYC → FUSF → MSA → Interop (with admin approval)
    - **Document Access**: Download only their own documents after completion
    - **Lifecycle**: Account archived/removed after process completion (90-day retention)
+
+## Role Reference Guide for Developers
+
+### Quick Role Checks in Code
+```typescript
+// Platform Owner
+if (user.role === 'platform_owner') { /* Platform-wide access */ }
+
+// Organization Owner
+if (user.role === 'organization_user' && user.organization_role === 'owner') { /* Full tenant control */ }
+
+// Admin
+if (user.role === 'organization_user' && user.organization_role === 'admin') { /* Team oversight */ }
+
+// Team Member
+if (user.role === 'organization_user' && user.organization_role === 'member') { /* Limited access */ }
+
+// Carrier
+if (user.role === 'carrier') { /* External user, own data only */ }
+
+// Any Organization User
+if (user.role === 'organization_user') { /* Check organization_role for specific permissions */ }
+
+// Admin or Owner (approval authority)
+if (user.role === 'organization_user' && ['owner', 'admin'].includes(user.organization_role)) { /* Can approve */ }
+```
+
+## User Signup Journeys
+
+### How Users Join TELODOX
+1. **Platform Owner**: Manually configured in Supabase database (no signup flow)
+   - Reserved for TELODOX platform operators only
+   
+2. **Organization Owner**: Self-service signup from homepage
+   - Creates Supabase Auth account → Frontend creates temporary tenant + user profile
+   - Gets temporary tenant (temp-xxxxx.telodox.com) automatically
+   - Selects subscription plan → Becomes organization owner
+   - **Customizes tenant name and subdomain** in dashboard (e.g., glotell.telodx.com)
+   - Responsible for billing and initial team setup
+   - Can invite admins and team members
+   
+3. **Admin**: Invited by organization owner only
+   - Receives email invitation with role pre-set to admin
+   - Creates account through invitation link
+   - Can invite team members (but not other admins)
+   
+4. **Team Member**: Invited by organization owner or admin
+   - Receives email invitation with role pre-set to member
+   - Creates account through invitation link
+   - Can invite carriers to start applications
+   
+5. **Carrier**: Multiple entry points
+   - **Direct Invitation**: Invited by any organization user (owner/admin/member)
+   - **Public Link** (Future): Organization owners can enable public KYC submission link
+   - Creates account on tenant's subdomain (e.g., glotell.telodox.com)
+   - Automatically assigned role='carrier' upon signup
+
+### Open Funnel Feature (Planned)
+Organization owners will have the option to generate a public link that allows any carrier to submit a KYC form without invitation. This serves as the top of an open sales funnel for organizations wanting to maximize carrier acquisition.
 
 ## Critical Business Logic & Edge Cases
 
@@ -143,13 +214,15 @@ Next-generation multi-tenant SaaS platform that transforms telecom carrier onboa
 
 ## Enhanced Core Workflows
 
-### Tenant Onboarding (Reduced Friction)
-1. User signs up → Selects subscription plan → Becomes organization owner
-2. Owner chooses subdomain during onboarding
-3. **NEW**: Upload existing PDF/DOCX documents for instant processing
-4. **NEW**: OCR extracts text and suggests form structure
-5. Owner reviews AI suggestions and finalizes form templates
-6. **NEW**: Invite team members with appropriate roles
+### Tenant Onboarding (Frontend-Handled)
+1. User signs up through Supabase Auth
+2. Frontend creates temporary tenant and user profile after successful auth
+3. User selects subscription plan → Becomes organization owner
+4. Owner customizes tenant name and subdomain in dashboard
+5. **NEW**: Upload existing PDF/DOCX documents for instant processing
+6. **NEW**: OCR extracts text and suggests form structure
+7. Owner reviews AI suggestions and finalizes form templates
+8. **NEW**: Invite team members with appropriate roles
 
 ### Carrier Application Process
 1. **Carrier** (external company) visits tenant subdomain (e.g., `glotell.telodox.com`)
@@ -177,9 +250,11 @@ Next-generation multi-tenant SaaS platform that transforms telecom carrier onboa
 ### Core Tables (Existing)
 - `tenants` - Telecom companies/organizations (e.g., GloTell)
 - `users` - All platform users with role system:
-  - `role`: 'platform_owner' | 'super_admin' | 'tenant_owner' | 'end_user' 
-  - `organization_role`: 'owner' | 'admin' | 'member' | null (for carriers)
-  - Carriers have `role: 'end_user'` and `organization_role: null`
+  - `role`: 'platform_owner' | 'organization_user' | 'carrier'
+  - `organization_role`: 'owner' | 'admin' | 'member' | null
+  - Platform owners have `role: 'platform_owner'` and `organization_role: null`
+  - Organization users have `role: 'organization_user'` and `organization_role: 'owner'|'admin'|'member'`
+  - Carriers have `role: 'carrier'` and `organization_role: null`
 - `form_templates` - Owner-created forms with document references
 - `form_fields` - Dynamic form structure
 - `applications` - Carrier onboarding instances (one per carrier)
@@ -254,8 +329,8 @@ Next-generation multi-tenant SaaS platform that transforms telecom carrier onboa
 │   └── ui/            # Reusable UI components
 ├── pages/
 │   ├── platform/      # Platform owner analytics
-│   ├── admin/         # Super admin pages (deprecated)
-│   ├── dashboard/     # Tenant dashboard
+│   ├── dashboard/     # Organization dashboard (all org roles)
+│   ├── application/   # Carrier application interface
 │   └── forms/         # Form filling interface
 ├── server/api/        # API routes
 ├── middleware/        # Tenant resolution, auth guards

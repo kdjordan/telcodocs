@@ -34,8 +34,8 @@ CREATE TABLE users (
     email VARCHAR(255) NOT NULL,
     full_name VARCHAR(255) NOT NULL,
     
-    -- Role system
-    role user_role NOT NULL DEFAULT 'end_user',
+    -- Clean two-field role system
+    role user_role NOT NULL DEFAULT 'carrier',
     organization_role organization_role,
     tenant_id UUID REFERENCES tenants(id) ON DELETE CASCADE,
     
@@ -48,10 +48,14 @@ CREATE TABLE users (
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW(),
     
-    -- Constraints
-    CONSTRAINT check_organization_role_requires_tenant CHECK (
-        (organization_role IS NULL AND tenant_id IS NULL) OR 
-        (organization_role IS NOT NULL AND tenant_id IS NOT NULL)
+    -- Role-based constraints ensuring data integrity
+    CONSTRAINT check_role_organization_consistency CHECK (
+        -- Platform owners cannot have organization_role or tenant_id
+        (role = 'platform_owner' AND organization_role IS NULL AND tenant_id IS NULL) OR
+        -- Organization users must have both organization_role and tenant_id
+        (role = 'organization_user' AND organization_role IS NOT NULL AND tenant_id IS NOT NULL) OR
+        -- Carriers cannot have organization_role but must have tenant_id (the tenant they're applying to)
+        (role = 'carrier' AND organization_role IS NULL AND tenant_id IS NOT NULL)
     )
 );
 

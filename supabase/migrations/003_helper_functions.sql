@@ -51,48 +51,24 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- Check if user is super admin (deprecated, use platform_owner)
-CREATE OR REPLACE FUNCTION is_super_admin() 
-RETURNS BOOLEAN AS $$
-BEGIN
-    RETURN (
-        SELECT role = 'super_admin' 
-        FROM users 
-        WHERE id = auth.uid()
-    );
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
-
--- Check if user is tenant owner
-CREATE OR REPLACE FUNCTION is_tenant_owner() 
-RETURNS BOOLEAN AS $$
-BEGIN
-    RETURN (
-        SELECT role = 'tenant_owner' 
-        FROM users 
-        WHERE id = auth.uid()
-    );
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
-
 -- Check if user is organization owner
 CREATE OR REPLACE FUNCTION is_organization_owner() 
 RETURNS BOOLEAN AS $$
 BEGIN
     RETURN (
-        SELECT organization_role = 'owner' 
+        SELECT role = 'organization_user' AND organization_role = 'owner'
         FROM users 
         WHERE id = auth.uid()
     );
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- Check if user is organization admin (owner or admin)
+-- Check if user is organization admin
 CREATE OR REPLACE FUNCTION is_organization_admin() 
 RETURNS BOOLEAN AS $$
 BEGIN
     RETURN (
-        SELECT organization_role IN ('owner', 'admin') 
+        SELECT role = 'organization_user' AND organization_role = 'admin'
         FROM users 
         WHERE id = auth.uid()
     );
@@ -104,7 +80,55 @@ CREATE OR REPLACE FUNCTION is_organization_member()
 RETURNS BOOLEAN AS $$
 BEGIN
     RETURN (
-        SELECT organization_role = 'member' 
+        SELECT role = 'organization_user' AND organization_role = 'member'
+        FROM users 
+        WHERE id = auth.uid()
+    );
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Check if user is any organization user
+CREATE OR REPLACE FUNCTION is_organization_user() 
+RETURNS BOOLEAN AS $$
+BEGIN
+    RETURN (
+        SELECT role = 'organization_user'
+        FROM users 
+        WHERE id = auth.uid()
+    );
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Check if user is carrier
+CREATE OR REPLACE FUNCTION is_carrier() 
+RETURNS BOOLEAN AS $$
+BEGIN
+    RETURN (
+        SELECT role = 'carrier'
+        FROM users 
+        WHERE id = auth.uid()
+    );
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Check if user has admin or owner role (for approval authority)
+CREATE OR REPLACE FUNCTION has_approval_authority() 
+RETURNS BOOLEAN AS $$
+BEGIN
+    RETURN (
+        SELECT role = 'organization_user' AND organization_role IN ('owner', 'admin')
+        FROM users 
+        WHERE id = auth.uid()
+    );
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Get user's organization role
+CREATE OR REPLACE FUNCTION get_user_organization_role() 
+RETURNS organization_role AS $$
+BEGIN
+    RETURN (
+        SELECT organization_role 
         FROM users 
         WHERE id = auth.uid()
     );
@@ -390,6 +414,9 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+-- User creation is handled in the frontend after successful auth signup
+-- No database trigger needed - keeps the system simple and reliable
+
 -- ============================================================================
 -- APPLY TRIGGERS
 -- ============================================================================
@@ -445,6 +472,7 @@ CREATE TRIGGER trigger_check_msa_document_tenant
 BEFORE INSERT OR UPDATE ON msa_documents
 FOR EACH ROW EXECUTE FUNCTION check_msa_document_tenant();
 
+
 -- ============================================================================
 -- COMMENTS FOR DOCUMENTATION
 -- ============================================================================
@@ -466,3 +494,13 @@ COMMENT ON FUNCTION calculate_tenant_health_score(UUID) IS 'Calculates and store
 COMMENT ON FUNCTION aggregate_platform_metrics() IS 'Aggregates daily platform metrics for analytics';
 COMMENT ON FUNCTION check_deal_assignment_tenant() IS 'Ensures deal assignments are within the same tenant as the application';
 COMMENT ON FUNCTION check_msa_document_tenant() IS 'Ensures MSA documents are within the same tenant as the application';
+
+-- Add function comments
+COMMENT ON FUNCTION is_platform_owner() IS 'Check if current user is a platform owner';
+COMMENT ON FUNCTION is_organization_owner() IS 'Check if current user is an organization owner';
+COMMENT ON FUNCTION is_organization_admin() IS 'Check if current user is an organization admin';
+COMMENT ON FUNCTION is_organization_member() IS 'Check if current user is an organization member';
+COMMENT ON FUNCTION is_organization_user() IS 'Check if current user is any type of organization user';
+COMMENT ON FUNCTION is_carrier() IS 'Check if current user is a carrier (external user)';
+COMMENT ON FUNCTION has_approval_authority() IS 'Check if user can approve documents (owner or admin)';
+COMMENT ON FUNCTION get_user_organization_role() IS 'Get the organization role of current user';

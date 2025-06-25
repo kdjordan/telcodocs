@@ -7,24 +7,21 @@
         :value="metrics.activeCarriers" 
         change="+5% this month"
         :icon="BuildingOfficeIcon"
-        variant="info"
-        secondary-metric="In pipeline"
+        variant="default"
       />
       <CarrierMetricsCard 
         title="Pending Approvals" 
         :value="metrics.pendingApprovals" 
         change="+12% this month"
         :icon="ClockIcon"
-        variant="warning"
-        secondary-metric="Need review"
+        variant="default"
       />
       <CarrierMetricsCard 
         title="Completed This Month" 
         :value="metrics.completedThisMonth" 
         change="+23% vs last month"
         :icon="CheckCircleIcon"
-        variant="success"
-        secondary-metric="Onboarded"
+        variant="default"
       />
       <CarrierMetricsCard 
         title="Team Performance" 
@@ -32,64 +29,54 @@
         change="+8% this month"
         :icon="UsersIcon"
         variant="default"
-        secondary-metric="Avg cycle time: 12d"
       />
     </div>
 
-    <!-- Main Dashboard Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
+    <!-- Half Width Dashboard Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
       <!-- Carriers Requiring Attention -->
-      <div class="lg:col-span-1">
-        <CarrierPipelineCard
-          title="Requiring Attention"
-          :carriers="urgentCarriers"
-          :loading="loading"
-          :max-display="5"
-          empty-title="All caught up!"
-          empty-message="No carriers need immediate attention."
-          :empty-icon="CheckCircleIcon"
-          @view-all="$emit('view-urgent')"
-        />
-      </div>
+      <CarrierPipelineCard
+        title="Requiring Attention"
+        :carriers="urgentCarriers"
+        :loading="loading"
+        :max-display="5"
+        empty-title="All caught up!"
+        empty-message="No carriers need immediate attention."
+        :empty-icon="CheckCircleIcon"
+        @view-all="$emit('view-urgent')"
+      />
       
       <!-- Team Activity Feed -->
-      <div class="lg:col-span-1">
-        <TeamActivityFeed 
-          :activities="recentActivities"
-          :loading="activitiesLoading"
-          @view-all="$emit('view-activities')"
-        />
-      </div>
+      <TeamActivityFeed 
+        :activities="recentActivities"
+        :loading="activitiesLoading"
+        @view-all="$emit('view-activities')"
+      />
       
-      <!-- Right Column: Pipeline Overview + Team Management -->
-      <div class="lg:col-span-1 space-y-4 lg:space-y-6">
-        <PipelineOverview 
-          :pipeline-data="pipelineData"
-          :loading="loading"
-          @view-stage="$emit('view-stage', $event)"
-        />
-        <TeamManagementCard 
-          :team-members="teamMembers"
-          :loading="teamLoading"
-          @manage-team="$emit('manage-team')"
-          @invite-member="$emit('invite-member')"
+      <!-- Pipeline Overview -->
+      <PipelineOverview 
+        :pipeline-data="pipelineData"
+        :loading="loading"
+        @view-stage="$emit('view-stage', $event)"
+      />
+
+      <!-- Team Management -->
+      <TeamManagementCard 
+        :team-members="teamMembers"
+        :loading="teamLoading"
+        @manage-team="$emit('manage-team')"
+        @invite-member="$emit('invite-member')"
+      />
+
+      <!-- Form Templates - Span 2 columns -->
+      <div class="lg:col-span-2">
+        <FormTemplatesCard 
+          :templates="formTemplates"
+          :loading="templatesLoading"
+          @create-template="$emit('create-template')"
+          @edit-template="$emit('edit-template', $event)"
         />
       </div>
-    </div>
-
-    <!-- Secondary Grid: Form Templates + Revenue Analytics -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
-      <FormTemplatesCard 
-        :templates="formTemplates"
-        :loading="templatesLoading"
-        @create-template="$emit('create-template')"
-        @edit-template="$emit('edit-template', $event)"
-      />
-      <RevenueAnalytics 
-        :revenue-data="revenueData"
-        :loading="revenueLoading"
-        @view-billing="$emit('view-billing')"
-      />
     </div>
   </div>
 </template>
@@ -108,7 +95,6 @@ import TeamActivityFeed from '~/components/dashboard/owner/TeamActivityFeed.vue'
 import PipelineOverview from '~/components/dashboard/owner/PipelineOverview.vue'
 import TeamManagementCard from '~/components/dashboard/owner/TeamManagementCard.vue'
 import FormTemplatesCard from '~/components/dashboard/owner/FormTemplatesCard.vue'
-import RevenueAnalytics from '~/components/dashboard/owner/RevenueAnalytics.vue'
 
 import type { Application } from '~/types'
 
@@ -154,13 +140,6 @@ interface FormTemplate {
   status: 'active' | 'draft'
 }
 
-interface RevenueData {
-  mrr: number
-  growth: number
-  seats: number
-  churnRate: number
-}
-
 interface Props {
   metrics: DashboardMetrics
   urgentCarriers: Application[]
@@ -168,12 +147,10 @@ interface Props {
   pipelineData: PipelineData
   teamMembers: TeamMember[]
   formTemplates: FormTemplate[]
-  revenueData: RevenueData
   loading: boolean
   activitiesLoading: boolean
   teamLoading: boolean
   templatesLoading: boolean
-  revenueLoading: boolean
 }
 
 defineProps<Props>()
@@ -186,6 +163,5 @@ defineEmits<{
   'invite-member': []
   'create-template': []
   'edit-template': [template: FormTemplate]
-  'view-billing': []
 }>()
 </script>

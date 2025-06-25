@@ -7,9 +7,9 @@
       <!-- Avatar -->
       <div class="relative flex-shrink-0">
         <img 
-          v-if="member.avatar" 
+          v-if="member?.avatar" 
           :src="member.avatar"
-          :alt="member.name"
+          :alt="member?.name || 'Team member'"
           class="w-8 h-8 rounded-full object-cover"
         />
         <div 
@@ -17,7 +17,7 @@
           class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center"
         >
           <span class="text-white text-xs font-semibold">
-            {{ getInitials(member.name) }}
+            {{ getInitials(member?.name || 'U') }}
           </span>
         </div>
         
@@ -33,16 +33,16 @@
       <!-- Member Info -->
       <div class="min-w-0 flex-1">
         <div class="flex items-center space-x-2">
-          <p class="text-white text-sm font-medium truncate">{{ member.name }}</p>
-          <RoleBadge :role="member.role" size="xs" />
+          <p class="text-white text-sm font-medium truncate">{{ member?.name || 'Unknown' }}</p>
+          <RoleBadge :role="member?.role || 'member'" size="xs" />
         </div>
         <div class="flex items-center space-x-3 mt-0.5">
           <p class="text-white/60 text-xs">
-            {{ member.assignedCarriers }} carriers
+            {{ member?.assignedCarriers || 0 }} carriers
           </p>
           <span class="text-white/40 text-xs">•</span>
           <p class="text-white/60 text-xs">
-            {{ member.performance }}% performance
+            {{ member?.performance || 0 }}% performance
           </p>
         </div>
       </div>
@@ -52,7 +52,7 @@
     <div class="flex items-center space-x-2 ml-2">
       <div class="w-12 h-1.5 bg-white/10 rounded-full overflow-hidden">
         <div 
-          :style="{ width: `${member.performance}%` }"
+          :style="{ width: `${member?.performance || 0}%` }"
           :class="[
             'h-full rounded-full transition-all duration-300',
             performanceColor
@@ -82,7 +82,7 @@ interface Props {
   member: TeamMember
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
 
 defineEmits<{
   'view-details': [member: TeamMember]
@@ -102,12 +102,13 @@ const statusColor = computed(() => {
     inactive: 'bg-gray-400',
     pending: 'bg-yellow-400'
   }
-  return colors[props.member.status]
+  return colors[props.member?.status || 'active']
 })
 
 const performanceColor = computed(() => {
-  if (props.member.performance >= 80) return 'bg-green-400'
-  if (props.member.performance >= 60) return 'bg-yellow-400'
+  const performance = props.member?.performance || 0
+  if (performance >= 80) return 'bg-green-400'
+  if (performance >= 60) return 'bg-yellow-400'
   return 'bg-red-400'
 })
 </script>

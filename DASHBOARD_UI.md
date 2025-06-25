@@ -1,44 +1,102 @@
 # TELODOX Dashboard UI Design Specification
 
+**⚠️ CRITICAL NOTE**: Project name is **TELODOX** - NOT telodx, telodx, teledox, or any other variation. Always use TELODOX.
+
 ## Overview
 Each user role gets a customized dashboard experience tailored to their specific responsibilities and access levels. This ensures users see only what's relevant to them while maintaining security boundaries.
+
+## Architecture Approach
+
+### Single Layout + Role-Based Components
+**Design Pattern**: Use one unified dashboard layout with intelligent components that adapt based on user role and permissions. This approach provides:
+
+- **Component Reusability**: Same components show different data scopes (platform-wide vs tenant-specific)
+- **Maintainability**: Single layout to maintain instead of 5+ separate dashboard pages
+- **Performance**: Shared component instances, better caching, single route with conditional rendering
+- **Consistency**: Unified design system across all user roles
+
+### Component Structure
+```
+/components/dashboard/
+├── DashboardLayout.vue           # Single unified layout
+├── shared/                       # Multi-role components
+│   ├── MetricsCard.vue          # Adapts metrics based on role
+│   ├── ActivityFeed.vue         # Shows relevant activities per role
+│   ├── PipelineOverview.vue     # Scoped pipeline data
+│   └── ApprovalQueue.vue        # Role-specific approvals
+├── platform/                    # Platform Owner exclusive
+│   ├── SystemHealthCard.vue     # Infrastructure monitoring
+│   ├── RevenueAnalytics.vue     # Cross-tenant revenue data
+│   └── TenantHealthMap.vue      # Geographic tenant distribution
+├── tenant/                      # Organization-level roles
+│   ├── TeamManagementCard.vue   # Team oversight (Owner/Admin)
+│   ├── FormTemplatesCard.vue    # Template management (Owner)
+│   └── MyAssignmentsCard.vue    # Personal assignments (Admin/Member)
+└── carrier/                     # External user components
+    ├── ApplicationProgress.vue   # Carrier onboarding status
+    └── DocumentUploadCard.vue   # Required documents
+```
+
+### Role-Based Rendering Logic
+Each component receives `userRole` and `organizationRole` props and handles its own visibility and data scope:
+
+- **Platform Owner**: System-wide metrics, no tenant-specific data access
+- **Organization Owner**: Complete tenant visibility, team management, all deals
+- **Admin**: Team oversight, approval workflows, assigned deals visibility
+- **Team Member**: Personal assignments only, limited communication
+- **Carrier**: Own application data only, external user experience
 
 ## Role-Based Dashboard Views
 
 ### 1. 🏢 Platform Owner Dashboard
-**Access**: System-wide analytics and operational management
+**Access**: System-wide analytics and operational management (replaces deprecated Super Admin role)
 **Primary Use**: Monitor platform health, revenue, and tenant performance
+**Data Scope**: Aggregated cross-tenant metrics only, NO individual tenant deal access
 
-**Key Sections**:
-- **Revenue Analytics**: MRR, ARR, paying tenants, conversion funnel
-- **Platform Metrics**: Total tenants, users, applications, growth trends
-- **Tenant Health Monitoring**: Activity scores, engagement levels, churn prediction
-- **System Operations**: Infrastructure health, API performance, error rates
-- **Geographic Distribution**: Tenant locations and market penetration
-- **Usage Analytics**: Feature adoption, popular workflows, bottlenecks
-- **Billing Health**: Payment failures, subscription status, revenue forecasts
+**Dashboard Components**:
+- **platform/RevenueAnalytics.vue**: MRR, ARR, paying tenants, conversion funnel
+- **platform/SystemHealthCard.vue**: Infrastructure health, API performance, error rates
+- **platform/TenantHealthMap.vue**: Geographic distribution, tenant locations, market penetration
+- **shared/MetricsCard.vue** (Platform scope): Total tenants, users, applications, growth trends
+- **shared/ActivityFeed.vue** (Platform scope): Billing failures, system alerts, critical notifications
 
-**Visual Elements**:
-- Revenue trend charts with month-over-month growth
-- World map showing tenant distribution
-- Health score indicators with traffic light colors
-- Real-time system status dashboard
-- Top performing tenants leaderboard
+**Visual Layout**:
+```
+┌─────────────────────────────────────────────────────────────┐
+│ Header: Platform Overview | System Status | Profile        │
+├─────────────────────────────────────────────────────────────┤
+│ Platform Metrics Row:                                      │
+│ [Total Tenants: 847] [Active Users: 12.3k] [MRR: $84k]    │
+├─────────────────────────────────────────────────────────────┤
+│ Main Content (3-column):                                   │
+│ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐           │
+│ │ Revenue     │ │ System      │ │ Tenant      │           │
+│ │ Analytics   │ │ Health      │ │ Health Map  │           │
+│ │ [Charts]    │ │ [Status]    │ │ [World Map] │           │
+│ └─────────────┘ └─────────────┘ └─────────────┘           │
+├─────────────────────────────────────────────────────────────┤
+│ Bottom Section (2-column):                                 │
+│ ┌─────────────────────────┐ ┌─────────────────────────┐   │
+│ │ Platform Events         │ │ Performance Insights    │   │
+│ │ [System alerts feed]    │ │ [Usage analytics]       │   │
+│ └─────────────────────────┘ └─────────────────────────┘   │
+└─────────────────────────────────────────────────────────────┘
+```
 
 ---
 
 ### 2. 👑 Organization Owner Dashboard (★ PRIMARY FOR LANDING PAGE)
 **Access**: Complete control over their tenant organization
 **Primary Use**: Manage team, oversee all deals, optimize operations
+**Data Scope**: All deals, all team activity, all carrier interactions within their tenant
 
-**Key Sections**:
-- **Pipeline Overview**: All carrier applications with status breakdown
-- **Team Management**: User roles, assignments, performance metrics
-- **Revenue Insights**: Deal values, completion rates, cycle times
-- **Form Templates**: Create/edit onboarding workflows
-- **Activity Feed**: Real-time team and carrier actions
-- **Performance Analytics**: Conversion rates, bottlenecks, team productivity
-- **Settings & Billing**: Subscription management, integrations
+**Dashboard Components**:
+- **shared/PipelineOverview.vue** (Tenant scope): All carrier applications with status breakdown
+- **tenant/TeamManagementCard.vue**: User roles, assignments, performance metrics  
+- **tenant/FormTemplatesCard.vue**: Create/edit onboarding workflows
+- **shared/MetricsCard.vue** (Tenant scope): Deal values, completion rates, cycle times
+- **shared/ActivityFeed.vue** (Tenant scope): Real-time team and carrier actions
+- **shared/ApprovalQueue.vue** (Owner scope): Documents requiring owner approval
 
 **Visual Layout** (Most visually rich for landing page):
 ```
@@ -70,60 +128,61 @@ Each user role gets a customized dashboard experience tailored to their specific
 ### 3. 🛡️ Admin Dashboard
 **Access**: Senior staff with broad authority within tenant
 **Primary Use**: Manage assigned deals, approve redlines, oversee team members
+**Data Scope**: All team member deals, full document access, approval authority
 
-**Key Sections**:
-- **My Assignments**: Deals assigned to this admin
-- **Team Overview**: Team members they manage
-- **Approval Queue**: Documents requiring admin approval
-- **MSA Redlining**: Active negotiations and change requests
-- **Performance Metrics**: Their team's productivity and success rates
-- **Communication Center**: Notifications to carriers and team
+**Dashboard Components**:
+- **tenant/MyAssignmentsCard.vue** (Admin scope): Deals assigned to this admin
+- **tenant/TeamManagementCard.vue** (Admin scope): Team members they manage (cannot add other admins)
+- **shared/ApprovalQueue.vue** (Admin scope): Documents requiring admin approval, MSA redlines
+- **shared/PipelineOverview.vue** (Admin scope): All deals they can approve/oversee
+- **shared/ActivityFeed.vue** (Admin scope): Team and carrier communications
+- **shared/MetricsCard.vue** (Admin scope): Team productivity and success rates
 
 **Visual Focus**:
 - Task-oriented layout with action items prominently displayed
-- Approval workflows with clear next steps
-- Team member cards with assignment status
-- Document collaboration interface
+- Approval workflows with clear next steps and deadlines
+- MSA redlining interface with change tracking
+- Team member cards with assignment status and performance
 
 ---
 
 ### 4. 👤 Team Member Dashboard
 **Access**: Individual contributors with focused responsibilities
 **Primary Use**: Manage assigned carriers and complete specific tasks
+**Data Scope**: Only assigned carriers, limited communication, no signing authority
 
-**Key Sections**:
-- **My Carriers**: Applications assigned to this user
-- **Task List**: Action items and deadlines
-- **Document Review**: Forms and files requiring attention
-- **Communication**: Messages with assigned carriers
-- **Progress Tracking**: Status of their deals through the pipeline
-- **Resource Center**: Templates, guides, and help docs
+**Dashboard Components**:
+- **tenant/MyAssignmentsCard.vue** (Member scope): Applications assigned to this user only
+- **shared/MetricsCard.vue** (Member scope): Personal productivity metrics
+- **shared/ActivityFeed.vue** (Member scope): Activity with assigned carriers only
+- **shared/ApprovalQueue.vue** (Member scope): Tasks requiring attention (no approval authority)
+- **carrier/DocumentUploadCard.vue** (Member view): Review documents from assigned carriers
 
 **Visual Focus**:
-- Clean, focused interface without distractions
-- Clear task prioritization with due dates
-- Progress indicators for each assigned deal
-- Quick action buttons for common tasks
+- Clean, focused interface without distractions or admin features
+- Clear task prioritization with due dates and progress tracking
+- Progress indicators for each assigned deal through KYC → FUSF → MSA → Interop
+- Quick action buttons for common tasks (review, comment, escalate to admin)
 
 ---
 
 ### 5. 📱 Carrier Dashboard (External Users)
-**Access**: Limited to their own application and documents
+**Access**: Limited to their own application and documents only
 **Primary Use**: Complete onboarding process and track progress
+**Data Scope**: Own application data only, time-limited access (90-day retention)
 
-**Key Sections**:
-- **Application Status**: Current stage and next steps
-- **Document Upload**: Required forms and attachments
-- **Communication**: Messages with assigned team member
-- **Timeline**: Progress through KYC → FUSF → MSA → Interop
-- **MSA Negotiation**: Redlining interface for contract terms
-- **Document Library**: Completed forms and signed agreements
+**Dashboard Components**:
+- **carrier/ApplicationProgress.vue**: Current stage and next steps with timeline
+- **carrier/DocumentUploadCard.vue**: Required forms and attachments
+- **shared/ActivityFeed.vue** (Carrier scope): Messages with assigned team member only
+- **shared/MetricsCard.vue** (Carrier scope): Personal application progress metrics
+- **carrier/MSARedliningCard.vue**: Contract negotiation interface (mutual consent workflow)
 
 **Visual Focus**:
-- Progress bar showing completion percentage
-- Clear call-to-action for next required step
+- Progress bar showing completion percentage through KYC → FUSF → MSA → Interop
+- Clear call-to-action for next required step with deadlines
 - Mobile-friendly design for on-the-go access
-- Document status with visual indicators
+- Document status with visual indicators (Draft | Under Review | Approved | Signed)
 
 ---
 
@@ -151,24 +210,33 @@ Each user role gets a customized dashboard experience tailored to their specific
 
 ---
 
-## Implementation Priority
+## Implementation Strategy
 
-### Phase 1: Organization Owner Dashboard (For Landing Page)
-**Target**: Create the most visually impressive dashboard for marketing
-- Pipeline overview with interactive charts
-- Team management cards
-- Real-time activity feed
-- Revenue analytics
-- Form template management
+### Phase 1: Unified Dashboard Architecture (CURRENT PRIORITY)
+**Target**: Refactor existing dashboard to support role-based components
+1. **Refactor DashboardLayout.vue**: Single layout accepting role props
+2. **Create shared components**: MetricsCard, ActivityFeed, PipelineOverview, ApprovalQueue
+3. **Move existing components**: Reorganize `/components/dashboard/owner/` → `/components/dashboard/tenant/`
+4. **Implement role logic**: Each component handles visibility/data scope based on user role
+5. **Test role switching**: Ensure proper component rendering for each user type
 
-### Phase 2: Core User Dashboards
-- Admin dashboard with approval workflows
-- Team member focused interface
-- Carrier onboarding experience
+### Phase 2: Platform Owner Dashboard (Analytics Priority)
+**Target**: Platform-wide monitoring and revenue analytics
+- **platform/RevenueAnalytics.vue**: Cross-tenant revenue dashboard
+- **platform/SystemHealthCard.vue**: Infrastructure monitoring
+- **platform/TenantHealthMap.vue**: Geographic tenant distribution
 
-### Phase 3: Platform Analytics
-- Platform owner system-wide view
-- Advanced reporting and insights
+### Phase 3: Role-Specific Enhancements
+**Target**: Optimize experience for each user type
+- **Admin workflows**: Enhanced approval queues and MSA redlining
+- **Team member focus**: Streamlined assignment management
+- **Carrier experience**: Mobile-optimized onboarding interface
+
+### Phase 4: Advanced Features
+**Target**: Interactive elements and real-time updates
+- Real-time notifications and status updates
+- Advanced filtering and search capabilities
+- Performance analytics and reporting
 
 ---
 
@@ -190,3 +258,69 @@ Each user role gets a customized dashboard experience tailored to their specific
 - Recent activity logs
 
 This dashboard will serve as the hero image showing the power and sophistication of the TELODOX platform!
+
+---
+
+## Current Implementation Status
+
+### ✅ COMPLETED (December 24, 2025)
+
+#### 🏗️ Dashboard Architecture
+- **Dashboard Layout**: Organization Owner dashboard fully implemented with 2-column grid layout
+- **Component Library**: Complete set of dashboard components built and working
+- **Mock Data System**: Comprehensive realistic telecom carrier data (Verizon, AT&T, T-Mobile, etc.)
+- **Loading States**: Fixed all loading spinner issues - data loads instantly
+- **Error Handling**: Resolved props undefined errors with null safety checks
+
+#### 🎨 Visual Design & UX
+- **Brand Colors**: Dark theme with pink/purple gradient icons consistently applied
+- **Metrics Cards**: 4 top-level KPI cards with gradient icons (removed secondary text for cleaner look)
+- **Typography**: Professional spacing and hierarchy implemented
+- **Activity Feed**: Proper spacing between user names and actions
+- **Icons**: Using Heroicons throughout (replaced custom SVG loading spinners)
+
+#### 🧑‍💼 User Experience
+- **Personalized Header**: "Welcome back, Alicia!" with fake professional data for screenshots
+- **Company Branding**: Uses "Perfect Vox" as fake company name (not personal info)
+- **Team Profiles**: Professional fake team member data with @teleconnect.com emails
+- **Cycle Times**: Optimized to show impressive "36hr" average cycle time
+
+#### 📊 Dashboard Content
+- **Active Carriers**: 47 with realistic major telecom companies
+- **Pipeline Data**: KYC: 14, FUSF: 12, MSA: 15, Interop: 6 (Total: 47)
+- **Team Performance**: 92% efficiency rating
+- **Activity Feed**: Real-time team actions with proper formatting
+- **Team Management**: 6 high-performing team members with performance scores
+
+#### 🔧 Technical Implementation
+- **Props Safety**: All components have null checks to prevent undefined errors
+- **Layout Optimization**: Removed Revenue Analytics (Platform Owner only), clean 2-column layout
+- **Responsive Design**: Works on mobile and desktop
+- **Performance**: Instant data loading with no loading states
+- **Code Quality**: TypeScript definitions, proper component structure
+
+### 📸 READY FOR MARKETING SCREENSHOT
+
+**Current Dashboard Shows**:
+- Clean 4-metric header row with gradient icons
+- 2-column layout: Requiring Attention | Team Activity
+- 2-column layout: Pipeline Overview | Team Management  
+- Full-width: Form Templates
+- Professional fake data for screenshots
+- Consistent TELODOX branding
+
+### 🎯 NEXT STEPS (New Chat Session)
+1. **Marketing Screenshot**: Capture high-quality dashboard screenshot for landing page hero
+2. **Landing Page Integration**: Add screenshot to hero section with compelling copy
+3. **Additional Dashboards**: Build Admin, Team Member, and Carrier dashboard views
+4. **Real Data Integration**: Connect to actual Supabase queries when ready
+5. **Advanced Features**: Add filtering, search, and interactive elements
+
+### 📋 FILES READY FOR NEXT SESSION
+- `/pages/dashboard/index.vue` - Main dashboard (screenshot-ready)
+- `/components/dashboard/owner/OwnerDashboardLayout.vue` - Clean layout
+- `/layouts/dashboard.vue` - Sidebar with fake branding
+- `/components/ui/UserMenuDropdown.vue` - Profile with fake data
+- All dashboard components in `/components/dashboard/` working perfectly
+
+**✅ STATUS**: Dashboard is polished, professional, and ready for marketing screenshot!

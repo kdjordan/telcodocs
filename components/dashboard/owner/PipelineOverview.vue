@@ -49,7 +49,7 @@
         </div>
         <div class="flex items-center justify-between mt-1">
           <span class="text-white/60 text-sm">Avg. Cycle Time</span>
-          <span class="text-white font-semibold">{{ avgCycleTime }}d</span>
+          <span class="text-white font-semibold">{{ avgCycleTime }}</span>
         </div>
       </div>
     </div>
@@ -77,7 +77,7 @@ interface Props {
   loading: boolean
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
 
 defineEmits<{
   'view-stage': [stage: string]
@@ -89,7 +89,7 @@ const stages = computed(() => [
     key: 'kyc',
     name: 'KYC Verification',
     description: 'Know Your Customer documentation',
-    count: props.pipelineData.kyc,
+    count: props.pipelineData?.kyc || 0,
     icon: IdentificationIcon,
     bgClass: 'bg-blue-500/20',
     iconClass: 'text-blue-400'
@@ -98,7 +98,7 @@ const stages = computed(() => [
     key: 'fusf',
     name: 'FUSF Documentation',
     description: 'Federal Universal Service Fund',
-    count: props.pipelineData.fusf,
+    count: props.pipelineData?.fusf || 0,
     icon: DocumentTextIcon,
     bgClass: 'bg-green-500/20',
     iconClass: 'text-green-400'
@@ -107,7 +107,7 @@ const stages = computed(() => [
     key: 'msa',
     name: 'MSA Negotiation',
     description: 'Master Service Agreement',
-    count: props.pipelineData.msa,
+    count: props.pipelineData?.msa || 0,
     icon: PencilSquareIcon,
     bgClass: 'bg-yellow-500/20',
     iconClass: 'text-yellow-400'
@@ -116,7 +116,7 @@ const stages = computed(() => [
     key: 'interop',
     name: 'Interoperability',
     description: 'Technical integration testing',
-    count: props.pipelineData.interop,
+    count: props.pipelineData?.interop || 0,
     icon: WifiIcon,
     bgClass: 'bg-purple-500/20',
     iconClass: 'text-purple-400'
@@ -124,11 +124,11 @@ const stages = computed(() => [
 ])
 
 const totalCarriers = computed(() => 
-  Object.values(props.pipelineData).reduce((sum, count) => sum + count, 0)
+  props.pipelineData ? Object.values(props.pipelineData).reduce((sum, count) => sum + count, 0) : 0
 )
 
 const avgCycleTime = computed(() => {
   // Mock calculation - would be based on actual data
-  return 12
+  return '36hr'
 })
 </script>

@@ -23,7 +23,7 @@
               <span class="text-white font-bold text-sm">T</span>
             </div>
             <h1 class="text-white font-bold text-lg">
-              {{ tenant?.name || 'TeloDox' }}
+              Perfect Vox
             </h1>
           </div>
           <div v-else class="w-8 h-8 bg-gradient-to-br from-pink-500 to-purple-600 rounded-lg flex items-center justify-center mx-auto">
@@ -140,7 +140,7 @@
                 class="w-8 h-8 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center hover:ring-2 hover:ring-white/20 transition-all"
               >
                 <span class="text-white text-xs font-semibold">
-                  {{ profile.full_name?.charAt(0).toUpperCase() }}
+                  A
                 </span>
               </button>
               
@@ -150,8 +150,8 @@
                 class="absolute bottom-full left-0 mb-2 w-48 bg-black/90 backdrop-blur-md rounded-lg border border-white/10 py-1 z-50"
               >
                 <div class="px-3 py-2 border-b border-white/10">
-                  <p class="text-sm font-medium text-white">{{ profile.full_name }}</p>
-                  <p class="text-xs text-white/60">{{ profile.role?.replace('_', ' ') }}</p>
+                  <p class="text-sm font-medium text-white">Alicia Thompson</p>
+                  <p class="text-xs text-white/60">Organization Owner</p>
                 </div>
                 <button
                   @click="handleLogout"
@@ -162,8 +162,8 @@
               </div>
             </div>
             <div v-if="!sidebarCollapsed" class="flex-1 min-w-0">
-              <p class="text-white text-sm font-medium truncate">{{ profile.full_name }}</p>
-              <p class="text-white/60 text-xs truncate">{{ profile.role?.replace('_', ' ') }}</p>
+              <p class="text-white text-sm font-medium truncate">Alicia Thompson</p>
+              <p class="text-white/60 text-xs truncate">Organization Owner</p>
             </div>
           </div>
         </div>

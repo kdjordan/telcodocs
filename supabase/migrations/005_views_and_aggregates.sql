@@ -1,4 +1,4 @@
--- TELODX Production Migration 005: Views and Aggregates
+-- TELODOX Production Migration 005: Views and Aggregates
 -- Creates all analytical views and aggregation functions for platform analytics
 
 -- ============================================================================
@@ -104,7 +104,7 @@ JOIN users u ON u.tenant_id = t.id
 LEFT JOIN activity_logs al ON al.user_id = u.id
 LEFT JOIN deal_assignments da ON da.assigned_to = u.id
 LEFT JOIN applications a ON a.id = da.application_id
-WHERE u.role != 'end_user'  -- Exclude external carriers
+WHERE u.role != 'carrier'  -- Exclude external carriers
 GROUP BY t.id, t.name, u.id, u.full_name, u.email, u.role, u.organization_role, u.created_at;
 
 -- Application pipeline analytics
@@ -184,13 +184,13 @@ SELECT
     (SELECT COUNT(*) FROM tenants) as total_tenants,
     (SELECT COUNT(*) FROM tenants WHERE subscription_status = 'active') as active_tenants,
     (SELECT COUNT(*) FROM tenants WHERE subscription_status = 'trial') as trial_tenants,
-    (SELECT COUNT(*) FROM users WHERE role != 'end_user') as total_org_users,
-    (SELECT COUNT(*) FROM users WHERE role = 'end_user') as total_carriers,
+    (SELECT COUNT(*) FROM users WHERE role != 'carrier') as total_org_users,
+    (SELECT COUNT(*) FROM users WHERE role = 'carrier') as total_carriers,
     (SELECT COUNT(*) FROM applications) as total_applications,
     (SELECT COUNT(*) FROM applications WHERE created_at::date = CURRENT_DATE) as applications_today,
     (SELECT COUNT(*) FROM applications WHERE completed_at::date = CURRENT_DATE) as completed_today,
     (SELECT COUNT(*) FROM tenants WHERE created_at::date = CURRENT_DATE) as new_tenants_today,
-    (SELECT COUNT(*) FROM users WHERE created_at::date = CURRENT_DATE AND role != 'end_user') as new_users_today,
+    (SELECT COUNT(*) FROM users WHERE created_at::date = CURRENT_DATE AND role != 'carrier') as new_users_today,
     (SELECT COALESCE(SUM(sp.price_monthly), 0) / 100.0
      FROM tenants t
      LEFT JOIN subscription_plans sp ON t.subscription_plan = sp.name
@@ -220,14 +220,14 @@ new_users AS (
     SELECT
         COUNT(*) as count
     FROM users
-    WHERE created_at >= (SELECT this_week_start FROM week_dates) AND role != 'end_user'
+    WHERE created_at >= (SELECT this_week_start FROM week_dates) AND role != 'carrier'
 ),
 last_week_new_users AS (
     SELECT
         COUNT(*) as count
     FROM users
     WHERE created_at >= (SELECT last_week_start FROM week_dates) 
-      AND created_at < (SELECT this_week_start FROM week_dates) AND role != 'end_user'
+      AND created_at < (SELECT this_week_start FROM week_dates) AND role != 'carrier'
 ),
 new_apps AS (
     SELECT
@@ -308,7 +308,7 @@ SELECT
     ) / 4 as overall_health_score,
     NOW() as calculated_at
 FROM tenants t
-LEFT JOIN users u ON u.tenant_id = t.id AND u.role != 'end_user'
+LEFT JOIN users u ON u.tenant_id = t.id AND u.role != 'carrier'
 LEFT JOIN applications a ON a.tenant_id = t.id
 GROUP BY t.id, t.name, t.subscription_status, t.subscription_plan;
 

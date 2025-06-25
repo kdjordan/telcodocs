@@ -36,8 +36,7 @@ CREATE POLICY "tenants_isolation" ON tenants
     FOR ALL 
     USING (
         id = get_user_tenant_id() OR 
-        is_platform_owner() OR 
-        is_super_admin()
+        is_platform_owner()
     );
 
 -- Users: Users can see users in their tenant + platform owners see all
@@ -45,8 +44,7 @@ CREATE POLICY "users_tenant_isolation" ON users
     FOR ALL 
     USING (
         tenant_id = get_user_tenant_id() OR 
-        is_platform_owner() OR 
-        is_super_admin() OR
+        is_platform_owner() OR
         id = auth.uid()  -- Users can always see themselves
     );
 
@@ -71,14 +69,13 @@ CREATE POLICY "form_templates_tenant_isolation" ON form_templates
     USING (tenant_id = get_user_tenant_id());
 
 -- Applications: Policies are now broken down by action (SELECT, INSERT, UPDATE) for clarity and security.
--- This replaces the overlapping FOR ALL policies.
 CREATE POLICY "applications_select_policy" ON applications
     FOR SELECT
     USING (
         tenant_id = get_user_tenant_id() AND (
             is_organization_admin() OR
             (is_organization_member() AND assigned_to = auth.uid()) OR
-            (role = 'end_user' AND user_id = auth.uid())
+            (EXISTS (SELECT 1 FROM users u WHERE u.id = auth.uid() AND u.role = 'carrier' AND u.id = applications.user_id))
         )
     );
 
@@ -94,7 +91,7 @@ CREATE POLICY "applications_update_policy" ON applications
         tenant_id = get_user_tenant_id() AND (
             is_organization_admin() OR
             (is_organization_member() AND assigned_to = auth.uid()) OR
-            (role = 'end_user' AND user_id = auth.uid())
+            (EXISTS (SELECT 1 FROM users u WHERE u.id = auth.uid() AND u.role = 'carrier' AND u.id = applications.user_id))
         )
     );
 
@@ -114,7 +111,7 @@ CREATE POLICY "audit_logs_tenant_isolation" ON audit_logs
     USING (
         tenant_id = get_user_tenant_id() OR 
         is_platform_owner() OR 
-        is_super_admin()
+        false  -- No super admin role anymore
     );
 
 -- Email templates: Only within same tenant
@@ -133,15 +130,15 @@ CREATE POLICY "subscription_plans_read_all" ON subscription_plans
 
 CREATE POLICY "subscription_plans_modify_platform_only" ON subscription_plans
     FOR INSERT 
-    WITH CHECK (is_platform_owner() OR is_super_admin());
+    WITH CHECK (is_platform_owner());
 
 CREATE POLICY "subscription_plans_update_platform_only" ON subscription_plans
     FOR UPDATE 
-    USING (is_platform_owner() OR is_super_admin());
+    USING (is_platform_owner());
 
 CREATE POLICY "subscription_plans_delete_platform_only" ON subscription_plans
     FOR DELETE 
-    USING (is_platform_owner() OR is_super_admin());
+    USING (is_platform_owner());
 
 -- ============================================================================
 -- TEAM MEMBER ACCESS RESTRICTIONS
@@ -151,12 +148,13 @@ CREATE POLICY "subscription_plans_delete_platform_only" ON subscription_plans
 CREATE POLICY "form_submissions_access" ON form_submissions
     FOR ALL 
     USING (
-        application_id IN (
-            SELECT id FROM applications 
-            WHERE 
+        EXISTS (
+            SELECT 1 FROM applications a
+            WHERE form_submissions.application_id = a.id AND (
                 is_organization_admin() OR 
-                (is_organization_member() AND assigned_to = auth.uid()) OR
-                (role = 'end_user' AND user_id = auth.uid())
+                (is_organization_member() AND a.assigned_to = auth.uid()) OR
+                (EXISTS (SELECT 1 FROM users u WHERE u.id = auth.uid() AND u.role = 'carrier' AND u.id = a.user_id))
+            )
         )
     );
 
@@ -164,13 +162,14 @@ CREATE POLICY "form_submissions_access" ON form_submissions
 CREATE POLICY "signatures_access" ON signatures
     FOR ALL 
     USING (
-        submission_id IN (
-            SELECT fs.id FROM form_submissions fs
+        EXISTS (
+            SELECT 1 FROM form_submissions fs
             JOIN applications a ON fs.application_id = a.id
-            WHERE 
+            WHERE signatures.submission_id = fs.id AND (
                 is_organization_admin() OR 
                 (is_organization_member() AND a.assigned_to = auth.uid()) OR
-                (role = 'end_user' AND a.user_id = auth.uid())
+                (EXISTS (SELECT 1 FROM users u WHERE u.id = auth.uid() AND u.role = 'carrier' AND u.id = a.user_id))
+            )
         )
     );
 
@@ -182,12 +181,13 @@ CREATE POLICY "signatures_access" ON signatures
 CREATE POLICY "msa_documents_access" ON msa_documents
     FOR SELECT 
     USING (
-        application_id IN (
-            SELECT id FROM applications 
-            WHERE 
+        EXISTS (
+            SELECT 1 FROM applications a
+            WHERE msa_documents.application_id = a.id AND (
                 is_organization_admin() OR 
-                (is_organization_member() AND assigned_to = auth.uid()) OR
-                (role = 'end_user' AND user_id = auth.uid())
+                (is_organization_member() AND a.assigned_to = auth.uid()) OR
+                (EXISTS (SELECT 1 FROM users u WHERE u.id = auth.uid() AND u.role = 'carrier' AND u.id = a.user_id))
+            )
         )
     );
 
@@ -214,13 +214,14 @@ CREATE POLICY "msa_documents_update" ON msa_documents
 CREATE POLICY "document_changes_access" ON document_changes
     FOR SELECT 
     USING (
-        document_id IN (
-            SELECT md.id FROM msa_documents md
+        EXISTS (
+            SELECT 1 FROM msa_documents md
             JOIN applications a ON md.application_id = a.id
-            WHERE 
+            WHERE document_changes.document_id = md.id AND (
                 is_organization_admin() OR 
                 (is_organization_member() AND a.assigned_to = auth.uid()) OR
-                (role = 'end_user' AND a.user_id = auth.uid())
+                (EXISTS (SELECT 1 FROM users u WHERE u.id = auth.uid() AND u.role = 'carrier' AND u.id = a.user_id))
+            )
         )
     );
 
@@ -228,13 +229,14 @@ CREATE POLICY "document_changes_access" ON document_changes
 CREATE POLICY "document_changes_create" ON document_changes
     FOR INSERT 
     WITH CHECK (
-        document_id IN (
-            SELECT md.id FROM msa_documents md
+        EXISTS (
+            SELECT 1 FROM msa_documents md
             JOIN applications a ON md.application_id = a.id
-            WHERE 
+            WHERE document_changes.document_id = md.id AND (
                 is_organization_admin() OR 
                 (is_organization_member() AND a.assigned_to = auth.uid()) OR
-                (role = 'end_user' AND a.user_id = auth.uid())
+                (EXISTS (SELECT 1 FROM users u WHERE u.id = auth.uid() AND u.role = 'carrier' AND u.id = a.user_id))
+            )
         )
     );
 
@@ -250,13 +252,14 @@ CREATE POLICY "document_changes_update" ON document_changes
 CREATE POLICY "document_comments_access" ON document_comments
     FOR ALL 
     USING (
-        document_id IN (
-            SELECT md.id FROM msa_documents md
+        EXISTS (
+            SELECT 1 FROM msa_documents md
             JOIN applications a ON md.application_id = a.id
-            WHERE 
+            WHERE document_comments.document_id = md.id AND (
                 is_organization_admin() OR 
                 (is_organization_member() AND a.assigned_to = auth.uid()) OR
-                (role = 'end_user' AND a.user_id = auth.uid())
+                (EXISTS (SELECT 1 FROM users u WHERE u.id = auth.uid() AND u.role = 'carrier' AND u.id = a.user_id))
+            )
         )
     );
 
@@ -264,13 +267,14 @@ CREATE POLICY "document_comments_access" ON document_comments
 CREATE POLICY "document_versions_access" ON document_versions
     FOR SELECT 
     USING (
-        document_id IN (
-            SELECT md.id FROM msa_documents md
+        EXISTS (
+            SELECT 1 FROM msa_documents md
             JOIN applications a ON md.application_id = a.id
-            WHERE 
+            WHERE document_versions.document_id = md.id AND (
                 is_organization_admin() OR 
                 (is_organization_member() AND a.assigned_to = auth.uid()) OR
-                (role = 'end_user' AND a.user_id = auth.uid())
+                (EXISTS (SELECT 1 FROM users u WHERE u.id = auth.uid() AND u.role = 'carrier' AND u.id = a.user_id))
+            )
         )
     );
 
@@ -281,22 +285,22 @@ CREATE POLICY "document_versions_access" ON document_versions
 -- Platform metrics: Only platform owners can access
 CREATE POLICY "platform_metrics_platform_only" ON platform_metrics
     FOR ALL 
-    USING (is_platform_owner() OR is_super_admin());
+    USING (is_platform_owner());
 
 -- Tenant health scores: Only platform owners can access
 CREATE POLICY "tenant_health_scores_platform_only" ON tenant_health_scores
     FOR ALL 
-    USING (is_platform_owner() OR is_super_admin());
+    USING (is_platform_owner());
 
 -- Platform events: Only platform owners can access
 CREATE POLICY "platform_events_platform_only" ON platform_events
     FOR ALL 
-    USING (is_platform_owner() OR is_super_admin());
+    USING (is_platform_owner());
 
 -- System health metrics: Only platform owners can access
 CREATE POLICY "system_health_metrics_platform_only" ON system_health_metrics
     FOR ALL 
-    USING (is_platform_owner() OR is_super_admin());
+    USING (is_platform_owner());
 
 -- ============================================================================
 -- ADMIN MANAGEMENT POLICIES
@@ -323,15 +327,15 @@ CREATE POLICY "deal_assignments_admin_update" ON deal_assignments
 -- Form templates: Only tenant owners can create/modify
 CREATE POLICY "form_templates_owner_manage" ON form_templates
     FOR INSERT 
-    WITH CHECK (is_tenant_owner() OR is_organization_owner());
+    WITH CHECK (is_organization_owner());
 
 CREATE POLICY "form_templates_owner_update" ON form_templates
     FOR UPDATE 
-    USING (is_tenant_owner() OR is_organization_owner());
+    USING (is_organization_owner());
 
 CREATE POLICY "form_templates_owner_delete" ON form_templates
     FOR DELETE 
-    USING (is_tenant_owner() OR is_organization_owner());
+    USING (is_organization_owner());
 
 -- ============================================================================
 -- COMMENTS FOR DOCUMENTATION

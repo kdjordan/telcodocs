@@ -13,6 +13,24 @@
     
     <!-- Role-Based Dashboard -->
     <div v-else>
+      <!-- Welcome Header -->
+      <div v-if="isOwner" class="mb-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="text-2xl font-bold text-white mb-1">
+              Welcome back, Alicia !
+            </h1>
+            <p class="text-white/60">
+              Here's what's happening at Perfect Vox today
+            </p>
+          </div>
+          <div class="text-right">
+            <p class="text-sm text-white/60 mb-1">{{ currentDate }}</p>
+            <p class="text-xs text-pink-400">Enterprise Plan</p>
+          </div>
+        </div>
+      </div>
+      
       <!-- Organization Owner Dashboard -->
       <OwnerDashboardLayout
         v-if="isOwner"
@@ -22,12 +40,10 @@
         :pipeline-data="pipelineData"
         :team-members="teamMembers"
         :form-templates="formTemplates"
-        :revenue-data="revenueData"
         :loading="loading"
         :activities-loading="activitiesLoading"
         :team-loading="teamLoading"
         :templates-loading="templatesLoading"
-        :revenue-loading="revenueLoading"
         @view-urgent="handleViewUrgent"
         @view-activities="handleViewActivities"
         @view-stage="handleViewStage"
@@ -35,7 +51,6 @@
         @invite-member="handleInviteMember"
         @create-template="handleCreateTemplate"
         @edit-template="handleEditTemplate"
-        @view-billing="handleViewBilling"
       />
       
       <!-- TODO: Add other role dashboards -->
@@ -57,6 +72,112 @@ import type { Application } from '~/types'
 // Import role-specific dashboard components
 import OwnerDashboardLayout from '~/components/dashboard/owner/OwnerDashboardLayout.vue'
 
+// Inline mock data for screenshot
+const mockDashboardData = {
+  metrics: {
+    activeCarriers: 47,
+    pendingApprovals: 12,
+    completedThisMonth: 23,
+    teamEfficiency: 92
+  },
+  urgentCarriers: [
+    {
+      id: '1',
+      tenant_id: 'mock-tenant',
+      carrier_name: 'Verizon Business',
+      carrier_company_name: 'Verizon Communications Inc.',
+      carrier_email: 'enterprise@verizon.com',
+      status: 'pending_approval',
+      current_stage: 'msa',
+      priority: 'high',
+      assigned_to: 'sarah-id',
+      assigned_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+      created_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+      last_activity_at: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
+      metadata: { dealValue: 450000 }
+    },
+    {
+      id: '2',
+      tenant_id: 'mock-tenant',
+      carrier_name: 'AT&T Enterprise',
+      carrier_company_name: 'AT&T Inc.',
+      carrier_email: 'wholesale@att.com',
+      status: 'requires_action',
+      current_stage: 'fusf',
+      priority: 'urgent',
+      assigned_to: 'mike-id',
+      assigned_at: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+      created_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+      last_activity_at: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
+      metadata: { dealValue: 325000 }
+    }
+  ],
+  recentActivities: [
+    {
+      id: '1',
+      type: 'approval_granted',
+      user_name: 'Sarah Johnson',
+      user_role: 'admin',
+      description: 'Approved MSA redlines',
+      carrier_name: 'Verizon Business',
+      timestamp: new Date(Date.now() - 15 * 60 * 1000).toISOString(),
+      metadata: { changeCount: 3 }
+    },
+    {
+      id: '2',
+      type: 'document_signed',
+      user_name: 'Michael Chen',
+      user_role: 'member',
+      description: 'Completed FUSF documentation',
+      carrier_name: 'AT&T Enterprise',
+      timestamp: new Date(Date.now() - 32 * 60 * 1000).toISOString()
+    }
+  ],
+  pipelineData: {
+    kyc: 14,
+    fusf: 12,
+    msa: 15,
+    interop: 6
+  },
+  teamMembers: [
+    {
+      id: 'sarah-id',
+      name: 'Sarah Johnson',
+      role: 'admin',
+      email: 'sarah@teleconnect.com',
+      assignedCarriers: 12,
+      performance: 96,
+      status: 'active'
+    },
+    {
+      id: 'mike-id',
+      name: 'Michael Chen',
+      role: 'member',
+      email: 'michael@teleconnect.com',
+      assignedCarriers: 8,
+      performance: 92,
+      status: 'active'
+    }
+  ],
+  formTemplates: [
+    {
+      id: '1',
+      name: 'Know Your Customer (KYC)',
+      stage: 'kyc',
+      lastModified: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+      status: 'active',
+      fields: 28,
+      submissions: 156
+    }
+  ],
+  revenueData: {
+    mrr: 24500,
+    growth: 28,
+    seats: 8,
+    churnRate: 2.3
+  }
+}
+
 definePageMeta({
   layout: 'dashboard',
   middleware: 'auth'
@@ -66,12 +187,12 @@ const supabase = useSupabaseClient()
 const { profile, fetchProfile, logout } = useAuth()
 const { tenant } = useTenant()
 
-const loading = ref(true)
+const loading = ref(false)
 const profileLoading = ref(true)
-const activitiesLoading = ref(true)
-const teamLoading = ref(true)
-const templatesLoading = ref(true)
-const revenueLoading = ref(true)
+const activitiesLoading = ref(false)
+const teamLoading = ref(false)
+const templatesLoading = ref(false)
+const revenueLoading = ref(false)
 
 // Organization Owner specific data
 const dashboardMetrics = ref({
@@ -113,6 +234,17 @@ const isCarrier = computed(() =>
   profile.value?.role === 'end_user' && !profile.value?.organization_role
 )
 
+// Date formatting for header
+const currentDate = computed(() => {
+  const now = new Date()
+  return now.toLocaleDateString('en-US', { 
+    weekday: 'long', 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' 
+  })
+})
+
 // Event handlers for Organization Owner dashboard
 const handleViewUrgent = () => {
   navigateTo('/dashboard/applications?filter=urgent')
@@ -147,108 +279,28 @@ const handleViewBilling = () => {
 }
 
 const fetchOwnerDashboardData = async () => {
-  if (!tenant.value) {
-    loading.value = false
-    return
-  }
+  // Immediately populate with impressive mock data for screenshot-ready dashboard
+  dashboardMetrics.value = mockDashboardData.metrics
+  urgentCarriers.value = mockDashboardData.urgentCarriers as Application[]
+  recentActivities.value = mockDashboardData.recentActivities
+  pipelineData.value = mockDashboardData.pipelineData
+  teamMembers.value = mockDashboardData.teamMembers
+  formTemplates.value = mockDashboardData.formTemplates
+  revenueData.value = mockDashboardData.revenueData
   
-  loading.value = true
-  
-  try {
-    // Fetch applications for metrics and urgent carriers
-    const { data: applications, error: appError } = await supabase
-      .from('applications')
-      .select('*')
-      .eq('tenant_id', tenant.value.id)
-      .order('created_at', { ascending: false })
-    
-    if (appError) throw appError
-    const apps = applications || []
-    
-    // Calculate metrics
-    const now = new Date()
-    const thisMonth = now.getMonth()
-    const thisYear = now.getFullYear()
-    
-    dashboardMetrics.value = {
-      activeCarriers: apps.filter(app => !['completed', 'archived'].includes(app.status)).length,
-      pendingApprovals: apps.filter(app => app.status === 'pending_approval').length,
-      completedThisMonth: apps.filter(app => {
-        const createdDate = new Date(app.created_at)
-        return app.status === 'completed' && 
-               createdDate.getMonth() === thisMonth && 
-               createdDate.getFullYear() === thisYear
-      }).length,
-      teamEfficiency: 85 // Mock calculation
-    }
-    
-    // Get urgent carriers (requiring attention)
-    urgentCarriers.value = apps.filter(app => 
-      ['pending_approval', 'requires_action', 'overdue'].includes(app.status)
-    ).slice(0, 10)
-    
-    // Calculate pipeline data
-    pipelineData.value = {
-      kyc: apps.filter(app => app.current_stage === 'kyc').length,
-      fusf: apps.filter(app => app.current_stage === 'fusf').length,
-      msa: apps.filter(app => app.current_stage === 'msa').length,
-      interop: apps.filter(app => app.current_stage === 'interop').length
-    }
-    
-    // Mock data for other sections (would come from actual API calls)
-    recentActivities.value = [
-      {
-        id: '1',
-        type: 'carrier_update',
-        user_name: 'John Smith',
-        user_role: 'admin',
-        description: 'Updated KYC documentation',
-        carrier_name: 'TeleCarrier Inc',
-        timestamp: new Date().toISOString()
-      }
-    ]
-    
-    teamMembers.value = [
-      {
-        id: '1',
-        name: 'Sarah Johnson',
-        role: 'admin',
-        assignedCarriers: 5,
-        performance: 92,
-        status: 'active'
-      }
-    ]
-    
-    formTemplates.value = [
-      {
-        id: '1',
-        name: 'KYC Verification Form',
-        stage: 'kyc',
-        lastModified: new Date().toISOString(),
-        status: 'active'
-      }
-    ]
-    
-    revenueData.value = {
-      mrr: 149,
-      growth: 15,
-      seats: 1,
-      churnRate: 3
-    }
-    
-  } catch (error) {
-    console.error('Error fetching owner dashboard data:', error)
-  } finally {
-    loading.value = false
-    activitiesLoading.value = false
-    teamLoading.value = false
-    templatesLoading.value = false
-    revenueLoading.value = false
-  }
+  // All data is instantly available - no loading states needed
+  console.log('Dashboard loaded with mock data:', {
+    carriers: dashboardMetrics.value.activeCarriers,
+    activities: recentActivities.value.length,
+    team: teamMembers.value.length
+  })
 }
 
 
 onMounted(async () => {
+  // Load mock data immediately for instant display
+  fetchOwnerDashboardData()
+  
   try {
     await fetchProfile()
   } catch (error) {
@@ -256,11 +308,5 @@ onMounted(async () => {
   } finally {
     profileLoading.value = false
   }
-  
-  // Fetch role-appropriate dashboard data
-  if (isOwner.value) {
-    await fetchOwnerDashboardData()
-  }
-  // TODO: Add other role data fetching
 })
 </script>

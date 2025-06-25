@@ -9,10 +9,10 @@
     <div class="min-w-0 flex-1">
       <div class="flex items-center justify-between">
         <p class="text-white text-sm">
-          <span class="font-medium">{{ activity.user_name }}</span>
-          <span class="text-white/60"> {{ actionText }}</span>
+          <span class="font-medium">{{ activity.user_name }}&nbsp;</span>
+          <span class="text-white/60"> {{ actionText }}&nbsp;</span>
           <span v-if="activity.carrier_name" class="font-medium text-pink-400">
-            {{ activity.carrier_name }}
+             {{ activity.carrier_name }}
           </span>
         </p>
         <div class="flex items-center space-x-2 ml-2">
@@ -50,7 +50,7 @@ import RoleBadge from '~/components/ui/RoleBadge.vue'
 
 interface Activity {
   id: string
-  type: 'carrier_update' | 'document_signed' | 'assignment_changed' | 'approval_granted' | 'message_sent' | 'status_changed'
+  type: string
   user_name: string
   user_role: string
   description: string
@@ -63,9 +63,51 @@ interface Props {
   activity: Activity
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
 
 const activityConfig = {
+  msa_redline_approved: {
+    icon: CheckCircleIcon,
+    text: 'approved MSA redlines for',
+    bgClass: 'bg-green-500/20',
+    iconClass: 'text-green-400'
+  },
+  carrier_onboarded: {
+    icon: CheckCircleIcon,
+    text: 'completed onboarding for',
+    bgClass: 'bg-green-500/20',
+    iconClass: 'text-green-400'
+  },
+  team_member_added: {
+    icon: UserPlusIcon,
+    text: 'added new team member',
+    bgClass: 'bg-purple-500/20',
+    iconClass: 'text-purple-400'
+  },
+  document_uploaded: {
+    icon: DocumentTextIcon,
+    text: 'uploaded document for',
+    bgClass: 'bg-blue-500/20',
+    iconClass: 'text-blue-400'
+  },
+  approval_requested: {
+    icon: CheckCircleIcon,
+    text: 'requested approval for',
+    bgClass: 'bg-yellow-500/20',
+    iconClass: 'text-yellow-400'
+  },
+  form_completed: {
+    icon: DocumentTextIcon,
+    text: 'completed form for',
+    bgClass: 'bg-green-500/20',
+    iconClass: 'text-green-400'
+  },
+  msa_negotiation_started: {
+    icon: PencilSquareIcon,
+    text: 'started negotiation with',
+    bgClass: 'bg-pink-500/20',
+    iconClass: 'text-pink-400'
+  },
   carrier_update: {
     icon: PencilSquareIcon,
     text: 'updated carrier',

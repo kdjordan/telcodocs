@@ -21,14 +21,14 @@
       <!-- Key Metrics -->
       <div class="grid grid-cols-2 gap-4">
         <div class="text-center">
-          <p class="text-2xl font-bold text-white">${{ formatCurrency(revenueData.mrr) }}</p>
+          <p class="text-2xl font-bold text-white">${{ formatCurrency(revenueData?.mrr || 0) }}</p>
           <p class="text-white/60 text-xs">Monthly Recurring Revenue</p>
           <p :class="['text-xs mt-1', mrrGrowthColor]">
-            {{ revenueData.growth > 0 ? '+' : '' }}{{ revenueData.growth }}% this month
+            {{ (revenueData?.growth || 0) > 0 ? '+' : '' }}{{ revenueData?.growth || 0 }}% this month
           </p>
         </div>
         <div class="text-center">
-          <p class="text-2xl font-bold text-white">{{ revenueData.seats }}</p>
+          <p class="text-2xl font-bold text-white">{{ revenueData?.seats || 0 }}</p>
           <p class="text-white/60 text-xs">Active Seats</p>
           <p class="text-green-400 text-xs mt-1">{{ seatUtilization }}% utilized</p>
         </div>
@@ -50,14 +50,14 @@
         </div>
         <div class="pt-2 border-t border-white/10 flex items-center justify-between">
           <span class="text-white font-medium">Total MRR</span>
-          <span class="text-white font-semibold">${{ formatCurrency(revenueData.mrr) }}</span>
+          <span class="text-white font-semibold">${{ formatCurrency(revenueData?.mrr || 0) }}</span>
         </div>
       </div>
       
       <!-- Health Indicators -->
       <div class="grid grid-cols-2 gap-4 pt-4 border-t border-white/10">
         <div class="text-center">
-          <p :class="['text-lg font-semibold', churnColor]">{{ revenueData.churnRate }}%</p>
+          <p :class="['text-lg font-semibold', churnColor]">{{ revenueData?.churnRate || 0 }}%</p>
           <p class="text-white/60 text-xs">Churn Rate</p>
         </div>
         <div class="text-center">
@@ -95,7 +95,7 @@ interface Props {
   loading: boolean
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
 
 defineEmits<{
   'view-billing': []
@@ -109,21 +109,22 @@ const formatCurrency = (amount: number) => {
 }
 
 const mrrGrowthColor = computed(() => 
-  props.revenueData.growth > 0 ? 'text-green-400' : 'text-red-400'
+  (props.revenueData?.growth || 0) > 0 ? 'text-green-400' : 'text-red-400'
 )
 
 const churnColor = computed(() => {
-  if (props.revenueData.churnRate <= 5) return 'text-green-400'
-  if (props.revenueData.churnRate <= 10) return 'text-yellow-400'
+  const churn = props.revenueData?.churnRate || 0
+  if (churn <= 5) return 'text-green-400'
+  if (churn <= 10) return 'text-yellow-400'
   return 'text-red-400'
 })
 
 // Mock calculations - would be based on actual data
-const baseSubscription = computed(() => 149) // Base plan
-const seatRevenue = computed(() => (props.revenueData.seats - 1) * 29) // Additional seats
-const usageFees = computed(() => props.revenueData.mrr - baseSubscription.value - seatRevenue.value)
-const seatUtilization = computed(() => Math.min(100, (props.revenueData.seats / 10) * 100))
-const netGrowth = computed(() => Math.max(0, props.revenueData.growth - props.revenueData.churnRate))
-const potentialSeats = computed(() => Math.max(0, 10 - props.revenueData.seats))
-const potentialRevenue = computed(() => potentialSeats.value * 29)
+const baseSubscription = computed(() => 2999) // Enterprise base plan
+const seatRevenue = computed(() => ((props.revenueData?.seats || 1) - 1) * 299) // Additional seats at $299 each
+const usageFees = computed(() => (props.revenueData?.mrr || 0) - baseSubscription.value - seatRevenue.value)
+const seatUtilization = computed(() => Math.min(100, ((props.revenueData?.seats || 1) / 10) * 100))
+const netGrowth = computed(() => Math.max(0, (props.revenueData?.growth || 0) - (props.revenueData?.churnRate || 0)))
+const potentialSeats = computed(() => Math.max(0, 15 - (props.revenueData?.seats || 1)))
+const potentialRevenue = computed(() => potentialSeats.value * 299)
 </script>

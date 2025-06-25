@@ -52,22 +52,22 @@ const changeColorClass = computed(() => {
 
 const iconBgClass = computed(() => {
   const variants = {
-    default: 'bg-pink-500/20',
-    success: 'bg-green-500/20',
-    warning: 'bg-yellow-500/20', 
-    danger: 'bg-red-500/20',
-    info: 'bg-blue-500/20'
+    default: 'bg-gradient-to-br from-pink-500 to-purple-600',
+    success: 'bg-gradient-to-br from-green-500 to-emerald-600',
+    warning: 'bg-gradient-to-br from-yellow-500 to-orange-600', 
+    danger: 'bg-gradient-to-br from-red-500 to-pink-600',
+    info: 'bg-gradient-to-br from-blue-500 to-indigo-600'
   }
   return variants[props.variant]
 })
 
 const iconColorClass = computed(() => {
   const variants = {
-    default: 'text-pink-400',
-    success: 'text-green-400',
-    warning: 'text-yellow-400',
-    danger: 'text-red-400',
-    info: 'text-blue-400'
+    default: 'text-white',
+    success: 'text-white',
+    warning: 'text-white',
+    danger: 'text-white',
+    info: 'text-white'
   }
   return variants[props.variant]
 })
