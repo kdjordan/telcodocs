@@ -1,20 +1,12 @@
-# TeloDox - Cursor Rules for Claude
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Telodox - Cursor Rules for Claude update
 
 ## Project Context
-Multi-tenant SaaS for telecom document management. Nuxt 3 + TypeScript + Supabase + PrimeVue.
-**Project Name**: TeloDox (not Telodox, telodx, or any other variation)
-
-## User Role System
-TeloDox uses a two-field role system:
-- `role`: 'platform_owner' | 'organization_user' | 'carrier'
-- `organization_role`: 'owner' | 'admin' | 'member' | null
-
-### Role Mapping:
-1. **Platform Owner**: `role: 'platform_owner'`, `organization_role: null`
-2. **Organization Owner**: `role: 'organization_user'`, `organization_role: 'owner'`
-3. **Admin**: `role: 'organization_user'`, `organization_role: 'admin'`
-4. **Team Member**: `role: 'organization_user'`, `organization_role: 'member'`
-5. **Carrier**: `role: 'carrier'`, `organization_role: null`
+Multi-tenant SaaS for telecom document management. Nuxt 3 + TypeScript + Supabase + NuxtUI.
 
 ## Code Style & Standards
 
@@ -43,7 +35,7 @@ TeloDox uses a two-field role system:
 - Use transactions for multi-table operations
 
 ### Form Handling
-- Auto-save on field changes with debouncing (1 second)
+- Auto-save on field changes with debouncing (300ms)
 - Validate forms both client and server side
 - Use reactive form state management
 - Implement optimistic updates for better UX
@@ -59,7 +51,6 @@ TeloDox uses a two-field role system:
 - Use Supabase Auth with role-based access
 - Implement proper session management
 - Add rate limiting for sensitive endpoints
-- Always check both `role` and `organization_role` fields
 
 ### Error Handling
 - Use try/catch blocks for all async operations
@@ -86,12 +77,11 @@ TeloDox uses a two-field role system:
 <script setup lang="ts">
 // Props with proper typing
 // Composables for form logic
-// Auto-save implementation (1 second debounce)
+// Auto-save implementation
 // Validation rules
 </script>
 
 <template>
-  <!-- PrimeVue components -->
   <!-- Proper accessibility -->
   <!-- Mobile responsive -->
 </template>
@@ -101,7 +91,6 @@ TeloDox uses a two-field role system:
 ```typescript
 // Tenant validation first
 // Authentication check
-// Role permission verification
 // Input validation
 // Database operation with RLS
 // Proper error handling
@@ -128,10 +117,9 @@ TeloDox uses a two-field role system:
 ## Testing Considerations
 - Test multi-tenant isolation
 - Validate RLS policies work correctly
-- Test form auto-save functionality (1 second delay)
+- Test form auto-save functionality
 - Verify signature capture works on mobile
 - Test file upload edge cases
-- Verify role permissions are enforced
 
 ## Documentation
 - Document complex business logic
@@ -142,35 +130,16 @@ TeloDox uses a two-field role system:
 ## Focus Areas for MVP
 1. Get multi-tenant routing working first
 2. Implement basic form builder with essential field types
-3. Set up authentication and role-based access (two-field system)
-4. Build form submission with auto-save (1 second debounce)
+3. Set up authentication and role-based access
+4. Build form submission with auto-save
 5. Create basic signature capture
 6. Develop owner dashboard for application management
-7. Set up email notifications (AWS SES - currently pending)
+7. Set up email notifications
 
 ## Common Patterns
 - Use `navigateTo()` for programmatic navigation
 - Use `$fetch` for API calls with proper error handling
 - Implement loading states for all async operations
-- Use PrimeVue Toast for user notifications
 - Store form state in Pinia for complex forms
-
-## Role Checking Patterns
-```typescript
-// Platform Owner
-if (user.role === 'platform_owner') { /* Platform-wide access */ }
-
-// Organization Owner
-if (user.role === 'organization_user' && user.organization_role === 'owner') { /* Full tenant control */ }
-
-// Admin
-if (user.role === 'organization_user' && user.organization_role === 'admin') { /* Team oversight */ }
-
-// Team Member
-if (user.role === 'organization_user' && user.organization_role === 'member') { /* Limited access */ }
-
-// Carrier
-if (user.role === 'carrier') { /* External user, own data only */ }
-```
 
 Remember: This is an MVP - focus on core functionality over perfect polish. Get the essential multi-tenant document workflow working first.

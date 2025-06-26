@@ -115,7 +115,7 @@ if (user.role === 'organization_user' && ['owner', 'admin'].includes(user.organi
    - Creates Supabase Auth account → Frontend creates temporary tenant + user profile
    - Gets temporary tenant (temp-xxxxx.telodox.com) automatically
    - Selects subscription plan → Becomes organization owner
-   - **Customizes tenant name and subdomain** in dashboard (e.g., glotell.telodx.com)
+   - **Customizes tenant name and subdomain** in dashboard (e.g., glotell.telodox.com)
    - Responsible for billing and initial team setup
    - Can invite admins and team members
    
