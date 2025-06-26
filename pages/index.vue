@@ -7,7 +7,7 @@
     <section
       class="relative overflow-hidden bg-brand-dark py-20 lg:py-32 pt-32"
     >
-      <div class="max-w-7xl mx-auto px-6">
+      <div class="max-w-7xl mx-auto px-6 relative z-10">
         <!-- Content - Centered -->
         <div class="mb-16 text-center">
           <div class="hero-content">
@@ -59,14 +59,10 @@
         </div>
       </div>
 
-      <!-- Background decorative elements -->
+      <!-- Simple Sunrise Spotlight Effect -->
       <div class="absolute inset-0 overflow-hidden pointer-events-none">
-        <div
-          class="absolute -top-40 -right-40 w-80 h-80 bg-pink-500/10 rounded-full blur-3xl"
-        ></div>
-        <div
-          class="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl"
-        ></div>
+        <!-- Single magenta sunrise spotlight -->
+        <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 w-[1400px] h-[1400px] sunrise-spotlight"></div>
       </div>
     </section>
 

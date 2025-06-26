@@ -35,6 +35,18 @@
     color: transparent;
   }
 
+  /* Simple sunrise spotlight gradient */
+  .sunrise-spotlight {
+    background: radial-gradient(circle at center, 
+      rgba(255, 255, 255, 0.8) 0%,
+      rgba(168, 85, 247, 0.6) 10%,
+      rgba(168, 85, 247, 0.4) 40%,
+      rgba(168, 85, 247, 0.2) 60%,
+      transparent 100%
+    );
+    filter: blur(4px);
+  }
+
   .btn-primary {
     background-color: #91C4F2;
     color: white;
