@@ -1,90 +1,148 @@
 <template>
-  <div class="p-6">
+  <div class="p-6 bg-gray-900 min-h-screen">
     <div class="flex justify-between items-center mb-6">
-      <h1 class="text-2xl font-bold">User Management</h1>
-      <Button label="Add User" icon="pi pi-plus" @click="showNewUserDialog = true" />
+      <h1 class="text-2xl font-bold text-white">User Management</h1>
+      <GlowButton @click="showNewUserDialog = true">
+        <PlusIcon class="h-4 w-4 mr-2" />
+        Add User
+      </GlowButton>
     </div>
 
-    <DataTable :value="users" :loading="loading" paginator :rows="10" 
-               :globalFilterFields="['email', 'full_name', 'role', 'tenant.name']"
-               showGridlines>
+    <DataTable 
+      :data="users" 
+      :columns="columns"
+      :loading="loading"
+      :searchFields="['email', 'full_name', 'role', 'tenant.name']"
+      searchPlaceholder="Search users..."
+      emptyText="No users found"
+    >
       <template #header>
-        <div class="flex justify-between">
-          <span class="p-input-icon-left">
-            <i class="pi pi-search" />
-            <InputText v-model="filters.global" placeholder="Search users..." />
-          </span>
-        </div>
+        <div></div>
       </template>
 
-      <Column field="email" header="Email" sortable></Column>
-      <Column field="full_name" header="Name" sortable></Column>
-      <Column field="role" header="Role" sortable>
-        <template #body="slotProps">
-          <Tag :severity="getRoleSeverity(slotProps.data.role)" :value="slotProps.data.role" />
-        </template>
-      </Column>
-      <Column field="tenant.name" header="Tenant" sortable></Column>
-      <Column field="created_at" header="Created" sortable>
-        <template #body="slotProps">
-          {{ new Date(slotProps.data.created_at).toLocaleDateString() }}
-        </template>
-      </Column>
-      <Column header="Actions" style="width: 10rem">
-        <template #body="slotProps">
-          <Button icon="pi pi-pencil" class="p-button-text p-button-sm" @click="editUser(slotProps.data)" />
-          <Button icon="pi pi-trash" class="p-button-text p-button-danger p-button-sm" 
-                  @click="confirmDeleteUser(slotProps.data)" />
-        </template>
-      </Column>
+      <template #cell-role="{ value }">
+        <RoleBadge :role="value" />
+      </template>
+
+      <template #cell-created_at="{ value }">
+        {{ new Date(value).toLocaleDateString() }}
+      </template>
+
+      <template #cell-actions="{ item }">
+        <div class="flex space-x-2">
+          <button
+            @click="editUser(item)"
+            class="p-1 text-gray-400 hover:text-accent transition-colors"
+            title="Edit user"
+          >
+            <PencilIcon class="h-4 w-4" />
+          </button>
+          <button
+            @click="confirmDeleteUser(item)"
+            class="p-1 text-gray-400 hover:text-red-400 transition-colors"
+            title="Delete user"
+          >
+            <TrashIcon class="h-4 w-4" />
+          </button>
+        </div>
+      </template>
     </DataTable>
 
-    <Dialog v-model:visible="showNewUserDialog" :style="{width: '450px'}" header="Add New User" :modal="true">
-      <div class="flex flex-col gap-4">
+    <HeadlessModal 
+      v-model="showNewUserDialog" 
+      title="Add New User"
+      size="md"
+    >
+      <div class="space-y-4">
         <div>
-          <label for="email" class="block text-sm font-medium mb-2">Email</label>
-          <InputText id="email" v-model="newUser.email" class="w-full" />
+          <label for="email" class="block text-sm font-medium text-gray-300 mb-2">Email</label>
+          <input
+            id="email"
+            v-model="newUser.email"
+            type="email"
+            class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
+            placeholder="user@example.com"
+          />
         </div>
         <div>
-          <label for="name" class="block text-sm font-medium mb-2">Full Name</label>
-          <InputText id="name" v-model="newUser.full_name" class="w-full" />
+          <label for="name" class="block text-sm font-medium text-gray-300 mb-2">Full Name</label>
+          <input
+            id="name"
+            v-model="newUser.full_name"
+            type="text"
+            class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
+            placeholder="John Doe"
+          />
         </div>
         <div>
-          <label for="role" class="block text-sm font-medium mb-2">Role</label>
-          <Dropdown id="role" v-model="newUser.role" :options="roles" class="w-full" />
+          <label for="role" class="block text-sm font-medium text-gray-300 mb-2">Role</label>
+          <HeadlessSelect
+            v-model="newUser.role"
+            :options="roleOptions"
+            placeholder="Select a role"
+          />
         </div>
         <div>
-          <label for="tenant" class="block text-sm font-medium mb-2">Tenant</label>
-          <Dropdown id="tenant" v-model="newUser.tenant_id" :options="tenants" 
-                    optionLabel="name" optionValue="id" class="w-full" />
+          <label for="tenant" class="block text-sm font-medium text-gray-300 mb-2">Tenant</label>
+          <HeadlessSelect
+            v-model="newUser.tenant_id"
+            :options="tenants"
+            optionLabel="name"
+            optionValue="id"
+            placeholder="Select a tenant"
+          />
         </div>
       </div>
+
       <template #footer>
-        <Button label="Cancel" icon="pi pi-times" @click="showNewUserDialog = false" class="p-button-text" />
-        <Button label="Save" icon="pi pi-check" @click="saveUser" />
+        <div class="flex justify-end space-x-3">
+          <button
+            @click="showNewUserDialog = false"
+            class="px-4 py-2 text-gray-400 hover:text-white transition-colors"
+          >
+            Cancel
+          </button>
+          <GlowButton @click="saveUser">
+            Save User
+          </GlowButton>
+        </div>
       </template>
-    </Dialog>
+    </HeadlessModal>
   </div>
 </template>
 
 <script setup>
+import { PlusIcon, PencilIcon, TrashIcon } from '@heroicons/vue/24/outline'
+import { toast } from 'vue-sonner'
+
 const { $supabase } = useNuxtApp()
-const toast = useToast()
 
 const users = ref([])
 const tenants = ref([])
 const loading = ref(false)
 const showNewUserDialog = ref(false)
-const filters = ref({ global: '' })
 
 const newUser = ref({
   email: '',
   full_name: '',
-  role: 'end_user',
+  role: 'organization_user',
   tenant_id: null
 })
 
-const roles = ['super_admin', 'tenant_owner', 'end_user']
+const roleOptions = [
+  { value: 'platform_owner', label: 'Platform Owner' },
+  { value: 'organization_user', label: 'Organization User' },
+  { value: 'carrier', label: 'Carrier' }
+]
+
+const columns = [
+  { key: 'email', header: 'Email', sortable: true },
+  { key: 'full_name', header: 'Name', sortable: true },
+  { key: 'role', header: 'Role', sortable: true },
+  { key: 'tenant.name', header: 'Tenant', sortable: true },
+  { key: 'created_at', header: 'Created', sortable: true },
+  { key: 'actions', header: 'Actions', sortable: false }
+]
 
 onMounted(() => {
   fetchUsers()
@@ -102,7 +160,7 @@ const fetchUsers = async () => {
     if (error) throw error
     users.value = data
   } catch (error) {
-    toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch users', life: 3000 })
+    toast.error('Failed to fetch users')
   } finally {
     loading.value = false
   }
@@ -122,27 +180,19 @@ const fetchTenants = async () => {
   }
 }
 
-const getRoleSeverity = (role) => {
-  switch (role) {
-    case 'super_admin': return 'danger'
-    case 'tenant_owner': return 'warning'
-    default: return 'info'
-  }
-}
-
 const editUser = (user) => {
   // TODO: Implement edit functionality
-  toast.add({ severity: 'info', summary: 'Not implemented', detail: 'Edit functionality coming soon', life: 3000 })
+  toast.info('Edit functionality coming soon')
 }
 
 const confirmDeleteUser = (user) => {
   // TODO: Implement delete confirmation
-  toast.add({ severity: 'info', summary: 'Not implemented', detail: 'Delete functionality coming soon', life: 3000 })
+  toast.info('Delete functionality coming soon')
 }
 
 const saveUser = async () => {
   // TODO: Implement user creation
-  toast.add({ severity: 'info', summary: 'Not implemented', detail: 'User creation coming soon', life: 3000 })
+  toast.info('User creation coming soon')
   showNewUserDialog.value = false
 }
 </script>

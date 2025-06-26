@@ -1,20 +1,12 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import tailwindcss from '@tailwindcss/vite'
-
 export default defineNuxtConfig({
   compatibilityDate: '2025-05-15',
   devtools: { enabled: true },
 
-  vite: {
-    plugins: [
-      tailwindcss(),
-    ],
-  },
-  
   modules: [
+    '@nuxtjs/tailwindcss',
     '@nuxtjs/google-fonts',
-    '@nuxtjs/supabase',
-    '@nuxt/ui'
+    '@nuxtjs/supabase'
   ],
 
   components: [

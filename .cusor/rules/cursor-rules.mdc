@@ -3,10 +3,10 @@ description:
 globs: 
 alwaysApply: true
 ---
-# Telodox - Cursor Rules for Claude update
+# TeloDox - Cursor Rules for Claude
 
 ## Project Context
-Multi-tenant SaaS for telecom document management. Nuxt 3 + TypeScript + Supabase + NuxtUI.
+Multi-tenant SaaS for telecom document management. Nuxt 3 + TypeScript + Supabase + Headless UI + vue-sonner.
 
 ## Code Style & Standards
 
@@ -22,6 +22,13 @@ Multi-tenant SaaS for telecom document management. Nuxt 3 + TypeScript + Supabas
 - Use auto-imports for components and composables
 - Follow Nuxt 3 directory conventions
 
+### UI Components
+- Use Headless UI components with custom styling wrappers
+- Maintain consistent dark theme across all components
+- Use vue-sonner for toast notifications
+- Implement proper accessibility with Headless UI
+- All components should be mobile-responsive
+
 ### Multi-tenant Architecture
 - Always include tenant context in API calls
 - Use RLS policies, never client-side tenant filtering
@@ -35,7 +42,7 @@ Multi-tenant SaaS for telecom document management. Nuxt 3 + TypeScript + Supabas
 - Use transactions for multi-table operations
 
 ### Form Handling
-- Auto-save on field changes with debouncing (300ms)
+- Auto-save on field changes with debouncing (1 second)
 - Validate forms both client and server side
 - Use reactive form state management
 - Implement optimistic updates for better UX
@@ -47,6 +54,7 @@ Multi-tenant SaaS for telecom document management. Nuxt 3 + TypeScript + Supabas
 - Implement automatic cleanup policies
 
 ### Authentication & Authorization
+- Use role-based system: platform_owner, organization_user (owner/admin/member), carrier
 - Check user permissions on every protected route
 - Use Supabase Auth with role-based access
 - Implement proper session management
@@ -63,6 +71,7 @@ Multi-tenant SaaS for telecom document management. Nuxt 3 + TypeScript + Supabas
 - Implement proper caching strategies
 - Optimize database queries with indexes
 - Use CDN for static assets
+- Client-side rendering for browser-dependent features
 
 ### Security
 - Sanitize all user inputs
@@ -72,12 +81,27 @@ Multi-tenant SaaS for telecom document management. Nuxt 3 + TypeScript + Supabas
 
 ## Component Structure
 
+### Headless UI Wrappers
+```vue
+<script setup lang="ts">
+// Use HeadlessSelect, HeadlessCombobox, HeadlessModal, HeadlessDropdown
+// Maintain consistent dark theme styling
+// Implement proper v-model support
+// Add loading and disabled states
+</script>
+
+<template>
+  <!-- Accessible components with consistent styling -->
+  <!-- Mobile responsive design -->
+</template>
+```
+
 ### Form Components
 ```vue
 <script setup lang="ts">
 // Props with proper typing
 // Composables for form logic
-// Auto-save implementation
+// Auto-save implementation (1 second debounce)
 // Validation rules
 </script>
 
@@ -107,7 +131,7 @@ Multi-tenant SaaS for telecom document management. Nuxt 3 + TypeScript + Supabas
 ## Import Structure
 ```typescript
 // 1. Vue/Nuxt imports
-// 2. Third-party libraries
+// 2. Third-party libraries (Headless UI, vue-sonner)
 // 3. Local components
 // 4. Composables
 // 5. Types
@@ -117,9 +141,11 @@ Multi-tenant SaaS for telecom document management. Nuxt 3 + TypeScript + Supabas
 ## Testing Considerations
 - Test multi-tenant isolation
 - Validate RLS policies work correctly
-- Test form auto-save functionality
+- Test form auto-save functionality (1 second debounce)
 - Verify signature capture works on mobile
 - Test file upload edge cases
+- Test SSR/hydration compatibility
+- Validate role-based access controls
 
 ## Documentation
 - Document complex business logic
@@ -127,19 +153,43 @@ Multi-tenant SaaS for telecom document management. Nuxt 3 + TypeScript + Supabas
 - Keep README updated with setup instructions
 - Document API endpoints clearly
 
-## Focus Areas for MVP
-1. Get multi-tenant routing working first
-2. Implement basic form builder with essential field types
-3. Set up authentication and role-based access
-4. Build form submission with auto-save
-5. Create basic signature capture
-6. Develop owner dashboard for application management
-7. Set up email notifications
+## UI Component Library
+- `HeadlessSelect` - Dropdown selection with search
+- `HeadlessCombobox` - Searchable select with filtering
+- `HeadlessModal` - Modal dialogs with size variants
+- `HeadlessDropdown` - Context menus and dropdowns
+- `DataTable` - Full-featured table with search/sort/pagination
+- All components use consistent dark theme styling
+
+## Toast Notifications
+- Use `$toast` from vue-sonner plugin
+- Dark theme with consistent styling
+- Wrap in ClientOnly for SSR compatibility
+- Use appropriate toast types (success, error, warning, info)
+
+## Focus Areas for Current Phase
+1. ✅ Multi-tenant architecture with subdomain routing
+2. ✅ Modern UI component library with Headless UI
+3. ✅ Form builder with 11 field types and auto-save
+4. ✅ Digital signature capture
+5. ✅ Role-based dashboard system
+6. 🎯 Document upload and OCR processing
+7. 🎯 Team management and deal assignment
+8. 🎯 MSA redlining and collaboration
 
 ## Common Patterns
 - Use `navigateTo()` for programmatic navigation
 - Use `$fetch` for API calls with proper error handling
 - Implement loading states for all async operations
-- Store form state in Pinia for complex forms
+- Use ClientOnly wrapper for client-dependent features
+- Store form state reactively with auto-save debouncing
+- Use `$toast` for user feedback instead of alert dialogs
 
-Remember: This is an MVP - focus on core functionality over perfect polish. Get the essential multi-tenant document workflow working first.
+## Performance Optimizations
+- Bundle size reduced by 29% with Headless UI migration
+- Lazy load heavy components
+- Use process.client checks for browser APIs
+- Implement proper SSR compatibility
+- Optimize GSAP animations with existence checks
+
+Remember: MVP foundation is complete. Focus on game-changing features: document processing, team collaboration, and MSA redlining to differentiate from competitors.

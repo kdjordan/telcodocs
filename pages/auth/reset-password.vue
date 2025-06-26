@@ -1,115 +1,128 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="min-h-screen flex items-center justify-center bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-md w-full space-y-8">
       <div>
-        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        <h2 class="mt-6 text-center text-3xl font-extrabold text-white">
           Set new password
         </h2>
-        <p class="mt-2 text-center text-sm text-gray-600">
+        <p class="mt-2 text-center text-sm text-gray-400">
           Enter your new password below.
         </p>
       </div>
 
-      <Card v-if="!passwordUpdated" class="p-6">
-        <template #content>
-          <form @submit.prevent="updatePassword" class="space-y-6">
-            <div>
-              <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
-                New password
-              </label>
-              <Password
+      <div v-if="!passwordUpdated" class="bg-gray-800 rounded-2xl p-6 shadow-lg">
+        <form @submit.prevent="updatePassword" class="space-y-6">
+          <div>
+            <label for="password" class="block text-sm font-medium text-gray-300 mb-2">
+              New password
+            </label>
+            <div class="relative">
+              <input
                 id="password"
                 v-model="password"
-                :feedback="false"
-                toggleMask
-                class="w-full"
-                :class="{ 'p-invalid': passwordError }"
+                :type="showPassword ? 'text' : 'password'"
+                class="w-full px-3 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
+                :class="{ 'border-red-500': passwordError }"
                 placeholder="Enter new password"
                 @input="passwordError = ''"
               />
-              <small v-if="passwordError" class="p-error">{{ passwordError }}</small>
+              <button
+                type="button"
+                @click="showPassword = !showPassword"
+                class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-300"
+              >
+                <EyeIcon v-if="!showPassword" class="h-5 w-5" />
+                <EyeSlashIcon v-else class="h-5 w-5" />
+              </button>
             </div>
+            <p v-if="passwordError" class="mt-1 text-sm text-red-400">{{ passwordError }}</p>
+          </div>
 
-            <div>
-              <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-2">
-                Confirm new password
-              </label>
-              <Password
+          <div>
+            <label for="confirmPassword" class="block text-sm font-medium text-gray-300 mb-2">
+              Confirm new password
+            </label>
+            <div class="relative">
+              <input
                 id="confirmPassword"
                 v-model="confirmPassword"
-                :feedback="false"
-                toggleMask
-                class="w-full"
-                :class="{ 'p-invalid': confirmPasswordError }"
+                :type="showConfirmPassword ? 'text' : 'password'"
+                class="w-full px-3 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
+                :class="{ 'border-red-500': confirmPasswordError }"
                 placeholder="Confirm new password"
                 @input="confirmPasswordError = ''"
               />
-              <small v-if="confirmPasswordError" class="p-error">{{ confirmPasswordError }}</small>
+              <button
+                type="button"
+                @click="showConfirmPassword = !showConfirmPassword"
+                class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-300"
+              >
+                <EyeIcon v-if="!showConfirmPassword" class="h-5 w-5" />
+                <EyeSlashIcon v-else class="h-5 w-5" />
+              </button>
             </div>
-
-            <Button
-              type="submit"
-              :loading="loading"
-              :disabled="!password || !confirmPassword || loading"
-              class="w-full"
-              label="Update password"
-            />
-          </form>
-        </template>
-      </Card>
-
-      <Card v-else class="p-6">
-        <template #content>
-          <div class="text-center">
-            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-4">
-              <i class="pi pi-check text-green-600 text-xl"></i>
-            </div>
-            <h3 class="text-lg font-medium text-gray-900 mb-2">Password updated</h3>
-            <p class="text-sm text-gray-600 mb-6">
-              Your password has been successfully updated. You can now sign in with your new password.
-            </p>
-            <Button
-              @click="goToLogin"
-              class="w-full"
-              label="Sign in"
-            />
+            <p v-if="confirmPasswordError" class="mt-1 text-sm text-red-400">{{ confirmPasswordError }}</p>
           </div>
-        </template>
-      </Card>
+
+          <GlowButton
+            type="submit"
+            :disabled="!password || !confirmPassword || loading"
+            :loading="loading"
+            class="w-full"
+          >
+            Update password
+          </GlowButton>
+        </form>
+      </div>
+
+      <div v-else class="bg-gray-800 rounded-2xl p-6 shadow-lg">
+        <div class="text-center">
+          <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-900 mb-4">
+            <CheckIcon class="h-6 w-6 text-green-400" />
+          </div>
+          <h3 class="text-lg font-medium text-white mb-2">Password updated</h3>
+          <p class="text-sm text-gray-400 mb-6">
+            Your password has been successfully updated. You can now sign in with your new password.
+          </p>
+          <GlowButton @click="goToLogin" class="w-full">
+            Sign in
+          </GlowButton>
+        </div>
+      </div>
 
       <div v-if="error" class="text-center">
-        <Card class="p-6">
-          <template #content>
-            <div class="text-center">
-              <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
-                <i class="pi pi-times text-red-600 text-xl"></i>
-              </div>
-              <h3 class="text-lg font-medium text-gray-900 mb-2">Invalid or expired link</h3>
-              <p class="text-sm text-gray-600 mb-6">
-                {{ error }}
-              </p>
-              <NuxtLink
-                to="/auth/forgot-password"
-                class="text-blue-600 hover:text-blue-500"
-              >
-                Request a new reset link
-              </NuxtLink>
+        <div class="bg-gray-800 rounded-2xl p-6 shadow-lg">
+          <div class="text-center">
+            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-900 mb-4">
+              <XMarkIcon class="h-6 w-6 text-red-400" />
             </div>
-          </template>
-        </Card>
+            <h3 class="text-lg font-medium text-white mb-2">Invalid or expired link</h3>
+            <p class="text-sm text-gray-400 mb-6">
+              {{ error }}
+            </p>
+            <NuxtLink
+              to="/auth/forgot-password"
+              class="text-accent hover:text-accent/80 transition-colors"
+            >
+              Request a new reset link
+            </NuxtLink>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import { EyeIcon, EyeSlashIcon, CheckIcon, XMarkIcon } from '@heroicons/vue/24/outline'
+import { toast } from 'vue-sonner'
+
 definePageMeta({
   layout: false,
   auth: false
 })
 
 const { $supabase } = useNuxtApp()
-const toast = useToast()
 const route = useRoute()
 const router = useRouter()
 
@@ -120,6 +133,8 @@ const confirmPasswordError = ref('')
 const loading = ref(false)
 const passwordUpdated = ref(false)
 const error = ref('')
+const showPassword = ref(false)
+const showConfirmPassword = ref(false)
 
 onMounted(async () => {
   // Check if we have the session from the reset link
@@ -190,12 +205,7 @@ const updatePassword = async () => {
     }
 
     passwordUpdated.value = true
-    toast.add({
-      severity: 'success',
-      summary: 'Password updated',
-      detail: 'Your password has been successfully updated',
-      life: 5000
-    })
+    toast.success('Your password has been successfully updated')
   } catch (err) {
     console.error('Password update error:', err)
     
@@ -203,12 +213,7 @@ const updatePassword = async () => {
       error.value = 'Your reset session has expired. Please request a new password reset.'
     } else {
       passwordError.value = err.message || 'Failed to update password'
-      toast.add({
-        severity: 'error',
-        summary: 'Update failed',
-        detail: passwordError.value,
-        life: 5000
-      })
+      toast.error(passwordError.value)
     }
   } finally {
     loading.value = false

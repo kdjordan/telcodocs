@@ -46,16 +46,18 @@ const handleLogout = async () => {
 
 // Close menu when clicking outside
 onMounted(() => {
-  const handleClickOutside = (event: Event) => {
-    const target = event.target as Element
-    if (!target.closest('.relative')) {
-      userMenuOpen.value = false
+  if (process.client) {
+    const handleClickOutside = (event: Event) => {
+      const target = event.target as Element
+      if (!target.closest('.relative')) {
+        userMenuOpen.value = false
+      }
     }
+    document.addEventListener('click', handleClickOutside)
+    
+    onUnmounted(() => {
+      document.removeEventListener('click', handleClickOutside)
+    })
   }
-  document.addEventListener('click', handleClickOutside)
-  
-  onUnmounted(() => {
-    document.removeEventListener('click', handleClickOutside)
-  })
 })
 </script>

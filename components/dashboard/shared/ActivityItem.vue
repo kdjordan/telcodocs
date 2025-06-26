@@ -17,7 +17,12 @@
         </p>
         <div class="flex items-center space-x-2 ml-2">
           <RoleBadge :role="activity.user_role" size="xs" />
-          <span class="text-white/40 text-xs">{{ formatTime(activity.timestamp) }}</span>
+          <ClientOnly>
+            <span class="text-white/40 text-xs">{{ formatTime(activity.timestamp) }}</span>
+            <template #fallback>
+              <span class="text-white/40 text-xs">--</span>
+            </template>
+          </ClientOnly>
         </div>
       </div>
       
@@ -156,6 +161,7 @@ const iconColorClass = computed(() => config.value.iconClass)
 const actionText = computed(() => config.value.text)
 
 const formatTime = (timestamp: string) => {
+  if (!process.client) return ''
   const date = new Date(timestamp)
   const now = new Date()
   const diffMs = now.getTime() - date.getTime()

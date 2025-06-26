@@ -25,7 +25,12 @@
             </p>
           </div>
           <div class="text-right">
-            <p class="text-sm text-white/60 mb-1">{{ currentDate }}</p>
+            <ClientOnly>
+              <p class="text-sm text-white/60 mb-1">{{ currentDate }}</p>
+              <template #fallback>
+                <p class="text-sm text-white/60 mb-1">Loading...</p>
+              </template>
+            </ClientOnly>
             <p class="text-xs text-pink-400">Enterprise Plan</p>
           </div>
         </div>
@@ -236,6 +241,7 @@ const isCarrier = computed(() =>
 
 // Date formatting for header
 const currentDate = computed(() => {
+  if (!process.client) return ''
   const now = new Date()
   return now.toLocaleDateString('en-US', { 
     weekday: 'long', 
