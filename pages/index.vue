@@ -787,9 +787,18 @@ useHead({
 const user = useSupabaseUser();
 const { profile } = useAuth();
 const router = useRouter();
+const route = useRoute();
 
 // Redirect logged-in users to appropriate dashboard
 onMounted(async () => {
+  // Check if this is an email confirmation callback
+  if (route.query.code) {
+    // This is an email verification callback
+    // Redirect to login with a success message
+    await router.push('/auth/login?verified=true');
+    return;
+  }
+  
   if (user.value) {
     // Wait a bit for profile to load
     await new Promise((resolve) => setTimeout(resolve, 100));

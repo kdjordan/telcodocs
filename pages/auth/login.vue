@@ -74,6 +74,13 @@
             </div>
           </div>
 
+          <div v-if="successMessage" class="bg-green-500/10 border border-green-500/30 rounded-xl p-4">
+            <div class="flex items-center">
+              <CheckCircleIcon class="w-5 h-5 text-green-400 mr-3" />
+              <p class="text-sm text-green-300">{{ successMessage }}</p>
+            </div>
+          </div>
+
           <div v-if="error" class="bg-red-500/10 border border-red-500/30 rounded-xl p-4">
             <div class="flex items-center">
               <ExclamationCircleIcon class="w-5 h-5 text-red-400 mr-3" />
@@ -110,7 +117,7 @@
               <p class="text-xs text-white/60">
                 Don't have an account?
                 <NuxtLink
-                  to="/auth/register"
+                  :to="getAuthRoute('register')"
                   class="font-semibold text-pink-400 hover:text-pink-300 transition-colors"
                 >
                   Create account
@@ -126,7 +133,7 @@
 </template>
 
 <script setup lang="ts">
-import { ArrowLeftIcon, LockClosedIcon, ExclamationCircleIcon } from "@heroicons/vue/24/outline";
+import { ArrowLeftIcon, LockClosedIcon, ExclamationCircleIcon, CheckCircleIcon } from "@heroicons/vue/24/outline";
 import GlowButton from "~/components/ui/GlowButton.vue";
 
 definePageMeta({
@@ -137,6 +144,8 @@ definePageMeta({
 const { login, profile } = useAuth()
 const { tenant } = useTenant()
 const router = useRouter()
+const route = useRoute()
+const { getAuthRoute } = useLaunchConfig()
 
 const form = reactive({
   email: '',
@@ -145,6 +154,14 @@ const form = reactive({
 
 const loading = ref(false)
 const error = ref('')
+const successMessage = ref('')
+
+// Check for verification success
+onMounted(() => {
+  if (route.query.verified === 'true') {
+    successMessage.value = 'Email verified successfully! Please log in.'
+  }
+})
 
 const handleLogin = async () => {
   loading.value = true

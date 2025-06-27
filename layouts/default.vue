@@ -67,10 +67,10 @@
             </div>
             
             <div v-else class="space-x-4">
-              <NuxtLink to="/auth/login" class="text-gray-700 hover:text-gray-900">
+              <NuxtLink :to="getAuthRoute('login')" class="text-gray-700 hover:text-gray-900">
                 Sign in
               </NuxtLink>
-              <NuxtLink to="/auth/register" class="btn-primary">
+              <NuxtLink :to="getAuthRoute('register')" class="btn-primary">
                 Get Started
               </NuxtLink>
             </div>
@@ -91,6 +91,7 @@ const route = useRoute()
 const router = useRouter()
 const { profile, logout, isSuperAdmin, isTenantOwner, isEndUser } = useAuth()
 const { tenant } = useTenant()
+const { getAuthRoute } = useLaunchConfig()
 
 const selectedMenuItem = ref('')
 

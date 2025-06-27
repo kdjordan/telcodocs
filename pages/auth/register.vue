@@ -237,12 +237,18 @@ const handleRegister = async () => {
     )
     
     // Check if email confirmation is required
+    console.log('Registration result:', { user: !!result?.user, session: !!result?.session })
+    
     if (result?.user && !result.session) {
       // Email confirmation required
+      console.log('Redirecting to verify-email')
       await router.push('/auth/verify-email')
     } else if (result?.session) {
       // Auto-confirmed, redirect to tenant setup
+      console.log('Redirecting to company-setup')
       await router.push('/onboarding/company-setup')
+    } else {
+      console.log('Unexpected registration state:', result)
     }
   } catch (err: any) {
     console.error('Registration error:', err)

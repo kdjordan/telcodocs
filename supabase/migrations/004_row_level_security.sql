@@ -48,6 +48,16 @@ CREATE POLICY "users_tenant_isolation" ON users
         id = auth.uid()  -- Users can always see themselves
     );
 
+-- Users: Allow self-registration for organization owners and invitation-based signup
+CREATE POLICY "users_insert_policy" ON users
+    FOR INSERT 
+    WITH CHECK (
+        -- Self-registration: Users can create their own record
+        id = auth.uid() OR
+        -- Service role can create any user (for backend operations)
+        current_setting('role') = 'service_role'
+    );
+
 -- Team invitations: Only within same tenant
 CREATE POLICY "team_invitations_tenant_isolation" ON team_invitations
     FOR ALL 

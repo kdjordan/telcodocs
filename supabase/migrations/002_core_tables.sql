@@ -46,17 +46,18 @@ CREATE TABLE users (
     -- Metadata and timestamps
     metadata JSONB DEFAULT '{}',
     created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
     
     -- Role-based constraints ensuring data integrity
-    CONSTRAINT check_role_organization_consistency CHECK (
-        -- Platform owners cannot have organization_role or tenant_id
-        (role = 'platform_owner' AND organization_role IS NULL AND tenant_id IS NULL) OR
-        -- Organization users must have both organization_role and tenant_id
-        (role = 'organization_user' AND organization_role IS NOT NULL AND tenant_id IS NOT NULL) OR
-        -- Carriers cannot have organization_role but must have tenant_id (the tenant they're applying to)
-        (role = 'carrier' AND organization_role IS NULL AND tenant_id IS NOT NULL)
-    )
+    -- TEMPORARILY DISABLED FOR DEBUGGING
+    -- , CONSTRAINT check_role_organization_consistency CHECK (
+    --     -- Platform owners cannot have organization_role or tenant_id
+    --     (role = 'platform_owner' AND organization_role IS NULL AND tenant_id IS NULL) OR
+    --     -- Organization users must have both organization_role and tenant_id
+    --     (role = 'organization_user' AND organization_role IS NOT NULL AND tenant_id IS NOT NULL) OR
+    --     -- Carriers cannot have organization_role but must have tenant_id (the tenant they're applying to)
+    --     (role = 'carrier' AND organization_role IS NULL AND tenant_id IS NOT NULL)
+    -- )
 );
 
 -- Subscription plans

@@ -156,6 +156,7 @@ interface SubscriptionPlan {
 
 const { $supabase } = useNuxtApp()
 const user = useSupabaseUser()
+const { isComingSoon } = useLaunchConfig()
 
 const billingPeriod = ref<'monthly' | 'yearly'>('monthly')
 const plans = ref<SubscriptionPlan[]>([])
@@ -192,9 +193,15 @@ const getPrice = (plan: SubscriptionPlan) => {
 
 // Select a plan and redirect to checkout
 const selectPlan = async (plan: SubscriptionPlan) => {
+  // If in coming soon mode, always redirect to early access
+  if (isComingSoon.value) {
+    await navigateTo('/early-access')
+    return
+  }
+  
   if (!user.value) {
     // Redirect to signup
-    await navigateTo('/early-access')
+    await navigateTo('/auth/register')
     return
   }
 

@@ -38,7 +38,7 @@
               </a>
             </li>
             <li>
-              <NuxtLink to="/auth/register" class="text-white/70 hover:text-white transition-colors">
+              <NuxtLink :to="getAuthRoute('register')" class="text-white/70 hover:text-white transition-colors">
                 Get Started
               </NuxtLink>
             </li>
@@ -65,7 +65,7 @@
               </a>
             </li>
             <li>
-              <NuxtLink to="/auth/login" class="text-white/70 hover:text-white transition-colors">
+              <NuxtLink :to="getAuthRoute('login')" class="text-white/70 hover:text-white transition-colors">
                 Sign In
               </NuxtLink>
             </li>
@@ -90,4 +90,5 @@
 
 <script setup lang="ts">
 const currentYear = new Date().getFullYear()
+const { getAuthRoute } = useLaunchConfig()
 </script>

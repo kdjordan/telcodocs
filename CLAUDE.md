@@ -19,7 +19,8 @@ Next-generation multi-tenant SaaS platform that transforms telecom carrier onboa
 **Database**: Shared tables with Row Level Security using `tenant_id`
 **Forms**: Sequential workflow (KYC → FUSF → MSA → Interop) with owner approval gates
 
-## User Roles
+## User 
+
 
 ### Role System Overview
 TELODOX uses a two-field role system for maximum flexibility:

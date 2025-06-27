@@ -33,7 +33,7 @@ export default defineNuxtConfig({
     redirectOptions: {
       login: '/auth/login',
       callback: '/auth/callback',
-      exclude: ['/', '/terms', '/privacy', '/auth/register', '/auth/forgot-password']
+      exclude: ['/', '/terms', '/privacy', '/auth/register', '/auth/forgot-password', '/auth/verify-email', '/early-access']
     }
   },
 
@@ -44,7 +44,8 @@ export default defineNuxtConfig({
       appDomain: process.env.APP_DOMAIN || 'telodox.com',
       r2PublicUrl: process.env.R2_PUBLIC_URL || '',
       stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY || '',
-      devPassword: process.env.DEV_PASSWORD || ''
+      devPassword: process.env.DEV_PASSWORD || '',
+      comingSoonMode: process.env.COMING_SOON_MODE || 'false'
     },
     supabaseServiceKey: process.env.SUPABASE_SERVICE_KEY || '',
     stripeSecretKey: process.env.STRIPE_SECRET_KEY || '',
